@@ -1,11 +1,155 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Urban Safe</title>
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <nav class="navbar">
+      <div class="container nav-inner">
+        <a href="#" class="brand">
+          <span class="brand-icon">
+            <svg width="24" height="28" viewBox="0 0 24 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill="#39716C" d="M12 0L0 6V16.3333C0 22.1667 5.14286 27.5 12 28C18.8571 27.5 24 22.1667 24 16.3333V6L12 0ZM12 17.5C9.64286 17.5 7.71429 15.5417 7.71429 13.125C7.71429 10.7083 9.64286 8.75 12 8.75C14.3571 8.75 16.2857 10.7083 16.2857 13.125C16.2857 15.5417 14.3571 17.5 12 17.5Z"/>
+            </svg>
+          </span>
+          <span class="brand-name">Urban Safe</span>
+        </a>
+
+        <ul class="menu">
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#">Mapa</a></li>
+          <li><a href="#">Chats</a></li>
+          <li><a href="#">Ayuda</a></li>
+        </ul>
+
+        <a href="#" class="login-link">
+          <span>Iniciar sesión</span>
+        </a>
+      </div>
+    </nav>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-card">
+            <h1>Conectamos vecinos y autoridades para comunidades más seguras.</h1>
+            <p>Somos UrbanTrust, una startup universitaria que impulsa participación ciudadana con tecnología accesible, datos útiles y una experiencia móvil centrada en la seguridad y comunicación de las personas.</p>
+          </div>
+          <div class="hero-image">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsbPWEuABzdKoeUuAlqU3ND0cvBAPCynnUn2NjAy_1FgjlVKdbpFkgo2JSGHwaNXeOMLamHOlRv2sVaREDX-kjbTBp3l48OMdVnvOJ6VYsDWSVswhOClFeLLqduVEsujxMF4VaIXkkzjFN17jCKowkrBTL6xh4WYuzlfpRMpXfZAyPf2-zavEGiiadspZskn_q8-13VGvagoqiMMDuqyY55_VYy0NWB6754N6Vjv0DhBgfErnxv9j8lcEBjojnNrI-HPT1Ao-Q4zI" alt="Vecinos de la comunidad sonriendo y saludando" />
+          </div>
+        </div>
+      </section>
+
+      <!-- MISIÓN/VISIÓN/SENTIDO -->
+      <section class="info">
+        <div class="container info-grid">
+          <div class="info-item">
+            <h2>Misión</h2>
+            <p>Fortalecer la seguridad ciudadana mediante plataformas tecnológicas que mejoren la coordinación y participación comunitaria, generando un impacto positivo en la calidad de vida urbana.</p>
+          </div>
+          <div class="info-item">
+            <h2>Visión</h2>
+            <p>Convertirnos en un referente nacional en tecnología para la seguridad ciudadana, expandiendo nuestras soluciones a nivel global y fomentando comunidades más seguras y cohesionadas.</p>
+          </div>
+          <div class="info-item">
+            <h2>Sentido de existencia</h2>
+            <p>Aportar al bienestar de las personas, ayudando a que cada ciudadano se sienta seguro en el lugar donde vive. Sabemos que la seguridad no depende solo de las autoridades, sino también de la unión y el compromiso de cada comunidad.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUE OFRECEMOS? -->
+      <section class="offers">
+        <div class="container">
+          <h2>¿Qué ofrecemos?</h2>
+          <div class="offer-grid">
+            <div class="offer-card">
+              <div class="offer-icon">📱</div>
+              <h3>App móvil para vecinos</h3>
+              <p>Reportes con geolocalización, evidencias, mapa de incidentes, chat vecinal y botón de pánico configurable.</p>
+            </div>
+            <div class="offer-card">
+              <div class="offer-icon">📊</div>
+              <h3>Panel administrativo</h3>
+              <p>Analítica, seguimiento de reportes, comparación por períodos, exportación y flujos de validación.</p>
+            </div>
+            <div class="offer-card">
+              <div class="offer-icon">👥</div>
+              <h3>Integración comunitaria</h3>
+              <p>Encuestas, eventos y foros para priorizar acciones y construir confianza.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     
-</body>
-</html>
+      <!-- EQUIPO -->
+      <section class="team">
+        <div class="container">
+          <h2>Equipo</h2>
+          <div class="team-grid">
+            <div class="member">
+              <img class="team-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC3Ips6lHf6jzrQC7i42WYnyToXvY-onvT-MA8_s_1ZCBfeFm9XKte8Sa3Xg0MxGUkvi8Nvtchr8osFurubSCeoegWvAAmUxKSLcug4FzVznWZFoZh6rW7Fx3b9kDw7pcBqkSouLFonIixNjtOMe8DmWC-5OjyXSi2_xBYUFBFX90RRwH6m3ejMuVdK7lh6kIdXaCKKr10d1lHi-_Byt-8IgB2N35Tq8Frn6hzL1nioDsNbPnCMCQz7Mp0I2__SXtvw2k9dn3s71c" alt="Foto de Lionel Chavez" />
+              <h3>Lionel Chavez</h3>
+              <p>Ing. de software</p>
+            </div>
+            <div class="member">
+              <img class="team-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD85JRzqVmxWD4cMFq-bwioKUMD4NI0M_IqtWoxfIr39lkDeMDGpqyxZngnU2h98Ia586Q2waHKqOSuu0QVtcFttYBh6pU37wESRLnyOaUESE-wNA1DWtkcO5U1Le8Fi0Q7ZrzvEv0DguzdfjvRLPBDvWWfiBtCQnn2AhVv_ZjObB3MeUYmFDLBI3Jq1n3mHZe1Y40y5bZmo2ZkfeKj0Mp65HlgB0JFoQcFBx3700yZLXQloYwmV94owwu10yqWoIjoptl5nSO7HLM" alt="Foto de Josué Jiménez" />
+              <h3>Josué Jiménez</h3>
+              <p>Ing. de sistemas</p>
+            </div>
+            <div class="member">
+              <img class="team-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1DoeRNGxV27GSp2krpAFdHM5fUKyrBy5QVxjWNiPsYgZGp1x3qsahzpQz6Nk6dig80COoo8BuQxgybWDSS_K96U_JN6td8Am2f4Dr-2wuSy1h3HHZexpXdDj1XN1aLlWK6rgSZNthFhhE7nLwEma5W_gREOZmFaN2HjettFuk9gK9Vl2OsZAGrEC29-IU8lwOQHS_kQlBYJ_dFMyY87HMYPKpeHLGmTtGslI6zXHvcXrnLuADek67-Hz2EoMfKc8AR1GXOViHd-w" alt="Foto de Zayd Ayasta" />
+              <h3>Zayd Ayasta</h3>
+              <p>Ing. de software</p>
+            </div>
+            <div class="member">
+              <img class="team-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd4MAz0h-LrW2n4Sb9Y5Hqo4c1PAmJd3TyvgqK0g7upa_yK8DCLwSaMcTQYLdCbar190n1N6PjTwppnuQPcHvJbsUi_Xyy3P67gILqu1fEjJes1mWTfuGi3hfFrCKg1o178M_9BMUS10ACP9ixalCooA6oCe8A41nYoE2qbWQ_nMVcadGcvXKMAnY91m6d9aWvFQ24ffgyEo_GKNZvOLW4FQTbIbYEkjXGBND3gdTB8DcPQ995Kelap39C1OUefa3cMBzJU2s6sUs" alt="Foto de Victor Laura" />
+              <h3>Victor Laura</h3>
+              <p>Ing. de software</p>
+            </div>
+            <div class="member">
+              <img class="team-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGOMzGsFuwwJ3rqXWfsa1Av455to6GXu1vPbXYo3rP1mBDO5iwRk2GQi_nz4M_BmW4o-IBvPjYiY8TsaoJaOwPb4OQP-dJwDjVc0IxardSmREylRx7NXx5g4sepNBcQQ5IL54Z6u7PUhHV3P4vaQfGjgnweEbRRBRcFV252heJxpZ8lDHsVP91xI5ic4Wszy6uZAoIpbwyRF_LGZoGZEWmvVeKWYoafYcj3CdVpkM81AbqbcfNmdg9YP8qQ8JggaDZMX8zMO1qfuQ" alt="Foto de Kamil Díaz" />
+              <h3>Kamil Díaz</h3>
+              <p>Ing. de software</p>
+            </div>
+            <div class="member">
+              <img class="team-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7OLUvPULCOW9QKF1tWsEw4mH5mi_5hjWpkYjy86oGvCd9_0h7RVM9-sjQxhmygcUTG9H-su6GWnuWXTUJcdTIwGSiTIOduyZnAPWn80jPeQwlT3reNmNhkVDHBs0gcA5Ez-wKhJsyXfSBTY7haG_5o66OJ6zSdDxOZeGdC20cb6Q8tMqxYqQBL-iT6MwwZBCQwp-cEeICsYXnVqYOMAxZxd_gpfRxzGHOisBSN-wFdwWuIXXRbqe3TCsy-VdBnBReFKglhziHjd0" alt="Foto de Fabrizio Cano" />
+              <h3>Fabrizio Cano</h3>
+              <p>Ing. de software</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>Urban Safe - 2025 - Lima, Perú</div>
+        <div class="muted">© 2025 Urban Trust. Todos los derechos reservados.</div>
+        <div class="social">
+          <a href="#" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
+            </svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465A4.902 4.902 0 0120.322 3.678c.735.735 1.006 1.328 1.153 1.772.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 8a3 3 0 110-6 3 3 0 010 6zm6.406-11.845a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+  </html>
