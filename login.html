@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urban Safe - Iniciar sesión</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body class="login-page">
+
+    <main class="login-main">
+      <div class="login-top-image"></div>
+
+      <div class="login-logo-badge">
+        <div class="login-logo-circle">
+          <img src="img/UrbanSafe - Logo.png" alt="Logo de Urban Safe" class="login-logo" />
+        </div>
+      </div>
+
+      <!-- Anchors para mostrar mensajes y conmutar secciones -->
+      <div id="login-error"></div>
+      <div id="login-required"></div>
+      <div id="signup-required"></div>
+
+      <!-- Mensajes de alerta debajo del logo -->
+      <div class="alerts">
+        <div class="alert alert--login-error">Nombre o contraseña incorrectos vuelva a intentar porfavor.</div>
+        <div class="alert alert--login-required">Para iniciar sesión debe rellenar ambos campos.</div>
+        <div class="alert alert--signup-required">Para registrarse debe rellenar todos los campos.</div>
+      </div>
+
+      <section id="signup" class="signup-section">
+        <h1 class="signup-title">Crear cuenta</h1>
+
+        <form action="#" class="signup-form">
+          <div class="form-row">
+            <input type="text" class="login-input" placeholder="Nombre" />
+          </div>
+          <div class="form-row">
+            <input type="text" class="login-input" placeholder="Apellido" />
+          </div>
+          <div class="form-row">
+            <input type="email" class="login-input" placeholder="Correo electrónico" />
+          </div>
+          <div class="form-row">
+            <input type="password" class="login-input" placeholder="Contraseña" />
+          </div>
+          <button type="submit" class="login-button">Crear Cuenta</button>
+        </form>
+
+        <p class="login-register">Ya tienes cuenta? <a href="#login">Inicia sesión aquí</a></p>
+      </section>
+
+      <section id="login" class="login-content">
+        <h1 class="login-title">Bienvenido de vuelta</h1>
+
+        <form action="#" class="login-form">
+          <div class="form-row">
+            <input type="text" class="login-input" placeholder="Nombre de usuario" />
+          </div>
+          <div class="form-row">
+            <input type="password" class="login-input" placeholder="Contrasena" />
+            <div class="forgot">
+              <a href="#">Olvidaste tu contrasena?</a>
+            </div>
+          </div>
+          <button type="submit" class="login-button">Iniciar sesion</button>
+        </form>
+
+        <div class="social-buttons">
+          <button class="social-btn" aria-label="Continuar con proveedor 1">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <g clip-path="url(#clip0_1155_3797)">
+                <path d="M16.7212 1.57887C11.9253 3.24262 7.78927 6.40049 4.9207 10.5886C2.05212 14.7768 0.602197 19.7744 0.783888 24.8475C0.965579 29.9206 2.76931 34.8017 5.93014 38.7739C9.09097 42.7461 13.4423 45.6 18.345 46.9164C22.3197 47.942 26.484 47.987 30.48 47.0476C34.0999 46.2345 37.4467 44.4952 40.1925 42.0001C43.0503 39.3239 45.1246 35.9194 46.1925 32.1526C47.3532 28.0564 47.5597 23.7486 46.7962 19.5601H24.4762V28.8189H37.4025C37.1441 30.2956 36.5905 31.705 35.7748 32.9627C34.9591 34.2205 33.8979 35.3008 32.655 36.1389C31.0765 37.183 29.2972 37.8855 27.4312 38.2014C25.5598 38.5494 23.6402 38.5494 21.7687 38.2014C19.8719 37.8092 18.0776 37.0263 16.5 35.9026C13.9655 34.1086 12.0625 31.5598 11.0625 28.6201C10.0455 25.6253 10.0455 22.3786 11.0625 19.3839C11.7743 17.2847 12.9511 15.3734 14.505 13.7926C16.2832 11.9504 18.5345 10.6336 21.0118 9.98665C23.4892 9.3397 26.0968 9.3876 28.5487 10.1251C30.4641 10.7131 32.2157 11.7404 33.6637 13.1251C35.1212 11.6751 36.5762 10.2214 38.0287 8.76387C38.7787 7.98012 39.5962 7.23386 40.335 6.43137C38.1246 4.3744 35.53 2.77383 32.7 1.72137C27.5464 -0.149923 21.9074 -0.200212 16.7212 1.57887Z" fill="#0C132D"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_1155_3797">
+                  <rect width="48" height="48" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+          <button class="social-btn" aria-label="Continuar con proveedor 2">
+            <svg width="57" height="57" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M52.25 28.5C52.25 15.39 41.61 4.75 28.5 4.75C15.39 4.75 4.75 15.39 4.75 28.5C4.75 39.995 12.92 49.5662 23.75 51.775V35.625H19V28.5H23.75V22.5625C23.75 17.9788 27.4788 14.25 32.0625 14.25H38V21.375H33.25C31.9438 21.375 30.875 22.4438 30.875 23.75V28.5H38V35.625H30.875V52.1313C42.8688 50.9438 52.25 40.8263 52.25 28.5Z" fill="#0C132D"/>
+            </svg>
+          </button>
+          <button class="social-btn" aria-label="Continuar con proveedor 3">
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M39.7739 27.578C39.8446 35.2155 46.4746 37.7574 46.5477 37.7899C46.4917 37.9686 45.4886 41.412 43.0552 44.9679C40.9516 48.0424 38.7681 51.1055 35.3291 51.1697C31.95 51.2315 30.8632 49.1653 26.9994 49.1653C23.1368 49.1653 21.9298 51.1055 18.7306 51.2315C15.4107 51.3574 12.8826 47.9063 10.7616 44.8436C6.42771 38.5776 3.11555 27.1372 7.56277 19.4148C9.77196 15.5798 13.7207 13.1516 18.0062 13.0891C21.266 13.0269 24.3429 15.282 26.3356 15.282C28.327 15.282 32.0661 12.5699 35.997 12.968C37.6427 13.0367 42.2618 13.6326 45.2278 17.9746C44.9894 18.1229 39.7166 21.1925 39.7739 27.578ZM33.423 8.82302C35.1853 6.68981 36.3716 3.71931 36.0482 0.764648C33.5075 0.866617 30.4355 2.45749 28.6134 4.5899C26.9803 6.47774 25.5503 9.50024 25.9358 12.3964C28.7678 12.6158 31.6603 10.9575 33.423 8.82302Z" fill="#0C132D"/>
+            </svg>
+          </button>
+        </div>
+
+        <p class="login-register">No tienes una cuenta? <a href="#signup">Crear una cuenta</a></p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>Urban Safe - 2025 - Lima, Peru</div>
+        <div class="muted">© 2025 Urban Trust. Todos los derechos reservados.</div>
+        <div class="social">
+          <a href="#" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
+            </svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465A4.902 4.902 0 0120.322 3.678c.735.735 1.006 1.328 1.153 1.772.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 8a3 3 0 110-6 3 3 0 010 6zm6.406-11.845a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+  </html>
