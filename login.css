@@ -1,0 +1,241 @@
+/* LOGIN PAGE */
+.login-page {
+  background-color: #192435;
+  padding-top: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-main {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 16px 40px;
+  text-align: center;
+  color: #ffffff;
+  flex: 1 0 auto;
+}
+
+.login-top-image {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  height: 280px;
+  background-image:
+    linear-gradient(to bottom, rgba(25, 36, 53, 0) 0%, rgba(25, 36, 53, 0.6) 55%, rgba(25, 36, 53, 1) 100%),
+    url("img/login-background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.login-logo-badge {
+  display: flex;
+  justify-content: center;
+  margin-top: -56px;
+  margin-bottom: 12px;
+}
+
+.login-logo-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #e9e9e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+}
+
+.login-logo {
+  height: 150px;
+  width: auto;
+  border-radius: 100%;
+}
+
+.login-content {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 24px 0 16px;
+}
+
+.login-form {
+  width: 100%;
+}
+
+.form-row {
+  margin-bottom: 16px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: #e9e9e9;
+  color: #1f2937;
+  border: none;
+  border-radius: 999px;
+  outline: none;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.login-input::placeholder {
+  color: #6b7280;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.forgot {
+  text-align: right;
+  margin-top: 8px;
+}
+
+.forgot a {
+  color: #cbd5e1;
+  text-decoration: none;
+}
+
+.forgot a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.login-button {
+  width: 100%;
+  max-width: 300px;
+  padding: 14px 18px;
+  background: #39716C;
+  color: #ffffff;
+  border: none;
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.login-button:hover {
+  opacity: 0.92;
+}
+
+.social-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 22px 0;
+}
+
+.social-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+  cursor: pointer;
+}
+
+.social-btn:hover {
+  background: #f1f5f9;
+}
+
+.social-btn svg {
+  width: 28px;
+  height: 28px;
+}
+
+.login-register {
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.login-register a {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.login-register a:hover {
+  text-decoration: underline;
+}
+
+/* Footer distinto en login y pegado abajo */
+.login-page .footer {
+  background: #2F7372;
+  margin-top: auto;
+}
+
+/* SIGNUP (Crear cuenta) */
+.signup-section {
+  display: none;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.signup-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 24px 0 16px;
+}
+
+.signup-form {
+  width: 100%;
+}
+
+/* Mostrar signup y ocultar login cuando el hash es #signup */
+#signup:target {
+  display: block;
+}
+
+#signup:target ~ .login-content {
+  display: none;
+}
+
+/* Mostrar signup y ocultar login cuando el hash sea #signup-required */
+#signup-required:target ~ .signup-section {
+  display: block;
+}
+
+#signup-required:target ~ .login-content {
+  display: none;
+}
+
+/* Alertas debajo del logo */
+.alerts {
+  width: 100%;
+  max-width: 420px;
+  margin: 8px auto 12px;
+}
+
+.alert {
+  display: none;
+  color: #E45757;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Mostrar mensajes segun el anchor en URL */
+#login-error:target ~ .alerts .alert--login-error {
+  display: block;
+}
+
+#login-required:target ~ .alerts .alert--login-required {
+  display: block;
+}
+
+#signup-required:target ~ .alerts .alert--signup-required {
+  display: block;
+}
+
