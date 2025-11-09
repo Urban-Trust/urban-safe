@@ -220,7 +220,7 @@ body {
 /* Contenedor de controles arriba a la izquierda */
 .mapa-controles {
   position: absolute;
-  top: 20px;
+  top: 30px;
   left: 20px;
   display: flex;
   align-items: center;
@@ -229,12 +229,13 @@ body {
 
 /* Cuadro de búsqueda */
 .busqueda {
+  width: 500px;
   display: flex;
   align-items: center;
   background-color: white;
   border-radius: 30px;
   padding: 8px 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px #00000033;
 }
 
 .busqueda input {
@@ -248,9 +249,22 @@ body {
 }
 
 .icono-busqueda {
-  height: 1px;
-  width: auto;
-  display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icono-busqueda img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  background: transparent;
+  border: none;
 }
 
 .icono-filtro {
