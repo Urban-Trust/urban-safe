@@ -392,6 +392,9 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  align-items: flex-start; /* alinea arriba */
+  overflow-y: auto;        /* permite scroll si el contenido crece */
+  padding-top: 5rem;       /* espacio para evitar que se pegue al navbar */
 }
 
 .modal-contenido {
@@ -415,7 +418,7 @@ body {
 }
 
 .oculto {
-  display: none;
+  display: none !important;
 }
 
 /* Contenido del desplegable de reporte de incidente */
@@ -436,6 +439,13 @@ body {
   border-radius: 8px;
 }
 
+.adjuntar-imagen label{
+  color: white;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
 .campo-incidente label {
   color: white;
   display: block; /*baja los inputs y selects para que se vea mas ordenado*/
@@ -453,6 +463,11 @@ select {
   border-radius: 15px;
   color:gray;
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  color:#c5c5c5;
+}
+
+[type="text"]::placeholder {
+  color:#c5c5c5;
 }
 
 .boton-contenedor {
@@ -466,7 +481,7 @@ select {
   color: black;
   border: 2px solid black;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -478,6 +493,285 @@ select {
   width: 20px;
   height: 20px;
   display: block;
+}
+
+.contenedor-imagen-adjunta {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.boton-clip {
+  background-color: #1C2542;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.modal-imagenes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(12, 19, 45, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-imagenes-contenido {
+  background-color: #f5f2f0;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.imagenes-recientes {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.imagen-opcion {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.imagen-opcion:hover {
+  border-color: #1C2542;
+}
+
+.imagen-seleccionada {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1C2542;
+  border-radius: 15px;
+  padding: 10px;
+  margin-top: 10px;
+  color: white;
+}
+
+.imagen-seleccionada img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.boton-quitar-imagen {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Estilos para el botón de seleccionar dirección en mapa */
+.input-con-boton-mapa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.boton-seleccionar-mapa {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #0c132d; /* Color de fondo del botón */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.boton-seleccionar-mapa:hover {
+  background-color: #1a233e; /* Color de fondo al pasar el ratón */
+}
+
+.boton-seleccionar-mapa svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Estilos para ocultar elementos cuando se selecciona dirección en el mapa */
+.mapa-ocultar .mapa-controles,
+.mapa-ocultar .boton-alerta,
+.mapa-ocultar .modal-alerta,
+.mapa-ocultar .navbar,
+.mapa-ocultar .footer {
+  display: none !important;
+}
+
+/* --- AJUSTES AQUÍ --- */
+
+/* Contenedor del título para seleccionar dirección */
+.mapa-seleccion-direccion {
+  position: absolute;
+  top: 20px; /* Distancia desde la parte superior */
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none; /* Esto es clave: hace que el contenedor no intercepte los clics */
+}
+
+/* Título de selección de dirección */
+.titulo-seleccion-mapa {
+  background-color: #0c132d;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-size: 1.2em;
+  text-align: center;
+  pointer-events: auto; /* Permite seleccionar el texto si se desea, pero no es necesario */
+}
+
+
+.reporte-en-mapa {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 50;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+  padding-top: 20px; /* Espacio para la etiqueta "Tuyo" */
+}
+
+/* Etiqueta "Tuyo" */
+.reporte-etiqueta-usuario {
+  position: absolute;
+  top: -12px; /* La posicionamos ligeramente por encima */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2F7372; /* Color solicitado */
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px; /* Forma de píldora */
+  font-size: 11px;
+  font-weight: 600;
+  z-index: 1; /* Por si acaso */
+}
+
+/* El triangulito indicador de abajo */
+.reporte-en-mapa::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid white;
+}
+
+.reporte-contenido {
+  padding: 8px;
+  text-align: center;
+}
+
+.reporte-imagen {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  border: 1px solid #eee;
+}
+
+.reporte-titulo {
+  font-size: 1em;
+  font-weight: 600;
+  color: #1C2542;
+  margin: 0;
+  padding: 0 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reporte-en-mapa.oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ESTILOS PARA EL MODAL DE ÉXITO */
+.modal-exito {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001; /* Debe estar por encima de todo */
+  cursor: pointer;
+}
+
+.modal-exito-contenido {
+  background-color: #2F7372;
+  color: white;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 90%;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-exito-contenido h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.modal-exito-contenido svg {
+  width: 80px; /* Tamaño del icono */
+  height: auto;
+}
+
+
+/* --- ESTILOS PARA MENSAJES DE ERROR DEL FORMULARIO --- */
+.error-mensaje {
+  color: #e53935; /* Un tono de rojo claro y legible */
+  font-size: 0.85em;
+  font-weight: 500;
+  margin-top: 5px;
+  display: none; /* Oculto por defecto */
+}
+
+.error-mensaje.visible {
+  display: block; /* Se muestra al añadir la clase 'visible' */
+}
+
+/* Estilo para resaltar el campo con error */
+input.error {
+  border: 1px solid #e53935;
+  box-shadow: 0 0 0 1px #e53935; /* Un ligero brillo para llamar la atención */
 }
 
 /* Footer */
