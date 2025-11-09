@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Urban Safe - Iniciar sesión</title>
+    <title>Urban Safe - Iniciar sesiÃ³n</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -33,6 +33,28 @@
         <div class="alert alert--signup-required">Para registrarse debe rellenar todos los campos.</div>
       </div>
 
+      <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="forgot-modal">
+          <h3 class="modal-title">Olvido su contraseña?</h3>
+          <p class="modal-text">Por favor, ingrese el correo electronico vinculado a su cuenta para que podamos enviarle un mensaje con el enlace de recuperacion de contrasena.</p>
+          <div class="form-row">
+            <input type="email" id="forgot-email" class="modal-input" placeholder="Correo electronico" />
+            <div class="modal-error" id="forgot-error">Rellenar este campo para el mensaje a su correo</div>
+          </div>
+          <button class="btn btn-primary" id="btn-confirm-email">Confirmar correo</button>
+          <button class="btn btn-secondary btn-back" id="btn-back-forgot">Regresar</button>
+        </div>
+        <div class="modal" id="success-modal">
+          <h3 class="modal-title">Listo!</h3>
+          <p class="modal-text">Te hemos enviado un correo con el enlace para restablecer tu contraseña. Revisa tu bandeja de entrada y no olvides verificar la carpeta de spam.</p>
+          <button class="btn btn-primary" id="btn-success-accept">Aceptar</button>
+        </div>
+        <div class="modal" id="reset-success-modal">
+          <h3 class="modal-title">Nueva contraseña actualizada</h3>
+          <button class="btn btn-primary" id="btn-reset-accept">Aceptar</button>
+        </div>
+      </div>
+
       <section id="signup" class="signup-section">
         <h1 class="signup-title">Crear cuenta</h1>
 
@@ -55,17 +77,31 @@
         <p class="login-register">Ya tienes cuenta? <a href="#login">Inicia sesión aquí</a></p>
       </section>
 
+      <!-- Seccion de nueva contraseña -->
+      <section id="reset-section" class="reset-section" style="display:none;">
+        <h1 class="login-title">Nueva contraseña</h1>
+        <form class="login-form">
+          <div class="form-row">
+            <input type="password" id="new-pass" class="login-input" placeholder="Nueva contraseña" />
+          </div>
+          <div class="form-row">
+            <input type="password" id="confirm-pass" class="login-input" placeholder="Confirmar nueva contraseña" />
+          </div>
+          <button type="button" class="login-button" id="btn-reset-save">Guardar</button>
+        </form>
+      </section>
+
       <section id="login" class="login-content">
         <h1 class="login-title">Bienvenido de vuelta</h1>
 
-        <form action="#" class="login-form">
+        <form action="#" class="login-form" id="login-form">
           <div class="form-row">
             <input type="text" class="login-input" placeholder="Nombre de usuario" />
           </div>
           <div class="form-row">
-            <input type="password" class="login-input" placeholder="Contrasena" />
+            <input type="password" class="login-input" placeholder="Contraseña" />
             <div class="forgot">
-              <a href="#">Olvidaste tu contrasena?</a>
+              <a href="#" id="open-forgot">Olvidaste tu contraseña?</a>
             </div>
           </div>
           <button type="submit" class="login-button">Iniciar sesion</button>
@@ -119,5 +155,7 @@
       </div>
     </footer>
 
+    <script src="login.js"></script>
   </body>
   </html>
+
