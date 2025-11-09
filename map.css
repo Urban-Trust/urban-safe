@@ -25,7 +25,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1001;
 }
 
 .nav-inner {
@@ -229,7 +229,7 @@ body {
 
 /* Cuadro de búsqueda */
 .busqueda {
-  width: 500px;
+  width: 450px;
   display: flex;
   align-items: center;
   background-color: white;
@@ -284,17 +284,61 @@ body {
   position: absolute;
   bottom: 20px;
   left: 20px;
-  background-color: #e74c3c;
-  border: none;
+  background-color: #f8f2f1;
+  border: 2px solid black;
   border-radius: 50%;
   color: white;
   font-size: 20px;
-  width: 48px;
-  height: 48px;
+  width: 100px;
+  height: 100px;
   box-shadow: 0 2px 6px #00000033;
   cursor: pointer;
 }
 
+.boton-alerta svg {
+  display: block;
+  margin: auto;
+}
+
+
+/* Desplegable del recuadro de reportes de incidentes*/
+.modal-alerta {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-contenido {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.oculto {
+  display: none;
+}
+
+/* Footer */
 .footer {
   background: #1A284D;
   color: #FFFFFF;
