@@ -12,8 +12,8 @@ body {
 }
 
 .container {
-  width: 100%;
-  max-width: 1500px;
+  width: 95%;
+  max-width: auto;
   margin: 0 auto;
 }
 
@@ -49,12 +49,109 @@ body {
   display: block;
 }
 
+/* Dropdown del logo (solo en map) */
+.brand-wrap {
+  position: relative;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+.brand {
+  cursor: pointer;
+}
+
+.arrow-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+.arrow-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.menu-toggle:checked + .brand .arrow-icon {
+  transform: rotate(180deg);
+}
+
+.user-menu {
+  display: none;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: calc(100vw - 32px);
+  max-width: 400px;
+  height: calc(100vh - 80px);
+  background: #EAE9E7;
+  padding: 16px;
+  overflow-y: auto;
+  z-index: 999; /* por debajo o al nivel del header */
+  color: #1E1E1E;
+  flex-direction: column;
+  box-shadow: 0 12px 6px rgba(0,0,0,0.3);
+}
+
+.menu-toggle:checked ~ .user-menu {
+  display: flex;
+}
+
+.menu-section + .menu-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.menu-title {
+  font-weight: 700;
+  color: #5E5D5C;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.menu-item:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.menu-item .icon svg {
+  display: block;
+}
+
+/* Más espacio vertical entre opciones del dropdown */
+.menu-section .menu-item {
+  margin-bottom: 12px;
+}
+
+.menu-section .menu-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Cerrar sesión anclado al fondo, izquierda */
+.user-menu > .menu-item:last-child {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
 .menu {
   list-style: none;
   display: flex;
   padding: 0;
   margin: 0 16px;
-  gap: 60px;
+  gap: 100px;
 }
 
 .menu a {
@@ -62,6 +159,7 @@ body {
   color: #0C132D;
   padding: 8px 10px;
   border-radius: 6px;
+  font-weight: 500;
 }
 
 .menu a:hover {
@@ -146,6 +244,7 @@ body {
   padding: 6px;
   flex: 1;
   background: transparent;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 .icono-busqueda {
