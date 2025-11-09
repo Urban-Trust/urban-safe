@@ -227,15 +227,83 @@ body {
   gap: 10px;
 }
 
+/* Filtros desplegables */
+.filters-toggle { display: none; }
+
+.filters-panel {
+  display: none;
+  position: absolute;
+  top: 56px; /* debajo de la barra de búsqueda */
+  right: 0;
+  background: #B8BBC5;
+  border: 7px solid #8C8E96;
+  border-radius: 20px;
+  padding: 16px;
+  width: 450px;
+  max-width: calc(100vw - 48px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  color: #1C2542;
+}
+
+.filters-toggle:checked ~ .filters-panel { display: block; }
+
+.filters-group { margin-bottom: 12px; }
+.filters-label { display: block; font-weight: 600; margin-bottom: 6px; }
+.filters-select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border-color: #EAE9E7;
+  background: #EAE9E7;
+  color: #0C132D;
+  font-weight: bold;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.filters-divider { height: 1px; background: rgba(0,0,0,0.2); margin: 10px 0 12px; }
+.filters-subtitle { font-weight: 700; margin-bottom: 8px; }
+.filters-actions { display: flex; gap: 10px; margin-bottom: 14px; }
+.filter-chip {
+  border: 1px solid #8C8E96;
+  background: #EAE9E7;
+  color: #1E1E1E;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+.filter-chip:hover { opacity: .9; }
+
+/* Estado activo de filtros generales */
+.filter-chip.active,
+.filter-chip[aria-pressed="true"] {
+  background: #1C2542;
+  border-color: #1C2542;
+  color: #FFFFFF;
+}
+
+.btn-clear {
+  width: 100%;
+  background: #2F7372;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+.btn-clear:hover { opacity: .92; }
+
 /* Cuadro de búsqueda */
 .busqueda {
   width: 450px;
   display: flex;
   align-items: center;
-  background-color: white;
+  background-color: #EAE9E7;
   border-radius: 30px;
   padding: 8px 12px;
-  box-shadow: 0 2px 6px #00000033;
+  box-shadow: 0 10px 10px #00000033;
 }
 
 .busqueda input {
@@ -246,6 +314,42 @@ body {
   flex: 1;
   background: transparent;
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+/* Mensajes de error del formulario */
+.mensaje-error {
+  display: none;
+  color: #E45757;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.mensaje-error.visible { display: block; }
+
+.acciones-mapa {
+  margin: 10px 0 14px;
+}
+.boton-seleccionar-mapa {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #0c132d; /* Color de fondo del botón */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.boton-seleccionar-mapa:hover {
+  background-color: #1a233e; /* Color de fondo al pasar el ratón */
+}
+
+.boton-seleccionar-mapa svg {
+  width: 18px;
+  height: 18px;
 }
 
 .icono-busqueda {
@@ -268,8 +372,10 @@ body {
 }
 
 .icono-filtro {
-  background-color: #2ecc71;
-  border: none;
+  background-color: #738B8B;
+  border-width: 3px;
+  border-style: solid;
+  border-color: #5B6F6F;
   border-radius: 50%;
   color: white;
   font-size: 18px;
@@ -309,7 +415,6 @@ body {
   margin: auto;
 }
 
-
 /* Desplegable del recuadro de reportes de incidentes*/
 .modal-alerta {
   position: fixed;
@@ -331,7 +436,7 @@ body {
   background-color: #2F7372;
   border: 5px solid #6F9B9A;
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 20px;
   width: 80%;
   max-width: 600px;
   position: relative;
@@ -391,18 +496,18 @@ select {
   border: 2px solid white;
   background-color: #0C132D;
   border-radius: 15px;
-  color:#c5c5c5;
+  color:#B8BBC5;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 [type="text"]::placeholder {
-  color:#c5c5c5;
+  color: #0C132D;
 }
 
 .boton-contenedor {
   display: flex;             
   justify-content: flex-end;
 }
-
 
 .boton-enviar {
   background-color: #f5f2f0;
@@ -414,6 +519,7 @@ select {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 .icono-boton svg {
