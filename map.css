@@ -248,11 +248,9 @@ body {
 }
 
 .icono-busqueda {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  margin-left: 8px;
+  height: 1px;
+  width: auto;
+  display: block;
 }
 
 .icono-filtro {
