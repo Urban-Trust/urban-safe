@@ -99,7 +99,9 @@
           <img class="lupa-img" src="img/lupa.png"/>
         </button>
         <button class="icono-filtro">
-          <img class="filtro-img" src=""/>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 3H5C3.586 3 2.879 3 2.44 3.412C2.001 3.824 2 4.488 2 5.815V6.505C2 7.542 2 8.061 2.26 8.491C2.52 8.921 2.993 9.189 3.942 9.723L6.855 11.363C7.491 11.721 7.81 11.9 8.038 12.098C8.512 12.509 8.804 12.993 8.936 13.588C9 13.872 9 14.206 9 14.873V17.543C9 18.452 9 18.907 9.252 19.261C9.504 19.616 9.952 19.791 10.846 20.141C12.725 20.875 13.664 21.242 14.332 20.824C15 20.406 15 19.452 15 17.542V14.872C15 14.206 15 13.872 15.064 13.587C15.1896 13.0042 15.5059 12.4798 15.963 12.097C16.19 11.9 16.509 11.721 17.145 11.362L20.058 9.722C21.006 9.189 21.481 8.922 21.74 8.492C22 8.062 22 7.542 22 6.504V5.814C22 4.488 22 3.824 21.56 3.412C21.122 3 20.415 3 19 3Z" fill="white"/>
+          </svg>
         </button>
       </div>
     </div>
@@ -116,12 +118,52 @@
         <button class="cerrar-modal">✖</button>
         <!-- Aquí puedes poner tu formulario o contenido -->
         <h2>Formulario de alerta</h2>
-        <p>Contenido editable aquí...</p>
+
+        <form class="formulario-registro">
+          <div class="campo-incidente">
+            <label for="tipo-incidente">Tipo de Incidente:</label>
+            <select id="tipo-incidente" name="tipo-incidente">
+              <option value="">Seleccione Tipo</option>
+              <option value="">Robo</option>
+              <option value="">Daño</option>
+              <option value="">Incendio</option>
+              <option value="">Reunion</option>
+              <option value="">Otro</option>
+            </select>
+          </div>
+          
+          <div class="campo-incidente">
+            <label for="titulo-incidente">Titulo de Incidente</label>
+            <input type="text" id="titulo-incidente" name="titulo-inc" placeholder="Ingrese el titulo del incidente..."/>
+          </div>
+
+          <div class="campo-incidente">
+            <label for="direccion-incidente">Dirección de Incidente</label>
+            <input type="text" id="direccion-incidente" name="direccion-incidente" placeholder="Ingrese la direccion-incidente del incidente..."/>
+          </div>
+
+          <div class="campo-incidente">
+            <label for="descripcion-incidente">Descripción de Incidente</label>
+            <input type="text" id="descripcion-incidente" name="descripcion-incidente" placeholder="Ingrese la descripción del incidente..."/>
+          </div>
+
+          <div class="boton-contenedor">
+            <button type="submit" class="boton-enviar">
+              Enviar reporte
+              <span class="icono-boton">
+                <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.6317 8.22855L4.88168 0.353552C4.26011 0.0441878 3.55825 -0.0659481 2.87179 0.0381607C2.18534 0.142269 1.5477 0.455556 1.0458 0.935308C0.543909 1.41506 0.202189 2.03793 0.067234 2.71899C-0.067721 3.40005 0.0106562 4.10616 0.29168 4.74105L2.99168 10.7823C3.05294 10.9284 3.0845 11.0852 3.0845 11.2436C3.0845 11.4019 3.05294 11.5587 2.99168 11.7048L0.29168 17.7461C0.0629673 18.2599 -0.0337201 18.8227 0.0104039 19.3833C0.054528 19.944 0.238065 20.4848 0.544334 20.9565C0.850604 21.4282 1.2699 21.8159 1.76411 22.0843C2.25831 22.3527 2.81177 22.4934 3.37418 22.4936C3.90094 22.4883 4.41986 22.3653 4.89293 22.1336L20.6429 14.2586C21.2016 13.9775 21.6712 13.5468 21.9993 13.0144C22.3275 12.482 22.5012 11.8689 22.5012 11.2436C22.5012 10.6182 22.3275 10.0051 21.9993 9.47271C21.6712 8.94034 21.2016 8.50959 20.6429 8.22855H20.6317ZM19.6304 12.2448L3.88043 20.1198C3.67361 20.2191 3.44138 20.2528 3.21486 20.2164C2.98835 20.18 2.77839 20.0751 2.61313 19.916C2.44787 19.7569 2.33522 19.551 2.29028 19.326C2.24533 19.1011 2.27025 18.8677 2.36168 18.6573L5.05043 12.6161C5.08524 12.5354 5.11529 12.4527 5.14043 12.3686H12.8917C13.19 12.3686 13.4762 12.25 13.6872 12.039C13.8982 11.8281 14.0167 11.5419 14.0167 11.2436C14.0167 10.9452 13.8982 10.659 13.6872 10.4481C13.4762 10.2371 13.19 10.1186 12.8917 10.1186H5.14043C5.11529 10.0344 5.08524 9.95173 5.05043 9.87105L2.36168 3.8298C2.27025 3.61939 2.24533 3.38605 2.29028 3.16107C2.33522 2.93609 2.44787 2.73023 2.61313 2.57109C2.77839 2.41196 2.98835 2.30715 3.21486 2.27072C3.44138 2.2343 3.67361 2.268 3.88043 2.3673L19.6304 10.2423C19.8147 10.3367 19.9694 10.4801 20.0773 10.6568C20.1853 10.8335 20.2425 11.0365 20.2425 11.2436C20.2425 11.4506 20.1853 11.6536 20.0773 11.8303C19.9694 12.007 19.8147 12.1504 19.6304 12.2448Z" fill="#1C2542"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+
+        </form>
       </div>
     </div>
 
   </div>
-
+  
 </section>
 
 <!-- FOOTER -->
