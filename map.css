@@ -316,6 +316,42 @@ body {
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
+/* Mensajes de error del formulario */
+.mensaje-error {
+  display: none;
+  color: #E45757;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.mensaje-error.visible { display: block; }
+
+.acciones-mapa {
+  margin: 10px 0 14px;
+}
+.boton-seleccionar-mapa {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #0c132d; /* Color de fondo del botón */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.boton-seleccionar-mapa:hover {
+  background-color: #1a233e; /* Color de fondo al pasar el ratón */
+}
+
+.boton-seleccionar-mapa svg {
+  width: 18px;
+  height: 18px;
+}
+
 .icono-busqueda {
   background: none;
   border: none;
@@ -378,7 +414,6 @@ body {
   display: block;
   margin: auto;
 }
-
 
 /* Desplegable del recuadro de reportes de incidentes*/
 .modal-alerta {
@@ -461,20 +496,18 @@ select {
   border: 2px solid white;
   background-color: #0C132D;
   border-radius: 15px;
-  color:gray;
+  color:#B8BBC5;
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
-  color:#c5c5c5;
 }
 
 [type="text"]::placeholder {
-  color:#c5c5c5;
+  color: #0C132D;
 }
 
 .boton-contenedor {
   display: flex;             
   justify-content: flex-end;
 }
-
 
 .boton-enviar {
   background-color: #f5f2f0;
