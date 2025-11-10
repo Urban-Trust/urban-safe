@@ -174,14 +174,23 @@
           </div>
 
           <div class="campo-incidente">
-            <label for="direccion-incidente">Direccion de Incidente</label>
-            <input type="text" id="direccion-incidente" name="direccion-incidente" placeholder="Ingrese la direccion del incidente..."/>
-                      <p id="direccion-error" class="mensaje-error">Este campo es obligatorio</p>
+            <label for="direccion-incidente">Dirección de Incidente: *</label>
+            <div class="input-con-boton-mapa">
+              <input type="text" id="direccion-incidente" name="direccion-incidente" placeholder="Ingrese la direccion del incidente..."/>
+              <button type="button" class="boton-seleccionar-mapa" aria-label="Seleccionar dirección en mapa">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 12C13.1046 12 14 11.1046 14 10C14 8.89543 13.1046 8 12 8C10.8954 8 10 8.89543 10 10C10 11.1046 10.8954 12 12 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 2C8.13401 2 5 5.13401 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13401 15.866 2 12 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Seleccionar dirección en mapa</span>
+              </button>
+            </div>
+            <p class="error-mensaje" id="direccion-error">Completar este campo</p>
           </div>
 
               <div class="campo-incidente">
                 <label for="descripcion-incidente">Descripción de Incidente:</label>
-                <input type="text" id="descripcion-incidente" name="descripcion-incidente" placeholder="Ingrese la descripciÃƒÂ³n del incidente..."/>
+                <input type="text" id="descripcion-incidente" name="descripcion-incidente" placeholder="Ingrese la descripcion del incidente..."/>
               </div>
 
               <div class="adjuntar-imagen">
@@ -201,10 +210,6 @@
                       </div>
                     </div>
                   </div>
-              </div>
-
-              <div class="acciones-mapa">
-                <button type="button" class="boton-seleccionar-mapa">Seleccionar en mapa</button>
               </div>
 
               <div class="boton-contenedor">
