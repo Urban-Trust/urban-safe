@@ -83,7 +83,7 @@ body {
   display: none;
   position: fixed;
   top: 80px;
-  left: 0;
+  left: 16px;
   width: calc(100vw - 32px);
   max-width: 400px;
   height: calc(100vh - 80px);
@@ -226,6 +226,29 @@ body {
   align-items: center;
   gap: 10px;
 }
+
+/* Estilo para el input de bA�squeda */
+.mapa-controles .busqueda input[type="text"] {
+  color: black; 
+}
+
+/* Estilo para el placeholder */
+.mapa-controles .busqueda input[type="text"]::placeholder {
+  color: black;
+  opacity: 1; 
+}
+/* Estilo para el input de búsqueda */
+.mapa-controles .busqueda input[type="text"] {
+  color: black; 
+}
+
+/* Estilo para el placeholder */
+.mapa-controles .busqueda input[type="text"]::placeholder {
+  color: black;
+  opacity: 1; 
+}
+
+
 
 /* Filtros desplegables */
 .filters-toggle { display: none; }
@@ -501,7 +524,7 @@ select {
 }
 
 [type="text"]::placeholder {
-  color: #0C132D;
+  color: #c5c5c5;
 }
 
 .boton-contenedor {
@@ -626,7 +649,7 @@ select {
   color: white;
   border: none;
   padding: 8px 12px;
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
   font-size: 0.9em;
   transition: background-color 0.3s ease;
@@ -637,8 +660,8 @@ select {
 }
 
 .boton-seleccionar-mapa svg {
-  width: 18px;
-  height: 18px;
+  width: 50px;
+  height: 50px;
 }
 
 /* Estilos para ocultar elementos cuando se selecciona dirección en el mapa */
@@ -791,6 +814,25 @@ select {
 /* --- ESTILOS PARA MENSAJES DE ERROR DEL FORMULARIO --- */
 .error-mensaje {
   color: #e53935; /* Un tono de rojo claro y legible */
+  font-size: 0.85em;
+  font-weight: 500;
+  margin-top: 5px;
+  display: none; /* Oculto por defecto */
+}
+
+.error-mensaje.visible {
+  display: block; /* Se muestra al añadir la clase 'visible' */
+}
+
+/* Estilo para resaltar el campo con error */
+input.error {
+  border: 1px solid #e53935;
+  box-shadow: 0 0 0 1px #e53935; /* Un ligero brillo para llamar la atención */
+}
+
+/* Cambia el nombre de la clase de .mensaje-error a .error-mensaje para que coincida con tu JS y HTML */
+.error-mensaje {
+  color: #e53935; 
   font-size: 0.85em;
   font-weight: 500;
   margin-top: 5px;
