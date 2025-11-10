@@ -26,7 +26,7 @@
   height: 280px;
   background-image:
     linear-gradient(to bottom, rgba(25, 36, 53, 0) 0%, rgba(25, 36, 53, 0.6) 55%, rgba(25, 36, 53, 1) 100%),
-    url("img/login-background.png");
+    url("../images/login-background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -239,3 +239,103 @@
   display: block;
 }
 
+/* Modales */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 2000;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal {
+  display: none;
+  background: #EAE9E7;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 550px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  position: relative;
+  color: #1C2542;
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #1C2542;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.modal-text {
+  margin: 0 0 14px;
+  font-size: 14px;
+  color: #1C2542;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #1C2542;
+  border-radius: 10px;
+  outline: none;
+  background: #ffffff;
+  color: #1C2542;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.modal-input::placeholder {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.modal-error {
+  display: none;
+  margin-top: 6px;
+  color: #E45757;
+  font-size: 13px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 600;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.btn-primary {
+  background: #2F7372;
+}
+
+.btn-secondary {
+  background: #1C2542;
+}
+
+.btn-back {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+}
+
+/* Reset section */
+.reset-section {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
