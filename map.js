@@ -64,6 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
     modalImagenes.classList.add('oculto');
   });
 
+  // Toggle estado activo en filtros generales
+  const chips = document.querySelectorAll('.filter-chip');
+  chips.forEach((chip) => {
+    chip.setAttribute('aria-pressed', 'false');
+    chip.addEventListener('click', () => {
+      const isActive = chip.classList.toggle('active');
+      chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  });
+
   modalImagenes.addEventListener('click', (ev) => {
     if (ev.target === modalImagenes) {
       modalImagenes.classList.add('oculto');
