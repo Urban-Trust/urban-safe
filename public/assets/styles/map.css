@@ -227,6 +227,16 @@ body {
   gap: 10px;
 }
 
+/* Estilo para el input de bA�squeda */
+.mapa-controles .busqueda input[type="text"] {
+  color: black; 
+}
+
+/* Estilo para el placeholder */
+.mapa-controles .busqueda input[type="text"]::placeholder {
+  color: black;
+  opacity: 1; 
+}
 /* Estilo para el input de búsqueda */
 .mapa-controles .busqueda input[type="text"] {
   color: black; 
