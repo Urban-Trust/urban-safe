@@ -35,7 +35,7 @@ body {
   max-width: 95%;
   margin: 0 auto;
 }
-/* ... (el resto de tus estilos de .navbar, .brand, .menu, etc., que ya estaban bien, van aquí) ... */
+
 .brand-logo { height: 56px; width: auto; display: block; }
 .brand-wrap { position: relative; }
 .menu-toggle { display: none; }
@@ -81,11 +81,11 @@ body {
   flex: 1;
   background: transparent;
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
-  color: #FFFFFF; /* Texto del input blanco */
+  color: #FFFFFF; 
 }
 
 .busqueda input::placeholder {
-  color: #EAE9E7; /* Placeholder blanco semi-transparente */
+  color: #EAE9E7; 
   opacity: 0.8; 
 }
 
@@ -95,7 +95,7 @@ body {
 .icono-busqueda img {
   width: 20px; height: 20px; object-fit: contain;
 }
-.icono-filtro { /* No se usa en esta página, pero lo dejamos por si acaso */
+.icono-filtro { 
   display: none;
 }
 
@@ -105,8 +105,8 @@ body {
   margin-top: 30px; 
   display: flex;
   flex-direction: column; 
-  gap: 25px; /* Un poco más de espacio */
-  padding-bottom: 120px; /* Espacio para que no choque con los botones flotantes */
+  gap: 25px; 
+  padding-bottom: 120px;
 }
 
 .incidente-card {
@@ -117,10 +117,10 @@ body {
   overflow: hidden; 
   padding: 20px;
   gap: 20px; 
-  align-items: flex-start; /* Alinea arriba para textos largos */
+  align-items: flex-start; 
 }
 
-/* Contenido izquierdo: Imagen */
+
 .imagen-contenedor {
   position: relative;
   flex-shrink: 0;
@@ -152,13 +152,13 @@ body {
   z-index: 2;
 }
 
-/* Contenido derecho: Información */
+
 .incidente-contenido {
   flex-grow: 1; 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 180px; /* Para que tenga la misma altura que la imagen */
+  min-height: 180px;
 }
 .contenido-principal {
   flex-grow: 1;
@@ -181,7 +181,7 @@ body {
   margin-top: 15px;
 }
 
-/* Info del reportero (corregido) */
+
 .reporter-subtitulo {
   font-size: 0.8em;
   font-weight: 500;
@@ -213,7 +213,7 @@ body {
   color: #1C2542;
 }
 
-/* Estilos de la tarjeta AGRUPADA */
+
 .incidente-card.agrupado {
   background-color: #2F7372;
 }
@@ -237,9 +237,8 @@ body {
   z-index: 2;
 }
 
-/* MODAL DE AGRUPACIÓN Y ESTILOS DE FORMULARIO REUTILIZABLES */
 
-/* Base del Modal (para el fondo oscuro y centrado) */
+
 .modal-base {
   position: fixed;
   top: 0; left: 0;
@@ -256,7 +255,7 @@ body {
   display: none !important;
 }
 
-/* Contenido del Modal (el recuadro blanco/oscuro) */
+
 .modal-contenido {
   background-color: #2F7372;
   border: 5px solid #6F9B9A;
@@ -280,7 +279,7 @@ body {
   cursor: pointer;
 }
 
-/* Estilos de Formulario dentro de cualquier .modal-contenido */
+
 .modal-contenido .campo-incidente {
   margin-bottom: 15px;
 }
@@ -327,7 +326,7 @@ body {
   font-size: 1em;
 }
 
-/* Estilos específicos para la lista de resumen en el modal de agrupación */
+
 .lista-resumen-agrupados {
   background-color: rgba(12, 19, 45, 0.7);
   border-radius: 10px;
@@ -357,7 +356,7 @@ body {
   flex-grow: 1;
 }
 
-/* BOTONES FLOTANTES Y CHECKBOX DE AGRUPACIÓN */
+
 .acciones-flotantes {
   position: fixed;
   bottom: 30px; right: 30px;
@@ -387,7 +386,7 @@ body {
   gap: 15px;
 }
 
-/* Botón "Ver más" y Checkbox */
+
 .incidente-boton {
   background-color: #2F7372;
   color: white;
@@ -425,39 +424,37 @@ body {
   background-color: #2F7372;
 }
 .checkbox-agrupar.marcado::after {
-  content: 'X'; /* Cambiado a un checkmark para mejor UX */
+  content: 'X'; 
   color: white;
   font-size: 24px;
   font-weight: bold;
 }
 
 #modal-alerta-custom {
-    cursor: pointer; /* Indica que toda el área es clickeable para cerrar */
+    cursor: pointer; 
 }
 
 .alerta-contenido {
-    background-color: #1C2542; /* Un color oscuro y serio del tema */
+    background-color: #1C2542; 
     color: white;
     padding: 30px 40px;
     border-radius: 15px;
-    border: 3px solid #2F7372; /* Borde con el color principal */
+    border: 3px solid #2F7372;
     text-align: center;
     max-width: 90%;
     width: 450px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
     
-    /* Centrar el contenido interno (icono y texto) */
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
     
-    /* Evita que el clic en el contenido cierre el modal si se propaga */
+    
     cursor: default; 
 }
 
 .alerta-contenido svg {
-    /* El tamaño ya está en el HTML, pero podemos asegurar que no se encoja */
     flex-shrink: 0;
 }
 
