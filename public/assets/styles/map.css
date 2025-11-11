@@ -211,6 +211,72 @@ body {
   height: 100%;
 }
 
+/* Marcadores simples en el mapa */
+.map-marker-wrap { position: absolute; }
+
+.map-marker {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #0C132D;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+}
+.map-marker:hover { transform: scale(1.08); }
+
+/* Posición aproximada del marcador de la Casa de Laura */
+.marker-laura-wrap { top: 48%; left: 56%; }
+
+/* Hover popover para marcador fijo (mismo formato del reporte) */
+.marker-popover {
+  position: absolute;
+  bottom: 24px; /* arriba del punto */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  background: #0C132D; /* fondo solicitado */
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  padding: 8px;
+  text-align: center;
+  display: none; /* oculto por defecto */
+  z-index: 60;
+}
+
+/* Triangulito apuntando hacia abajo (igual al del marcador de reporte) */
+.marker-popover::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #0C132D;
+}
+
+/* Contenido interno: imagen + título */
+.marker-popover-content { padding: 4px; }
+.marker-popover-img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: #1f284a; /* placeholder si no hay imagen */
+}
+.marker-popover-title { margin: 0; font-size: 1em; font-weight: 700; }
+
+/* Mostrar popover cuando se hace hover sobre el wrapper */
+.marker-laura-wrap:hover .marker-popover { display: block; }
+
 .mapa-bg {
   width: 100%;
   height: 100%;
@@ -895,4 +961,123 @@ input.error {
 
 .footer-inner .social {
     justify-self: end;
+}
+
+/* ===================== */
+/* Vista HU015: Propiedad */
+/* ===================== */
+
+.propiedad-info {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 19, 45, 0.9); /* Fondo solicitado como overlay */
+  color: #EAE9E7;
+  z-index: 2000; /* por encima del header y el mapa */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.prop-header { display: none; }
+
+.prop-header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.prop-back {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0C132D;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.prop-logo { height: 36px; display: block; }
+
+.prop-container {
+  background: #EAE9E7;
+  color: #0C132D;
+  border-radius: 10px;
+  max-width: 960px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 16px;
+}
+
+.prop-hero {
+  background: #EAE9E7;
+  color: #0C132D;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.prop-photo {
+  flex: 1 1 320px;
+  height: 240px;
+  background: #d4d7dd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4A5568;
+}
+.prop-photo-img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+
+.prop-info { flex: 1 1 320px; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+.prop-title { margin: 0; font-size: 28px; }
+.prop-address { margin: 0; color: #4A5568; }
+
+.prop-user { display: flex; align-items: center; gap: 12px; }
+.prop-avatar { width: 48px; height: 48px; background: #cbd5e1; border-radius: 50%; }
+.prop-label { font-size: 14px; color: #4A5568; }
+.prop-name { font-weight: 600; }
+
+.prop-incidents { margin-top: 20px; }
+.prop-incidents h2 { margin: 0 0 12px; font-size: 22px; }
+
+.prop-card {
+  background: #ffffff;
+  color: #0C132D;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.prop-card-image { position: relative; flex: 1 1 280px; min-height: 200px; }
+.prop-card-cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.prop-image-placeholder { position: absolute; inset: 0; background: #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; }
+.prop-badge { position: absolute; left: 12px; bottom: 12px; background: rgba(0,0,0,0.6); color: #fff; font-size: 12px; padding: 4px 8px; border-radius: 6px; }
+
+.prop-card-body { flex: 2 1 360px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.prop-card-body h3 { margin: 0; font-size: 18px; }
+.prop-card-body p { margin: 0; color: #374151; }
+
+.prop-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.prop-mini-user { display: flex; align-items: center; gap: 8px; }
+.prop-mini-avatar { width: 36px; height: 36px; background: #cbd5e1; border-radius: 50%; }
+.prop-mini-avatar--green { background: #16a34a; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.prop-more { background: #2F7372; color: #fff; padding: 8px 12px; border-radius: 6px; font-weight: 600; text-decoration: none;}
+
+@media (max-width: 640px) {
+  .prop-title { font-size: 22px; }
+  .prop-photo { height: 200px; }
 }

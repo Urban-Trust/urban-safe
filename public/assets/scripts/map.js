@@ -17,6 +17,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const reporteImagen = document.querySelector('.reporte-imagen');
   const inputTituloIncidente = document.querySelector('#titulo-incidente');
   const modalExito = document.querySelector('.modal-exito');
+  // HU015: elementos de vista de propiedad (overlay)
+  const propiedadInfo = document.querySelector('.propiedad-info');
+  const propBackBtn = document.querySelector('.prop-back');
+  if (propBackBtn && propiedadInfo) {
+    propBackBtn.addEventListener('click', () => {
+      propiedadInfo.classList.add('oculto');
+      propiedadInfo.setAttribute('aria-hidden', 'true');
+    });
+  }
+  // Nota: el marcador generado al enviar reporte ya no abre la info de casa
+  // Abrir overlay al clicar marcador fijo "Casa de Laura"
+  const markerLaura = document.querySelector('.marker-laura');
+  if (markerLaura && propiedadInfo) {
+    markerLaura.addEventListener('click', () => {
+      propiedadInfo.classList.remove('oculto');
+      propiedadInfo.setAttribute('aria-hidden', 'false');
+    });
+  }
+  // Cerrar overlay clicando el fondo
+  if (propiedadInfo) {
+    propiedadInfo.addEventListener('click', (e) => {
+      if (e.target === propiedadInfo) {
+        propiedadInfo.classList.add('oculto');
+        propiedadInfo.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
   
   // Referencias a los párrafos de error del HTML (ahora funcionarán)
   const tituloError = document.querySelector('#titulo-error');
@@ -153,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return; 
     }
 
-    // --- SI LA VALIDACIÓN ES EXITOSA, CONTINUAMOS ---
     const iconoAlertaSvg = "data:image/svg+xml,%3Csvg width='67' height='67' viewBox='0 0 67 67' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M33.3333 66.6667C14.9233 66.6667 0 51.7433 0 33.3333C0 14.9233 14.9233 0 33.3333 0C51.7433 0 66.6667 14.9233 66.6667 33.3333C66.6667 51.7433 51.7433 66.6667 33.3333 66.6667ZM33.3333 60C40.4058 60 47.1885 57.1905 52.1895 52.1895C57.1905 47.1885 60 40.4058 60 33.3333C60 26.2609 57.1905 19.4781 52.1895 14.4772C47.1885 9.47618 40.4058 6.66667 33.3333 6.66667C26.2609 6.66667 19.4781 9.47618 14.4772 14.4772C9.47618 19.4781 6.66667 26.2609 6.66667 33.3333C6.66667 40.4058 9.47618 47.1885 14.4772 52.1895C19.4781 57.1905 26.2609 60 33.3333 60ZM33.3333 16.6667C34.2174 16.6667 35.0652 17.0179 35.6904 17.643C36.3155 18.2681 36.6667 19.1159 36.6667 20V36.6667C36.6667 37.5507 36.3155 38.3986 35.6904 39.0237C35.0652 39.6488 34.2174 40 33.3333 40C32.4493 40 31.6014 39.6488 30.9763 39.0237C30.3512 38.3986 30 37.5507 30 36.6667V20C30 19.1159 30.3512 18.2681 30.9763 17.643C31.6014 17.0179 32.4493 16.6667 33.3333 16.6667ZM33.3333 50C32.4493 50 31.6014 49.6488 30.9763 49.0237C30.3512 48.3986 30 47.5507 30 46.6667C30 45.7826 30.3512 44.9348 30.9763 44.3096C31.6014 43.6845 32.4493 43.3333 33.3333 43.3333C34.2174 43.3333 35.0652 43.6845 35.6904 44.3096C36.3155 44.9348 36.6667 45.7826 36.6667 46.6667C36.6667 47.5507 36.3155 48.3986 35.6904 49.0237C35.0652 49.6488 34.2174 50 33.3333 50Z' fill='%23EAE9E7'/%3E%3C/svg%3E";
     const titulo = inputTituloIncidente.value;
     const imagenSrc = inputHidden.value;
@@ -195,3 +221,4 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
