@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="reporter-name">Tú</span>
             </div>
           </div>
-          <a href="#" class="incidente-boton">Ver más</a>
+          <a href="reportsinfo2.html" class="incidente-boton">Ver más</a>
         </div>
       </div>
     `;

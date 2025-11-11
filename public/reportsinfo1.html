@@ -86,6 +86,75 @@
         </div>
     </nav>
 
+    <main class="page-container">
+        <!-- Botón para regresar a la lista -->
+        <a href="reports.html" class="back-button">
+            <svg width="25" height="30" viewBox="0 0 25 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.5 2.5L2.5 15L22.5 27.5" stroke="#EAE9E7" stroke-width="5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+
+        <!-- Contenedor principal de la información -->
+        <div class="incidente-detalle-card">
+            <h1 class="detalle-titulo">INCIDENTE(R78I): Robo de celular enfrente de vivienda de Lucas</h1>
+            
+            <div class="etiquetas-container">
+                <span class="etiqueta">Robo</span>
+                <span class="etiqueta">Individual</span>
+            </div>
+
+            <div class="imagen-contenedor">
+                <img src="assets/images/adjuntar-imagen-1.jpg" alt="Imagen del incidente" class="detalle-imagen">
+                <span class="detalle-fecha">10/11/2025 04:32 pm</span>
+            </div>
+            
+            <div class="detalle-seccion">
+                <h3 class="detalle-subtitulo">Ubicación exacta</h3>
+                <div class="ubicacion-wrapper">
+                    <div class="ubicacion-texto">Jr. Los Laureles 312, Urbanización Las Palmeras, ZMP, Limo, Perú</div>
+                    <button id="botonVerMapa" class="boton-ver-mapa">Ver dirección en el mapa</button>
+                </div>
+            </div>
+
+            <div class="detalle-seccion">
+                <h3 class="detalle-subtitulo">Descripción</h3>
+                <div class="descripcion-texto">Un vehículo fue sustraído sin autorización mientras estaba estacionado en la vía pública, sin vigilancia directa, frente a la gasolinera SUDO. El hecho ocurrió en...</div>
+            </div>
+            
+            <div class="detalle-seccion">
+                <h3 class="detalle-subtitulo">Reportado por:</h3>
+                <div class="reporter-identidad">
+                    <div class="reporter-avatar" style="background-color: #DAA520;" title="Maria Garcia">MG</div>
+                    <span class="reporter-name">Maria Garcia</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="edit-button-container">
+            <button class="boton-editar">
+                <span>Editar</span>
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.125 6.5H3.75C3.02065 6.5 2.32118 6.78973 1.80546 7.30546C1.28973 7.82118 1 8.52065 1 9.25V21.625C1 22.3543 1.28973 23.0538 1.80546 23.5695C2.32118 24.0853 3.02065 24.375 3.75 24.375H16.125C16.8543 24.375 17.5538 24.0853 18.0695 23.5695C18.5853 23.0538 18.875 22.3543 18.875 21.625V20.25" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17.5 3.75015L21.625 7.87515M23.5294 5.92952C24.0709 5.38798 24.3751 4.6535 24.3751 3.88765C24.3751 3.1218 24.0709 2.38731 23.5294 1.84577C22.9878 1.30423 22.2534 1 21.4875 1C20.7216 1 19.9872 1.30423 19.4456 1.84577L7.875 13.3751V17.5001H12L23.5294 5.92952Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </main>
     
+    <!-- Vista de Mapa a Pantalla Completa (Oculta por defecto) -->
+    <div id="mapaFullscreen" class="mapa-fullscreen oculto">
+        <img src="assets/images/mapabg.png" alt="Mapa de fondo" class="mapa-bg">
+        <a href="#" id="mapaBackButton" class="back-button mapa-back-button">
+            <svg width="25" height="30" viewBox="0 0 25 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.5 2.5L2.5 15L22.5 27.5" stroke="#EAE9E7" stroke-width="5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <div class="mapa-marcador">
+            <h4 class="marcador-titulo">Robo de celular enfrente de vivienda de Lucas</h4>
+            <img src="assets/images/adjuntar-imagen-1.jpg" alt="Imagen del incidente" class="marcador-imagen">
+        </div>
+    </div>
+
+    <script src="assets/scripts/reportsinfo1.js"></script>
 </body>
 </html>
