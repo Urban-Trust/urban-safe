@@ -359,9 +359,22 @@ body {
 
 .acciones-flotantes {
   position: fixed;
-  bottom: 30px; right: 30px;
+  bottom: 30px;
+  left: 30px; 
+  right: 30px; 
   z-index: 1000;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
 }
+
+
+.grupo-agrupar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
 .boton-accion {
   background-color: #2F7372;
   color: white;
@@ -374,7 +387,9 @@ body {
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s, transform 0.1s;
+  text-decoration: none; 
 }
+
 .boton-accion:hover {
   background-color: #1f4e4d;
 }
