@@ -342,16 +342,6 @@ body {
   gap: 10px;
 }
 
-/* Estilo para el input de bA�squeda */
-.mapa-controles .busqueda input[type="text"] {
-  color: black; 
-}
-
-/* Estilo para el placeholder */
-.mapa-controles .busqueda input[type="text"]::placeholder {
-  color: black;
-  opacity: 1; 
-}
 /* Estilo para el input de búsqueda */
 .mapa-controles .busqueda input[type="text"] {
   color: black; 
@@ -362,8 +352,6 @@ body {
   color: black;
   opacity: 1; 
 }
-
-
 
 /* Filtros desplegables */
 .filters-toggle { display: none; }
@@ -1010,6 +998,39 @@ input.error {
 
 .footer-inner .social {
     justify-self: end;
+}
+
+/* --- Estilo de la lista de autocompletado --- */
+.suggestions-list {
+  position: absolute;
+  top: 55px; /* ajusta si está muy abajo o arriba */
+  left: 0;
+  width: 100%;
+  background: #ccc;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.suggestions-list li {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.suggestions-list li:hover {
+  background-color: #f0f0f0;
+}
+
+.oculto {
+  display: none;
 }
 
 /* ===================== */

@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const reporteImagen = document.querySelector('.reporte-imagen');
   const inputTituloIncidente = document.querySelector('#titulo-incidente');
   const modalExito = document.querySelector('.modal-exito');
+  
   // HU015: elementos de vista de propiedad (overlay)
   const propiedadInfo = document.querySelector('.propiedad-info');
   const propBackBtn = document.querySelector('.prop-back');
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       propiedadInfo.setAttribute('aria-hidden', 'true');
     });
   }
+  
   // Nota: el marcador generado al enviar reporte ya no abre la info de casa
   // Abrir overlay al clicar marcador fijo "Casa de Laura"
   const markerLaura = document.querySelector('.marker-laura');
@@ -35,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       propiedadInfo.setAttribute('aria-hidden', 'false');
     });
   }
+  
   // Cerrar overlay clicando el fondo
   if (propiedadInfo) {
     propiedadInfo.addEventListener('click', (e) => {
@@ -257,5 +260,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-});
+  // --- AUTOCOMPLETADO EN LA BARRA DE BÚSQUEDA ---
+  const inputBusqueda = document.getElementById('input-busqueda');
+  const suggestionsList = document.getElementById('suggestions');
+  
+  if (inputBusqueda && suggestionsList) {
+    const sugerencias = Array.from(suggestionsList.getElementsByTagName('li'));
 
+    inputBusqueda.addEventListener('input', () => {
+      const texto = inputBusqueda.value.toLowerCase();
+      let hayCoincidencias = false;
+
+      sugerencias.forEach(item => {
+        const textoItem = item.textContent.toLowerCase();
+        if (textoItem.includes(texto) && texto !== "") {
+          item.style.display = "block";
+          hayCoincidencias = true;
+        } else {
+          item.style.display = "none";
+        }
+      });
+
+      suggestionsList.classList.toggle('oculto', !hayCoincidencias);
+    });
+
+    sugerencias.forEach(item => {
+      item.addEventListener('click', () => {
+        inputBusqueda.value = item.textContent;
+        suggestionsList.classList.add('oculto');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.busqueda')) {
+        suggestionsList.classList.add('oculto');
+      }
+    });
+  }
+});
