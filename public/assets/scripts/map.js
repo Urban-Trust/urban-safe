@@ -101,6 +101,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // HU33: Toggle de capas (Mapa de calor / Iconos de incidencias)
+  const heatChip = document.querySelector('.filter-chip[data-layer="heat"]');
+  const iconsChip = document.querySelector('.filter-chip[data-layer="icons"]');
+  const heatLayer = document.querySelector('.map-layer-heat');
+  const iconsLayer = document.querySelector('.map-layer-icons');
+
+  if (heatChip && heatLayer) {
+    heatChip.addEventListener('click', () => {
+      const isActive = heatChip.classList.contains('active') || heatChip.getAttribute('aria-pressed') === 'true';
+      heatLayer.classList.toggle('visible', isActive);
+      heatLayer.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    });
+  }
+
+  if (iconsChip && iconsLayer) {
+    iconsChip.addEventListener('click', () => {
+      const isActive = iconsChip.classList.contains('active') || iconsChip.getAttribute('aria-pressed') === 'true';
+      iconsLayer.classList.toggle('visible', isActive);
+      iconsLayer.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    });
+  }
+
+  // Botón "Quitar filtros": desactiva chips y oculta capas
+  const btnClear = document.querySelector('.btn-clear');
+  const filtersToggle = document.querySelector('#filters-toggle');
+  if (btnClear) {
+    btnClear.addEventListener('click', () => {
+      chips.forEach((chip) => {
+        chip.classList.remove('active');
+        chip.setAttribute('aria-pressed', 'false');
+      });
+      if (heatLayer) { heatLayer.classList.remove('visible'); heatLayer.setAttribute('aria-hidden', 'true'); }
+      if (iconsLayer) { iconsLayer.classList.remove('visible'); iconsLayer.setAttribute('aria-hidden', 'true'); }
+      if (filtersToggle) { filtersToggle.checked = false; }
+    });
+  }
+
   modalImagenes.addEventListener('click', (ev) => {
     if (ev.target === modalImagenes) {
       modalImagenes.classList.add('oculto');

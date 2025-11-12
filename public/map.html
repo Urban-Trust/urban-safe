@@ -78,7 +78,7 @@
         <ul class="menu">
           <li><a href="index.html">Inicio</a></li>
           <li><a href="map.html">Mapa</a></li>
-          <li><a href="#">Chats</a></li>
+          <li><a href="chat.html">Chats</a></li>
           <li><a href="reports.html">Incidentes</a></li>
         </ul>
 
@@ -91,6 +91,32 @@
     <section class="mapa">
       <div class="mapa-container">
         <img class="mapa-bg" src="assets/images/mapabg.png" alt="Mapa de fondo" />
+
+        <!-- Capas del mapa (HU33) -->
+        <div class="map-layers" aria-hidden="true">
+          <!-- Capa: Mapa de calor -->
+          <div class="map-layer-heat" aria-hidden="true">
+            <!-- Posiciones de ejemplo -->
+            <span class="heat-dot heat-yellow heat-md" style="top: 55%; left: 30%"></span>
+            <span class="heat-dot heat-orange heat-md" style="top: 35%; left: 60%"></span>
+            <span class="heat-dot heat-red heat-md" style="top: 70%; left: 45%"></span>
+            <!-- Extra -->
+            <span class="heat-dot heat-yellow heat-sm" style="top: 42%; left: 25%"></span>
+            <span class="heat-dot heat-orange heat-lg" style="top: 52%; left: 70%"></span>
+            <span class="heat-dot heat-red heat-sm" style="top: 30%; left: 40%"></span>
+          </div>
+
+          <!-- Capa: Iconos de incidencias -->
+          <div class="map-layer-icons" aria-hidden="true">
+            <img class="incident-icon" src="assets/images/apuñalamiento-icon.png" alt="Incidente: Apuñalamiento" style="top: 55%; left: 30%" />
+            <img class="incident-icon" src="assets/images/robo-icon.png" alt="Incidente: Robo" style="top: 35%; left: 60%" />
+            <img class="incident-icon" src="assets/images/asesinato-icon.png" alt="Incidente: Asesinato" style="top: 70%; left: 45%" />
+            <!-- Extra -->
+            <img class="incident-icon" src="assets/images/apuñalamiento-icon.png" alt="Incidente: Apuñalamiento" style="top: 42%; left: 25%" />
+            <img class="incident-icon" src="assets/images/robo-icon.png" alt="Incidente: Robo" style="top: 52%; left: 70%" />
+            <img class="incident-icon" src="assets/images/asesinato-icon.png" alt="Incidente: Asesinato" style="top: 30%; left: 40%" />
+          </div>
+        </div>
         <!-- Marcador fijo: Casa de Laura (envuelto para hover estable) -->
         <div class="map-marker-wrap marker-laura-wrap" aria-label="Casa de Laura">
           <button type="button" class="map-marker marker-laura" title="Casa de Laura" aria-label="Casa de Laura"></button>
@@ -145,10 +171,10 @@
             </div>
             <div class="filters-divider"></div>
             <div class="filters-subtitle">Filtros generales</div>
-            <div class="filters-actions">
-              <button type="button" class="filter-chip">Mapa de calor</button>
-              <button type="button" class="filter-chip">Iconos de incidencias</button>
-            </div>
+          <div class="filters-actions">
+            <button type="button" class="filter-chip" data-layer="heat">Mapa de calor</button>
+            <button type="button" class="filter-chip" data-layer="icons">Iconos de incidencias</button>
+          </div>
             <button type="button" class="btn-clear">Quitar filtros</button>
           </div>
       </div>
