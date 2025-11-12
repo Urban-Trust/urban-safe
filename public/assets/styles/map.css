@@ -211,6 +211,55 @@ body {
   height: 100%;
 }
 
+/* Capas del mapa (HU33) */
+.map-layers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.map-layer-heat,
+.map-layer-icons {
+  position: absolute;
+  inset: 0;
+  display: none; /* oculto por defecto */
+}
+
+.map-layer-heat.visible,
+.map-layer-icons.visible {
+  display: block;
+}
+
+/* Heatmap: círculos difusos por categoría */
+
+/* Círculos sólidos y transparentes */
+.heat-dot {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.heat-yellow { background: rgba(255, 230, 0, 0.32); border: 2px solid rgba(255, 230, 0, 0.65); }
+.heat-orange { background: rgba(255, 145, 0, 0.32); border: 2px solid rgba(255, 145, 0, 0.65); }
+.heat-red    { background: rgba(229,  57,57, 0.32); border: 2px solid rgba(229,  57,57, 0.65); }
+
+/* Variantes de tamaño */
+.heat-sm { width: 80px;  height: 80px; }
+.heat-md { width: 120px; height: 120px; }
+.heat-lg { width: 160px; height: 160px; }
+
+/* Iconos de incidencias */
+.incident-icon {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  transform: translate(-50%, -100%); /* punta al punto */
+}
+
 /* Marcadores simples en el mapa */
 .map-marker-wrap { position: absolute; }
 
