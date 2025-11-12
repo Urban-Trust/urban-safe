@@ -195,3 +195,40 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+// --- Autocompletado en la barra de búsqueda ---
+const inputBusqueda = document.getElementById('input-busqueda');
+const suggestionsList = document.getElementById('suggestions');
+const sugerencias = Array.from(suggestionsList.getElementsByTagName('li'));
+
+inputBusqueda.addEventListener('input', () => {
+  const texto = inputBusqueda.value.toLowerCase();
+  let hayCoincidencias = false;
+
+  sugerencias.forEach(item => {
+    const textoItem = item.textContent.toLowerCase();
+    if (textoItem.includes(texto) && texto !== "") {
+      item.style.display = "block";
+      hayCoincidencias = true;
+    } else {
+      item.style.display = "none";
+    }
+  });
+
+  suggestionsList.classList.toggle('oculto', !hayCoincidencias);
+});
+
+sugerencias.forEach(item => {
+  item.addEventListener('click', () => {
+    inputBusqueda.value = item.textContent;
+    suggestionsList.classList.add('oculto');
+  });
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.busqueda')) {
+    suggestionsList.classList.add('oculto');
+  }
+});
+
+
