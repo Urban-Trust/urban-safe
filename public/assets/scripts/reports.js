@@ -158,3 +158,25 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+// BÚSQUEDA POR TÍTULO
+document.addEventListener('DOMContentLoaded', () => {
+  const inputBusqueda = document.getElementById('texto-busquedad'); // pq busquedad?
+  const incidentes = document.querySelectorAll('.incidente-card');
+
+  if (inputBusqueda) {
+    inputBusqueda.addEventListener('input', () => {
+      const texto = inputBusqueda.value.toLowerCase();
+
+      incidentes.forEach(incidente => {
+        const titulo = incidente.querySelector('.incidente-titulo').textContent.toLowerCase();
+
+        
+        if (titulo.includes(texto)) {
+          incidente.style.display = 'flex';
+        } else {
+          incidente.style.display = 'none';
+        }
+      });
+    });
+  }
+});
