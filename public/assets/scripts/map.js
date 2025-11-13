@@ -297,4 +297,43 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // --- Botón de pánico en la navbar según preferencia en ajustes ---
+  try {
+    const panicBtn = document.getElementById('panic-navbar-button');
+    const modalPanic = document.getElementById('modal-panic');
+    const modalPanicClose = document.getElementById('modal-panic-close');
+    const enabled = localStorage.getItem('panicEnabled') === 'true';
+    if (panicBtn) {
+      panicBtn.classList.toggle('oculto', !enabled);
+      panicBtn.addEventListener('click', () => {
+        if (modalPanic) {
+          modalPanic.classList.remove('oculto');
+          modalPanic.setAttribute('aria-hidden', 'false');
+        }
+        // cerrar automaticamente despues de 2.2s
+        setTimeout(() => {
+          if (modalPanic) {
+            modalPanic.classList.add('oculto');
+            modalPanic.setAttribute('aria-hidden', 'true');
+          }
+        }, 2200);
+      });
+    }
+    if (modalPanicClose) {
+      modalPanicClose.addEventListener('click', () => {
+        if (modalPanic) {
+          modalPanic.classList.add('oculto');
+          modalPanic.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+    // si se cambia la preferencia en otra pestaña, actualizar visibilidad
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'panicEnabled' && panicBtn) {
+        const now = e.newValue === 'true';
+        panicBtn.classList.toggle('oculto', !now);
+      }
+    });
+  } catch (e) { /* noop */ }
 });
