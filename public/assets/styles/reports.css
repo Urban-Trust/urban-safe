@@ -495,3 +495,67 @@ body {
     font-weight: 500;
     line-height: 1.6;
 }
+
+/* --- MODAL DE DESCARGA --- */
+.modal-descarga {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.15);
+    z-index: 9999;
+}
+
+.modal-contenido-descarga {
+    background: #ffffff;
+    padding: 25px;
+    width: 450px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.modal-info p {
+    margin: 5px 0 10px 0;
+    font-size: 14px;
+}
+
+.titulo-modal {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Botón dentro del modal */
+.boton-descargar-modal {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: #0E6B61;
+    border: none;
+    color: white;
+    font-size: 17px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Ocultar */
+.oculto {
+    display: none !important;
+}
+
+/* ALERTA DE DESCARGA */
+.alerta-descarga {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 35px;
+    background: #0E6B61;
+    color: white;
+    font-size: 20px;
+    border-radius: 10px;
+    z-index: 10000;
+}

@@ -150,6 +150,9 @@
             </div>
 
             <div class="imagen-contenedor">
+              <button id="btn-descargar" class="boton-descargar">
+            <img src="assets/images/material-symbols_download-sharp.png" alt="Descargar">
+        </button>
                 <img id="detalle-imagen" src="assets/images/adjuntar-imagen-3.jpg" alt="Imagen del incidente" class="detalle-imagen">
                 <span class="detalle-fecha">10/11/2025 05:00 pm</span>
                 <button class="boton-cambiar-imagen oculto">
@@ -289,7 +292,40 @@
             <p>Las agrupaciones de incidentes deben tener 2 o más incidentes. No puede eliminar más.</p>
         </div>
     </div>
+    <!-- MODAL DE PREVISUALIZACIÓN DE DESCARGA -->
+<div id="modal-descarga" class="modal-descarga oculto">
+    <div class="modal-contenido-descarga">
+        <h2 class="titulo-modal">Confirmar Descarga</h2>
+
+        <div class="modal-info">
+
+          <p><strong>Título:</strong></p>
+    <p id="modal-titulo"></p>
+
+            <p><strong>Ubicación:</strong></p>
+            <p id="modal-ubicacion"></p>
+
+            <p><strong>Descripción:</strong></p>
+            <p id="modal-descripcion"></p>
+
+            <p><strong>Reportado por:</strong></p>
+            <p id="modal-reportado"></p>
+        </div>
+
+        <button id="btn-descargar-confirmar" class="boton-descargar-modal">
+            DESCARGAR
+        </button>
+    </div>
+</div>
+
+<!-- ALERTA -->
+<div id="alerta-descarga" class="alerta-popup oculto">
+    <img src="assets/images/Vector.png" class="icono-alerta" alt="check">
+    <p>¡Descarga exitosa!</p>
+</div>
+
 
     <script src="assets/scripts/reportsinfo2.js"></script>
+    
 </body>
 </html>
