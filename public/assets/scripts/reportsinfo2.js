@@ -211,4 +211,44 @@ document.addEventListener('DOMContentLoaded', () => {
     modalAlertaLimite.addEventListener('click', () => {
         modalAlertaLimite.classList.add('oculto');
     });
+
+    const btnDescarga = document.getElementById("btn-descargar");
+    const modal = document.getElementById("modal-descarga");
+    const alerta = document.getElementById("alerta-descarga");
+    const btnConfirmar = document.getElementById("btn-descargar-confirmar");
+
+    const txtTitulo = document.getElementById("modal-titulo");
+    const txtUbicacion = document.getElementById("modal-ubicacion");
+    const txtDescripcion = document.getElementById("modal-descripcion");
+    const txtReportado = document.getElementById("modal-reportado");
+
+    if (btnDescarga) {
+        btnDescarga.addEventListener("click", () => {
+            
+            txtTitulo.textContent =
+             document.querySelector(".detalle-titulo")?.textContent.trim();
+
+            txtUbicacion.textContent = 
+                document.querySelector(".ubicacion-texto")?.textContent.trim();
+
+            txtDescripcion.textContent = 
+                document.querySelector(".descripcion-texto")?.textContent.trim();
+
+            txtReportado.textContent = 
+                document.querySelector(".reportante-nombre")?.textContent.trim();
+
+            modal.classList.remove("oculto");
+        });
+    }
+
+    if (btnConfirmar) {
+        btnConfirmar.addEventListener("click", () => {
+
+            modal.classList.add("oculto");
+            alerta.classList.remove("oculto");
+
+            setTimeout(() => alerta.classList.add("oculto"), 2000);
+        });
+    }
+
 });

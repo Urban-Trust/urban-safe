@@ -467,3 +467,114 @@ body {
 .lista-etiquetas-disponibles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
 .etiqueta-opcion { background-color: #1C2542; color: #D4D4D4; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
 .etiqueta-opcion.seleccionada { background-color: #D4D4D4; color: #1C2542; font-weight: bold; }
+
+.boton-descargar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    border: none;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0,0,0,0.15);
+    z-index: 5;
+}
+
+.boton-descargar img {
+    width: 24px;
+    height: 24px;
+}
+
+/* ===== MODAL DE DESCARGA ===== */
+
+.modal-descarga {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #EAE9E7;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    z-index: 2000;
+}
+
+.modal-descarga h2 {
+    margin-top: 0;
+    font-size: 1.4em;
+    margin-bottom: 15px;
+}
+
+.modal-descarga p {
+    margin: 6px 0;
+    font-size: 0.95em;
+}
+
+.boton-descargar-modal {
+    width: 100%;
+    background-color: #2F7372;
+    color: white;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.boton-descargar-modal:hover {
+    background-color: #1f4e4d;
+}
+
+/* Alerta verde de descarga exitosa */
+.alerta-exitosa {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #2F7372;
+    color: white;
+    padding: 25px 40px;
+    border-radius: 12px;
+    font-size: 1.4em;
+    font-weight: bold;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    z-index: 3000;
+}
+
+/* POPUP VERDE DE DESCARGA EXITOSA */
+.alerta-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1A7569; /* verde igual al mockup */
+    padding: 40px 60px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 9999;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+
+    color: white;
+    font-size: 26px;
+    font-weight: bold;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.icono-alerta {
+    width: 65px;
+    height: auto;
+}
+
+.oculto {
+    display: none !important;
+}
