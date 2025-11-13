@@ -52,6 +52,9 @@ body {
 /* Dropdown del logo (solo en map) */
 .brand-wrap {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .menu-toggle {
