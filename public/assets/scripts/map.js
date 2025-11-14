@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- AUTOCOMPLETADO EN LA BARRA DE BÚSQUEDA ---
+  
   const inputBusqueda = document.getElementById('input-busqueda');
   const suggestionsList = document.getElementById('suggestions');
   
@@ -297,4 +297,25 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+
+const btnVerHistorial = document.getElementById("btn-ver-historial");
+const sidebarHistorial = document.getElementById("sidebar-historial");
+const propiedadInfoBox = document.querySelector(".propiedad-info");
+
+
+btnVerHistorial.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    propiedadInfoBox.classList.add("oculto");
+    propiedadInfoBox.setAttribute("aria-hidden", "true");
+    sidebarHistorial.classList.remove("oculto");
+});
+document.addEventListener("click", (e) => {
+    if (!sidebarHistorial.contains(e.target) && !btnVerHistorial.contains(e.target)) {
+        sidebarHistorial.classList.add("oculto");
+    }
+});
+
+  
 });
