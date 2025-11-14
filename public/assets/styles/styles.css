@@ -276,6 +276,88 @@ body {
   }
 }
 
+/* HELP */
+.help {
+  padding: 60px 0;
+}
+
+.help-hero {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.help-hero-text h2 {
+  margin: 0 0 8px;
+  font-size: 26px;
+}
+
+.help-hero-text p {
+  margin: 0;
+  color: #4B5563;
+}
+
+.help-hero-illustration svg {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.help-title {
+  margin: 32px 0 18px;
+  font-size: 28px;
+  text-align: left;
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.help-card {
+  background: #2F7372;
+  color: #FFFFFF;
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.help-card-icon svg {
+  display: block;
+}
+
+.help-card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.help-card p {
+  margin: 0;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .help-hero {
+    grid-template-columns: 1.2fr 1fr;
+  }
+
+  .help-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+}
+
 /* FOOTER */
 .footer {
   background: #1A284D;
