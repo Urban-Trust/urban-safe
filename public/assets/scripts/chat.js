@@ -7,7 +7,117 @@ document.addEventListener('DOMContentLoaded', () => {
   const attachImageBtn = document.getElementById('attachImageBtn');
   const attachPollBtn = document.getElementById('attachPollBtn');
   const attachEventBtn = document.getElementById('attachEventBtn');
+  const eventModal = document.getElementById('eventModal');
+  const eventModalClose = document.getElementById('eventModalClose');
+  const eventForm = document.getElementById('eventForm');
+  const eventChooseImageBtn = document.getElementById('eventChooseImageBtn');
+  const eventAttachmentName = document.getElementById('eventAttachmentName');
+  const eventAttachmentHidden = document.getElementById('eventAttachmentImage');
+  const eventMapBtn = document.getElementById('eventMapBtn');
+  const imagePickerModal = document.getElementById('imagePickerModal');
+  const imagePickerGrid = document.getElementById('imagePickerGrid');
+  const imagePickerClose = document.getElementById('imagePickerClose');
+  const eventSuccessOverlay = document.getElementById('eventSuccessOverlay');
   let menuOpen = false;
+  let lastFocusedElement = null;
+  let successTimer = null;
+
+  const projectImages = [
+    { src: 'assets/images/adjuntar-imagen-4.jpg', label: 'Patrullaje - Plaza' },
+    { src: 'assets/images/adjuntar-imagen-6.jpg', label: 'Control del parque' },
+    { src: 'assets/images/adjuntar-imagen-1.jpg', label: 'Ingreso principal' }
+  ];
+  let imagePickerAction = null;
+
+  const resetEventForm = () => {
+    if (!eventForm) return;
+    eventForm.reset();
+    if (eventAttachmentName) {
+      eventAttachmentName.textContent = 'Ninguna imagen seleccionada';
+    }
+    if (eventAttachmentHidden) {
+      eventAttachmentHidden.value = '';
+      delete eventAttachmentHidden.dataset.label;
+    }
+  };
+
+  const openEventModal = () => {
+    if (!eventModal) return;
+    lastFocusedElement = document.activeElement;
+    eventModal.classList.remove('hidden');
+    eventModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (eventForm) {
+      setTimeout(() => {
+        const titleInput = eventForm.querySelector('#eventTitle');
+        titleInput && titleInput.focus();
+      }, 0);
+    }
+  };
+
+  const closeEventModal = () => {
+    if (!eventModal) return;
+    eventModal.classList.add('hidden');
+    eventModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    resetEventForm();
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus();
+    }
+  };
+
+  const renderImagePicker = () => {
+    if (!imagePickerGrid) return;
+    imagePickerGrid.innerHTML = '';
+    projectImages.forEach((item) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'asset-picker-card';
+      btn.innerHTML = `
+        <img src="${item.src}" alt="${item.label}">
+        <span>${item.label}</span>
+      `;
+      btn.addEventListener('click', () => {
+        if (typeof imagePickerAction === 'function') {
+          imagePickerAction(item);
+        }
+        closeImagePicker();
+      });
+      imagePickerGrid.appendChild(btn);
+    });
+  };
+
+  const openImagePicker = (action) => {
+    if (!imagePickerModal) return;
+    imagePickerAction = action;
+    renderImagePicker();
+    imagePickerModal.classList.remove('hidden');
+    imagePickerModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeImagePicker = () => {
+    if (!imagePickerModal) return;
+    imagePickerModal.classList.add('hidden');
+    imagePickerModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+
+  const showEventSuccess = () => {
+    if (!eventSuccessOverlay) return;
+    eventSuccessOverlay.classList.remove('hidden');
+    eventSuccessOverlay.setAttribute('aria-hidden', 'false');
+    clearTimeout(successTimer);
+    successTimer = setTimeout(() => hideEventSuccess(), 2200);
+  };
+
+  const hideEventSuccess = () => {
+    if (!eventSuccessOverlay) return;
+    eventSuccessOverlay.classList.add('hidden');
+    eventSuccessOverlay.setAttribute('aria-hidden', 'true');
+  };
+
+  eventSuccessOverlay && eventSuccessOverlay.addEventListener('click', hideEventSuccess);
 
   // Toggle attach menu on button click
   attachBtn.addEventListener('click', (e) => {
@@ -39,28 +149,23 @@ document.addEventListener('DOMContentLoaded', () => {
     input.value = '';
   });
 
-  // Adjuntar imagen via menu option
+  // Adjuntar imagen via menu option (solo biblioteca interna)
   attachImageBtn.addEventListener('click', () => {
     menuOpen = false;
     attachMenuDropdown.classList.add('hidden');
-    
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.click();
+    const chatId = window.chatAPI?.getCurrentChatId?.();
+    if (!chatId) {
+      alert('Selecciona una conversación antes de adjuntar imágenes.');
+      return;
+    }
+    openImagePicker((item) => {
+      window.chatAPI?.sendImageInChat(chatId, item.src);
+    });
+  });
 
-    fileInput.onchange = () => {
-      const file = fileInput.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const chatId = window.chatAPI && window.chatAPI.getCurrentChatId ? window.chatAPI.getCurrentChatId() : null;
-        if (!chatId) return;
-        window.chatAPI.sendImageInChat(chatId, e.target.result);
-      };
-      reader.readAsDataURL(file);
-    };
+  imagePickerClose && imagePickerClose.addEventListener('click', closeImagePicker);
+  imagePickerModal && imagePickerModal.addEventListener('click', (evt) => {
+    if (evt.target === imagePickerModal) closeImagePicker();
   });
 
   // auto-scroll al cargar para ver últimos mensajes
@@ -123,11 +228,98 @@ document.addEventListener('DOMContentLoaded', () => {
       closePollModal();
     });
 
-    // Event button (no functionality yet)
+    // Event button modal handling
     attachEventBtn && attachEventBtn.addEventListener('click', () => {
       menuOpen = false;
       attachMenuDropdown.classList.add('hidden');
-      console.log('Crear evento: Sin funcionalidad todavía');
+      openEventModal();
+    });
+
+    eventModalClose && eventModalClose.addEventListener('click', closeEventModal);
+
+    eventModal && eventModal.addEventListener('click', (evt) => {
+      if (evt.target === eventModal) {
+        closeEventModal();
+      }
+    });
+
+    eventChooseImageBtn && eventChooseImageBtn.addEventListener('click', () => {
+      openImagePicker((item) => {
+        if (eventAttachmentName) {
+          eventAttachmentName.textContent = item.label;
+        }
+        if (eventAttachmentHidden) {
+          eventAttachmentHidden.value = item.src;
+          eventAttachmentHidden.dataset.label = item.label;
+        }
+      });
+    });
+
+    eventMapBtn && eventMapBtn.addEventListener('click', () => {
+      alert('Pronto podrás seleccionar la ubicación directamente desde el mapa.');
+    });
+
+    const shareEventInChat = (chatId, payload) => {
+      if (!chatId) return;
+      if (window.chatAPI?.createEventInChat) {
+        window.chatAPI.createEventInChat(chatId, payload);
+      } else if (window.chatAPI?.sendMessageToChat) {
+        const summary = [
+          `📅 ${payload.title}`,
+          `Fecha: ${payload.date} - ${payload.time}`,
+          `Lugar: ${payload.location}`,
+          payload.description ? `Descripción: ${payload.description}` : null
+        ].filter(Boolean).join('\n');
+        window.chatAPI.sendMessageToChat(chatId, summary);
+      } else {
+        console.info('Evento creado (simulado):', payload);
+      }
+    };
+
+    eventForm && eventForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('eventTitle')?.value.trim();
+      const date = document.getElementById('eventDate')?.value.trim();
+      const time = document.getElementById('eventTime')?.value.trim();
+      const location = document.getElementById('eventLocation')?.value.trim();
+      const description = document.getElementById('eventDescription')?.value.trim();
+      const attachmentImage = eventAttachmentHidden?.value || '';
+      const attachmentLabel = eventAttachmentHidden?.dataset?.label || null;
+
+      if (!title || !date || !time || !location) {
+        alert('Completa los campos obligatorios para crear el evento.');
+        return;
+      }
+
+      const chatId = window.chatAPI?.getCurrentChatId?.() || null;
+      if (!chatId) {
+        alert('Selecciona una conversación antes de crear un evento.');
+        return;
+      }
+      const basePayload = {
+        title,
+        date,
+        time,
+        location,
+        description,
+        attachmentName: attachmentLabel,
+        createdAt: new Date().toISOString()
+      };
+
+      const finalize = (attachmentData) => {
+        if (attachmentData) {
+          basePayload.image = attachmentData;
+        }
+        shareEventInChat(chatId, basePayload);
+        showEventSuccess();
+        closeEventModal();
+      };
+
+      if (attachmentImage) {
+        finalize(attachmentImage);
+      } else {
+        finalize(null);
+      }
     });
 
 });

@@ -350,6 +350,77 @@ document.addEventListener('DOMContentLoaded', () => {
         pollWrap.appendChild(optNode);
       });
       body.appendChild(pollWrap);
+    } else if (m.type === 'event') {
+      const card = document.createElement('div');
+      card.className = 'chat-event-card';
+
+      const media = document.createElement('div');
+      media.className = 'chat-event-media';
+      if (m.image) {
+        const img = document.createElement('img');
+        img.src = m.image;
+        img.alt = m.title || 'Evento';
+        media.appendChild(img);
+      } else {
+        media.innerHTML = '<span style="font-size:42px;opacity:0.4;">📅</span>';
+      }
+
+      const details = document.createElement('div');
+      const title = document.createElement('h4');
+      title.className = 'chat-event-title';
+      title.textContent = m.title || 'Evento';
+      details.appendChild(title);
+
+      const meta = document.createElement('div');
+      meta.className = 'chat-event-meta';
+      meta.innerHTML = `
+        <div>
+          <strong>Fecha</strong>
+          <span>${escapeHtml(m.date || '-')}</span>
+        </div>
+        <div>
+          <strong>Hora</strong>
+          <span>${escapeHtml(m.timeText || m.time || '-')}</span>
+        </div>
+        <div>
+          <strong>Lugar</strong>
+          <span>${escapeHtml(m.location || 'Por confirmar')}</span>
+        </div>
+        <div>
+          <strong>Recordatorio</strong>
+          <span>${m.reminderEnabled === false ? 'Desactivado' : 'Activo'}</span>
+        </div>
+      `;
+      details.appendChild(meta);
+
+      if (m.description) {
+        const desc = document.createElement('div');
+        desc.className = 'chat-event-description';
+        desc.textContent = m.description;
+        details.appendChild(desc);
+      }
+
+      const actions = document.createElement('div');
+      actions.className = 'chat-event-actions';
+      const reminder = document.createElement('div');
+      reminder.className = 'chat-event-reminder';
+      reminder.innerHTML = `<span>🔔</span> ${m.reminderEnabled === false ? 'Recordatorio apagado' : 'Recordatorio activo'}`;
+      actions.appendChild(reminder);
+
+      const yesPill = document.createElement('div');
+      yesPill.className = 'chat-event-pill';
+      yesPill.textContent = `Sí puedo ${m.attendingYes ?? 12}`;
+      const noPill = document.createElement('div');
+      noPill.className = 'chat-event-pill';
+      noPill.textContent = `No puedo ${m.attendingNo ?? 3}`;
+      actions.appendChild(yesPill);
+      actions.appendChild(noPill);
+
+      details.appendChild(actions);
+
+      card.appendChild(media);
+      card.appendChild(details);
+      body.appendChild(card);
     } else if (m.type === 'image') {
       const text = document.createElement('div');
       text.className = 'msg-text';
@@ -705,6 +776,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sendImageInChat: function(chatId, src) {
       const m = {from: 'Tú', type: 'image', src: src, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), self:true};
+      perChatMessages[chatId] = perChatMessages[chatId] || [];
+      perChatMessages[chatId].push(m);
+      if (currentChatId === chatId) {
+        chatArea.appendChild(formatMessageNode(m));
+        chatArea.scrollTop = chatArea.scrollHeight;
+      } else {
+        incrementUnread(chatId, 1);
+      }
+      saveState();
+    },
+
+    createEventInChat: function(chatId, payload) {
+      const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      const m = {
+        from: 'Tǧ',
+        type: 'event',
+        title: payload.title,
+        date: payload.date,
+        time: payload.time,
+        timeText: payload.time,
+        location: payload.location,
+        description: payload.description,
+        image: payload.image || null,
+        attachmentName: payload.attachmentName || null,
+        reminderEnabled: payload.reminderEnabled !== undefined ? payload.reminderEnabled : true,
+        attendingYes: payload.attendingYes ?? 12,
+        attendingNo: payload.attendingNo ?? 3,
+        self: true,
+        createdAt: payload.createdAt || new Date().toISOString()
+      };
+      m.time = now;
       perChatMessages[chatId] = perChatMessages[chatId] || [];
       perChatMessages[chatId].push(m);
       if (currentChatId === chatId) {

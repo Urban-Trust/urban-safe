@@ -217,6 +217,105 @@
     <div id="emojiGrid" class="emoji-grid"></div>
   </div>
 </div>
+
+<!-- Modal para crear evento -->
+<div id="eventModal" class="event-modal-overlay hidden" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="event-modal-panel">
+    <button type="button" id="eventModalClose" class="event-modal-close" aria-label="Cerrar">
+      <span aria-hidden="true">✕</span>
+    </button>
+    <div class="event-modal-header">
+      <h3>Crear Evento</h3>
+      <p>Completa la información para notificar a tu grupo.</p>
+    </div>
+    <form id="eventForm" class="event-form">
+      <div class="event-form-group">
+        <label for="eventTitle">Título del evento *</label>
+        <input id="eventTitle" type="text" placeholder="Escribir título..." required />
+      </div>
+      <div class="event-form-row">
+        <div class="event-form-group">
+          <label for="eventDate">Fecha del evento *</label>
+          <input id="eventDate" type="text" inputmode="numeric" placeholder="DD/MM/AAAA" required />
+        </div>
+        <div class="event-form-group">
+          <label for="eventTime">Hora del evento *</label>
+          <input id="eventTime" type="text" inputmode="numeric" placeholder="HH:MM am/pm" required />
+        </div>
+      </div>
+      <div class="event-form-group">
+        <label for="eventLocation">Ubicación exacta *</label>
+        <div class="event-input-action">
+          <input id="eventLocation" type="text" placeholder="Escribir ubicación..." required />
+          <button type="button" id="eventMapBtn" class="event-map-btn" aria-label="Añadir desde mapa">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2.5c-3.03 0-5.5 2.42-5.5 5.4 0 3.58 3.92 7.73 5.02 8.85.26.27.69.27.95 0 1.1-1.12 5.03-5.27 5.03-8.85 0-2.98-2.47-5.4-5.5-5.4zm0 7.65c-1.24 0-2.25-.99-2.25-2.25S10.76 5.65 12 5.65s2.25 1 2.25 2.25S13.24 10.15 12 10.15z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="event-form-group">
+        <label for="eventDescription">Descripción</label>
+        <textarea id="eventDescription" placeholder="Escribir descripción..."></textarea>
+      </div>
+      <div class="event-form-group">
+        <label>Adjuntar video o foto</label>
+        <div class="event-attachment">
+          <button type="button" id="eventChooseImageBtn" class="event-choose-btn" aria-label="Seleccionar imagen del proyecto">
+            <span class="event-attachment-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M16.5 6.5l-7.59 7.59a2 2 0 102.83 2.83L17 11.67" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span>Elegir imagen</span>
+          </button>
+          <div class="event-attachment-body">
+            <strong>Biblioteca Urban Safe</strong>
+            <span id="eventAttachmentName" class="event-attachment-name">Ninguna imagen seleccionada</span>
+          </div>
+        </div>
+        <input type="hidden" id="eventAttachmentImage" value="" />
+      </div>
+      <div class="event-form-footer">
+        <button type="submit" id="eventSubmitBtn" class="event-submit-btn">
+          <span class="event-submit-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 12l18-9-4 9 4 9-18-9zm12-3l-6 3 6 3-1.5 3.5L6 12l7.5-6.5L15 9z" fill="currentColor"/>
+            </svg>
+          </span>
+          Crear
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal para elegir imágenes del proyecto -->
+<div id="imagePickerModal" class="asset-picker-overlay hidden" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="asset-picker-panel">
+    <div class="asset-picker-header">
+      <div>
+        <h4>Biblioteca de imágenes</h4>
+        <p>Selecciona una imagen del proyecto para compartirla.</p>
+      </div>
+      <button type="button" id="imagePickerClose" aria-label="Cerrar">✕</button>
+    </div>
+    <div id="imagePickerGrid" class="asset-picker-grid"></div>
+  </div>
+</div>
+
+<!-- Overlay de confirmación de evento creado -->
+<div id="eventSuccessOverlay" class="event-success-overlay hidden" role="status" aria-live="assertive">
+  <div class="event-success-panel">
+    <div class="event-success-title">Evento Creado</div>
+    <div class="event-success-check" aria-hidden="true">
+      <svg viewBox="0 0 40 40">
+        <path d="M10 21l5 5 15-15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
     <!-- area para mensajes anclados (movido aquí, queda visible entre header y mensajes) -->
     <div id="pinnedArea" class="pinned-area"></div>
 
