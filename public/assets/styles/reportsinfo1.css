@@ -178,7 +178,7 @@ body {
   padding: 12px 20px;
   border-radius: 8px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   font-weight: 500;
   white-space: nowrap;
   transition: background-color 0.3s;
@@ -286,7 +286,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   font-weight: 600;
   font-size: 1em;
   cursor: pointer;
@@ -303,7 +303,7 @@ body {
   padding: 12px 24px;
   font-size: 1em;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }

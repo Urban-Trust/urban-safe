@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
       dropdown.className = 'msg-dropdown';
       // pin button
       const pinBtn = document.createElement('button');
-  const pinImg = document.createElement('img'); pinImg.src = 'assets/images/Anclar_N.png'; pinImg.alt='Anclar'; pinBtn.appendChild(pinImg);
+  const pinImg = document.createElement('img'); pinImg.src = 'assets/images/Anclarrrr.png'; pinImg.alt='Anclar'; pinBtn.appendChild(pinImg);
       pinBtn.addEventListener('click', (e)=>{ e.stopPropagation(); pinMessage(m); dropdown.remove();
         // after pinning, ensure banner is visible (scroll inside chat area with an offset so it's not hidden)
         setTimeout(()=>{
