@@ -594,7 +594,7 @@ body {
   align-items: center;
   justify-content: center;
   background: rgba(0,0,0,0.35);
-  z-index: 1200;
+  z-index: 1300;
 }
 .poll-modal-inner {
   background: var(--panel);

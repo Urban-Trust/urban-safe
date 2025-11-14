@@ -1180,3 +1180,75 @@ input.error {
   .prop-title { font-size: 22px; }
   .prop-photo { height: 200px; }
 }
+
+.prop-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.boton-historial-prop {
+    background: #2F7372;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.boton-historial-prop:hover {
+    background: #255f5e;
+}
+
+
+.sidebar {
+  position: fixed;
+  top: 170px;                
+  left: 20px;               
+  width: 320px;
+  height: calc(100vh - 170px);
+  
+  background: #255f5e;
+  border-radius: 14px;      
+  padding: 16px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  z-index: 3000;
+
+  overflow-y: auto;
+}
+
+#sidebar-historial {
+  background: #EAE9E7 !important;
+}
+
+
+#sidebar-historial .btn-vermas {
+    background-color: #2F7372;     
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: inline-block;
+}
+
+#sidebar-historial .btn-vermas:hover {
+    background-color: #255f5e;     
+}
+
+#sidebar-historial button.btn-vermas {
+    float: right;
+}
+
+#sidebar-historial {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+
