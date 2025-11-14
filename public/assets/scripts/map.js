@@ -296,5 +296,72 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestionsList.classList.add('oculto');
       }
     });
+  
+  // Crear un reporte de ejemplo al cargar la página
+  function crearReporteEjemplo() {
+    const mapaContainer = document.querySelector('.mapa-container');
+    if (!mapaContainer) return;
+
+    // Construir elemento con misma estructura/estética pero indicando que es un ejemplo
+    const ejemplo = document.createElement('div');
+    ejemplo.className = 'reporte-en-mapa reporte-ejemplo';
+    ejemplo.innerHTML = `
+      <div class="reporte-contenido">
+        <img src="assets/images/Acci_1.png" alt="Imagen de ejemplo" class="reporte-imagen">
+        <h4 class="reporte-titulo">Daño auto</h4>
+        <div class="reporte-meta">Hace 5 minutos</div>
+      </div>
+    `;
+
+    // Posicionar en esquina superior derecha, conservar tamaño y estética
+  ejemplo.style.top = '24px';
+  ejemplo.style.right = '24px';
+  ejemplo.style.left = 'auto';
+  ejemplo.style.transform = 'none';
+
+    mapaContainer.appendChild(ejemplo);
   }
+
+  // Ejecutar creación del ejemplo inmediatamente
+  crearReporteEjemplo();
+  }
+
+  // --- Botón de pánico en la navbar según preferencia en ajustes ---
+  try {
+    const panicBtn = document.getElementById('panic-navbar-button');
+    const modalPanic = document.getElementById('modal-panic');
+    const modalPanicClose = document.getElementById('modal-panic-close');
+    const enabled = localStorage.getItem('panicEnabled') === 'true';
+    if (panicBtn) {
+      panicBtn.classList.toggle('oculto', !enabled);
+      panicBtn.addEventListener('click', () => {
+        if (modalPanic) {
+          modalPanic.classList.remove('oculto');
+          modalPanic.setAttribute('aria-hidden', 'false');
+        }
+        // cerrar automaticamente despues de 2.2s
+        setTimeout(() => {
+          if (modalPanic) {
+            modalPanic.classList.add('oculto');
+            modalPanic.setAttribute('aria-hidden', 'true');
+          }
+        }, 2200);
+      });
+    }
+    if (modalPanicClose) {
+      modalPanicClose.addEventListener('click', () => {
+        if (modalPanic) {
+          modalPanic.classList.add('oculto');
+          modalPanic.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+    // si se cambia la preferencia en otra pestaña, actualizar visibilidad
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'panicEnabled' && panicBtn) {
+        const now = e.newValue === 'true';
+        panicBtn.classList.toggle('oculto', !now);
+      }
+    });
+  } catch (e) { /* noop */ }
 });

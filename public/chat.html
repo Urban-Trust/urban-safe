@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/styles/map.css"/>
     <link rel="stylesheet" href="assets/styles/chat.css"/>
+    <link rel="stylesheet" href="assets/styles/chat-groups.css"/>
 </head>
 <body>
     <!-- NAVBAR (idéntico a map.html) -->
@@ -111,29 +112,47 @@
   <!-- Lista de chats -->
   <div id="chatList" class="chat-list">
     <!-- Vecinos Los Álamos -->
-    <div class="chat-item" data-name="Vecinos Los Álamos">
+    <div class="chat-item" data-id="alamos" data-name="Vecinos Los Álamos">
       <img src="assets/images/Logo_Alamos.png" alt="Vecinos Los Álamos" class="chat-item-img" />
       <div class="chat-item-info">
         <span class="chat-item-name">Vecinos Los Álamos</span>
         <span class="chat-item-time">7:50 AM</span>
       </div>
+      <span class="chat-unread hidden" aria-hidden="true">0</span>
     </div>
 
     <!-- Seguridad -->
-    <div class="chat-item" data-name="Seguridad">
+    <div class="chat-item" data-id="seguridad" data-name="Seguridad">
       <img src="assets/images/seguridad.png" alt="Seguridad" class="chat-item-img" />
       <div class="chat-item-info">
         <span class="chat-item-name">Seguridad</span>
         <span class="chat-item-time">7:50 AM</span>
       </div>
+      <span class="chat-unread hidden" aria-hidden="true">0</span>
     </div>
 
     <!-- Lorena (Administradora) -->
-    <div class="chat-item" data-name="Lorena (Administradora)">
+    <div class="chat-item" data-id="lorena" data-name="Lorena (Administradora)">
       <img src="assets/images/Lorena.png" alt="Lorena" class="chat-item-img" />
       <div class="chat-item-info">
         <span class="chat-item-name">Lorena (Administradora)</span>
         <span class="chat-item-time">7:50 AM</span>
+      </div>
+      <span class="chat-unread hidden" aria-hidden="true">0</span>
+    </div>
+
+    <!-- Botón "Nuevo +" con dropdown -->
+    <div class="chat-nuevo-btn-wrapper">
+      <button id="chatNuevoBtn" class="chat-nuevo-btn">
+        Nuevo <strong>+</strong>
+      </button>
+      <div id="chatNuevoDropdown" class="chat-nuevo-dropdown hidden">
+        <button id="chatNuevoGrupoBtn" class="dropdown-option">
+          Nuevo grupo <strong>+</strong>
+        </button>
+        <button id="chatNotificacionBtn" class="dropdown-option">
+          Nueva notificación masiva <strong>+</strong>
+        </button>
       </div>
     </div>
   </div>
@@ -143,31 +162,64 @@
   <!-- Columna derecha: Chat actual -->
   <div class="chat-wrap" role="main" aria-label="Chat Vecinal">
    <header class="chat-top">
-  <h1 id="chatTitle">
-    <img src="assets/images/img_group.png" alt="Grupo" class="group-icon-chat" />
-    Grupo Vecinal
-  </h1>
-  <p class="chat-zone">Zona: Los Álamos — Lima</p>
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+    <div>
+      <h1 id="chatTitle">
+        <img src="assets/images/img_group.png" alt="Grupo" class="group-icon-chat" />
+        Grupo Vecinal
+      </h1>
+      <p class="chat-zone">Zona: Los Álamos — Lima</p>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button id="createPollBtn" class="sidebar-toggle" aria-label="Crear encuesta" title="Crear encuesta">Crear encuesta</button>
+    </div>
+  </div>
 </header>
 
+<!-- Modal / panel para crear encuestas -->
+<div id="pollModal" class="hidden" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="poll-modal-inner">
+    <h3>Crear encuesta</h3>
+    <label>
+      Pregunta
+      <input id="pollQuestion" type="text" placeholder="Escribe la pregunta..." />
+    </label>
+    <div id="pollOptions">
+      <label>Opción 1 <input type="text" class="poll-option" placeholder="Texto opción 1" /></label>
+      <label>Opción 2 <input type="text" class="poll-option" placeholder="Texto opción 2" /></label>
+    </div>
+    <div class="poll-actions">
+      <button id="addPollOption" type="button">Añadir opción</button>
+      <button id="createPollConfirm" type="button">Crear</button>
+      <button id="createPollCancel" type="button">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para ver votantes de una opción de encuesta -->
+<div id="votersModal" class="hidden" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="voters-modal-inner">
+    <button id="votersModalClose" class="voters-modal-close" aria-label="Cerrar">✕</button>
+    <h3 id="votersModalTitle">Votantes</h3>
+    <div id="votersList" class="voters-list"></div>
+  </div>
+</div>
+
+<!-- Emoji picker modal -->
+<div id="emojiPickerModal" class="hidden" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="emoji-modal-inner">
+    <button id="emojiPickerClose" class="voters-modal-close" aria-label="Cerrar">✕</button>
+    <h3>Emojis</h3>
+    <div id="emojiGrid" class="emoji-grid"></div>
+  </div>
+</div>
+    <!-- area para mensajes anclados (movido aquí, queda visible entre header y mensajes) -->
+    <div id="pinnedArea" class="pinned-area"></div>
 
     <div id="chatArea" class="chat-area" aria-live="polite">
       <!-- mensajes de ejemplo -->
-      <div class="msg msg-other">
-        <div class="msg-avatar">👩‍🦰</div>
-        <div class="msg-body">
-          <div class="msg-text">Hola vecinos, ¿alguien vio al serenazgo hoy?</div>
-          <div class="msg-meta">Lucía · 17:45</div>
-        </div>
-      </div>
-
-      <div class="msg msg-self">
-        <div class="msg-avatar">🧍‍♂️</div>
-        <div class="msg-body">
-          <div class="msg-text">Sí, pasó hace una hora por la Av. Central.</div>
-          <div class="msg-meta">Tú · 17:47</div>
-        </div>
-      </div>
+      
+      
     </div>
 
     <form id="chatForm" class="chat-input" aria-label="Enviar mensaje">
@@ -182,6 +234,195 @@
       </button>
     </form>
   </div>
+
+<!-- MODALES PARA NUEVO GRUPO Y NOTIFICACIÓN MASIVA -->
+
+<!-- 1. Modal: Selector de vecinos para nuevo grupo -->
+<div id="selectNeighborsModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content modal-large">
+    <div class="modal-header">
+      <h3>Selecciona vecinos para el grupo</h3>
+      <button class="modal-close" data-target="#selectNeighborsModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Buscador de vecinos -->
+      <div class="search-neighbors">
+        <input type="text" id="neighborsSearchInput" placeholder="Buscar vecinos..." />
+        <img src="assets/images/search_blanco.png" alt="Buscar" class="search-icon" />
+      </div>
+
+      <!-- Lista de vecinos disponibles -->
+      <div id="neighborsList" class="neighbors-list"></div>
+
+      <!-- Vecinos seleccionados (avatares circulares con iniciales) -->
+      <div class="selected-neighbors-title">Seleccionados:</div>
+      <div id="selectedNeighborsDisplay" class="selected-neighbors-display"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" data-target="#selectNeighborsModal">Cancelar</button>
+      <button id="nextToGroupDetailsBtn" class="btn-primary">
+        <img src="assets/images/Enviar_Mensaje.png" alt="Siguiente" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Modal: Crear grupo (nombre, imagen, descripción) -->
+<div id="createGroupModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content modal-large">
+    <div class="modal-header">
+      <h3>Crear chat grupal vecinal</h3>
+      <button class="modal-close" data-target="#createGroupModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Imagen del grupo -->
+      <div class="form-group">
+        <label>Imagen del grupo</label>
+        <div class="image-upload">
+          <input type="file" id="groupImageInput" accept="image/*" />
+          <img id="groupImagePreview" src="assets/images/img_group.png" alt="Imagen del grupo" />
+        </div>
+      </div>
+
+      <!-- Nombre del grupo -->
+      <div class="form-group">
+        <label>Nombre del grupo</label>
+        <input type="text" id="groupNameInput" placeholder="Ej: Grupo de Seguridad" />
+      </div>
+
+      <!-- Descripción del grupo -->
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="groupDescriptionInput" placeholder="Describe el propósito del grupo..."></textarea>
+      </div>
+
+      <!-- Miembros seleccionados (lista visual) -->
+      <div class="form-group">
+        <label>Integrantes:</label>
+        <div id="groupMembersPreview" class="group-members-preview"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" data-target="#createGroupModal">Cancelar</button>
+      <button id="createGroupConfirmBtn" class="btn-primary">
+        <img src="assets/images/Crear.png" alt="Crear" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Modal: Confirmación de grupo creado (imagen "GrupoCreado.png") -->
+<div id="groupCreatedModal" class="hidden modal-overlay modal-success" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content modal-success-content">
+    <img src="assets/images/GrupoCreado.png" alt="Grupo Creado" />
+  </div>
+</div>
+
+<!-- 4. Modal: Seleccionar grupo para notificación masiva -->
+<div id="selectGroupForNotifModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Selecciona a qué grupo enviar mensaje masivo</h3>
+      <button class="modal-close" data-target="#selectGroupForNotifModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="groupsForNotifList" class="groups-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Modal: Redactar mensaje masivo -->
+<div id="composeNotificationModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content modal-large">
+    <div class="modal-header">
+      <h3>Redacta mensaje masivo</h3>
+      <button class="modal-close" data-target="#composeNotificationModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Título del mensaje</label>
+        <input type="text" id="notifTitleInput" placeholder="Ej: Aviso de seguridad" />
+      </div>
+
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="notifDescriptionInput" placeholder="Escribe el mensaje..."></textarea>
+      </div>
+
+      <div class="users-excluded-info">
+        Usuarios excluidos: <span id="excludedCount">0</span>
+      </div>
+
+      <div class="form-group">
+        <label>Seleccionar usuarios para exclusión:</label>
+        <button id="selectExcludedUsersBtn" class="btn-secondary">Seleccionar usuarios</button>
+        <button id="selectByLocationBtn" class="btn-secondary">Filtrar por ubicación</button>
+        <button id="selectAllUsersBtn" class="btn-secondary">Seleccionar todos</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" data-target="#composeNotificationModal">Cancelar</button>
+      <button id="sendNotificationBtn" class="btn-primary">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Modal: Seleccionar usuarios para exclusión -->
+<div id="selectExcludedUsersModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content modal-large">
+    <div class="modal-header">
+      <h3>Selecciona usuarios a EXCLUIR</h3>
+      <button class="modal-close" data-target="#selectExcludedUsersModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <button id="selectAllInModalBtn" class="btn-secondary">Seleccionar todos</button>
+      <div id="usersForExclusionList" class="users-list"></div>
+    </div>
+    <div class="modal-footer">
+      <button id="acceptExclusionBtn" class="btn-primary">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<!-- 7. Modal: Filtrar por ubicación -->
+<div id="filterByLocationModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Filtrar por ubicación</h3>
+      <button class="modal-close" data-target="#filterByLocationModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <img src="assets/images/mapabg.png" alt="Mapa" class="location-map" />
+      <div id="locationExcludedInfo" class="info-text"></div>
+    </div>
+    <div class="modal-footer">
+      <button id="acceptLocationFilterBtn" class="btn-primary">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<!-- 8. Modal: Confirmación de envío (pregunta de seguridad) -->
+<div id="confirmSendModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content modal-confirmation">
+    <div class="modal-header">
+      <h3>¿Estás seguro?</h3>
+    </div>
+    <div class="modal-body">
+      <p>Se enviará el mensaje masivo a <span id="confirmGroupName"></span></p>
+    </div>
+    <div class="modal-footer">
+      <button id="confirmSendCancelBtn" class="btn-cancel">✕</button>
+      <button id="confirmSendAcceptBtn" class="btn-primary">✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- 9. Modal: Notificación enviada (imagen "MsjEnv.png") -->
+<div id="notificationSentModal" class="hidden modal-overlay modal-success" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content modal-success-content">
+    <img src="assets/images/MsjEnv.png" alt="Mensaje Enviado" />
+  </div>
+</div>
 
 </div>
 
@@ -209,6 +450,7 @@
 
 <script src="assets/scripts/chat.js"></script>
 <script src="assets/scripts/chat-sidebar.js"></script>
+<script src="assets/scripts/chat-groups.js"></script>
 
 </body>
 </html>

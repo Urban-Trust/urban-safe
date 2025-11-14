@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Safe - Información de Reporte Individual</title>
-    <link rel="icon" href="assets/images/urban-safe.ico" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/styles/reportsinfo1.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestionar Vecinos — Vecinos Los Álamos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles/map.css" />
+  <link rel="stylesheet" href="assets/styles/chat.css" />
+  <link rel="stylesheet" href="assets/styles/gestion_chat.css" />
 </head>
 <body>
-    <nav class="navbar">
+  <!-- Reuse same header as chat.html for consistency -->
+      <nav class="navbar">
       <div class="container nav-inner">
         <div class="brand-wrap">
           <input type="checkbox" id="menu-toggle" class="menu-toggle" />
@@ -88,168 +89,90 @@
       </div>
     </nav>
 
-    <main class="page-container">
-        <a href="reports.html" class="back-button">
-            <svg width="25" height="30" viewBox="0 0 25 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22.5 2.5L2.5 15L22.5 27.5" stroke="#EAE9E7" stroke-width="5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </a>
-
-        
-        <div class="incidente-detalle-card">
-            <div class="header-editable">
-                <h1 id="detalle-titulo" class="detalle-titulo" contenteditable="false">INCIDENTE(R78I): Robo de celular enfrente de vivienda de Lucas</h1>
-                <span class="edit-icon oculto">
-                    <svg width="19" height="19" viewBox="0 0 19 19"><path d="M3.875 4.8335H2.91667C2.40834 4.8335 1.92082 5.03543 1.56138 5.39487C1.20193 5.75432 1 6.24183 1 6.75016V15.3752C1 15.8835 1.20193 16.371 1.56138 16.7305C1.92082 17.0899 2.40834 17.2918 2.91667 17.2918H11.5417C12.05 17.2918 12.5375 17.0899 12.897 16.7305C13.2564 16.371 13.4583 15.8835 13.4583 15.3752V14.4168" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.5 2.91677L15.375 5.79177M16.7023 4.43573C17.0797 4.05829 17.2918 3.54638 17.2918 3.0126C17.2918 2.47883 17.0797 1.96691 16.7023 1.58948C16.3249 1.21204 15.813 1 15.2792 1C14.7454 1 14.2335 1.21204 13.8561 1.58948L5.79169 9.6251V12.5001H8.66669L16.7023 4.43573Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
+  <section class="mapa" style="background:#B9C2C5; padding-bottom:0; margin-bottom:0; height:auto; overflow:visible; min-height:calc(100vh - 200px); display:flex; align-items:center; justify-content:center;">
+    <div class="mapa-container" style="padding:10px; padding-bottom:0; height:auto; width:100%;">
+      <div class="chat-wrap" style="height:auto; min-height:auto; background:#D9D9D9;">
+        <header class="chat-top" style="background:#1C2542;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div style="display:flex; align-items:center; gap:12px; position:relative;">
+              <!-- Back button moved to the left, near title, using image -->
+              <a href="chat.html" id="backToChatBtn" title="Volver al chat" style="display:inline-flex;align-items:center;justify-content:center;position:absolute;left:-50px;">
+                <img src="assets/images/return_minimized.png" alt="Volver" style="width:44px;height:44px;" />
+              </a>
+              <img src="assets/images/img_group.png" alt="Grupo" style="width:56px;height:56px;border-radius:50%;background:#fff;" />
+              <div>
+                <h1 style="margin:0;color:#fff;">Vecinos Los Álamos — Gestión</h1>
+                <p class="chat-zone" style="margin:0;font-size:13px;opacity:0.95;color:#fff;">Gestiona miembros del grupo</p>
+              </div>
             </div>
-            
-            <div class="etiquetas-container" id="etiquetas-container">
-                <span class="etiqueta" data-valor="Robo">Robo<button class="quitar-etiqueta oculto">✖</button></span>
-                <span class="etiqueta individual">Individual</span> <!-- Etiqueta fija -->
-                <button class="agregar-etiqueta-btn oculto">+</button>
-            </div>
-
-            <div class="imagen-contenedor">
-              <button id="btn-descargar"class="boton-descargar">
-            <img src="assets/images/material-symbols_download-sharp.png" alt="Descargar">
-        </button>
-                <img id="detalle-imagen" src="assets/images/adjuntar-imagen-1.jpg" alt="Imagen del incidente" class="detalle-imagen">
-                <span class="detalle-fecha">10/11/2025 04:32 pm</span>
-                <button class="boton-cambiar-imagen oculto">
-                    <svg width="24" height="39" viewBox="0 0 24 39"><path d="M1 11.835V26.6667C1 29.584 2.13259 32.3819 4.1486 34.4448C6.16462 36.5077 8.89892 37.6667 11.75 37.6667C14.6011 37.6667 17.3354 36.5077 19.3514 34.4448C21.3674 32.3819 22.5 29.584 22.5 26.6667V8.33333C22.5 6.38841 21.7449 4.52315 20.4009 3.14788C19.0569 1.77262 17.2341 1 15.3333 1C13.4326 1 11.6097 1.77262 10.2657 3.14788C8.92172 4.52315 8.16667 6.38841 8.16667 8.33333V25.167C8.16667 25.6485 8.25935 26.1253 8.43943 26.5702C8.61951 27.015 8.88346 27.4192 9.2162 27.7597C9.54894 28.1002 9.94397 28.3703 10.3787 28.5546C10.8135 28.7388 11.2794 28.8337 11.75 28.8337C12.7004 28.8337 13.6118 28.4474 14.2838 27.7597C14.9558 27.0721 15.3333 26.1395 15.3333 25.167V12" stroke="#EAE9E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-            </div>
-            
-            <div class="detalle-seccion">
-                <div class="header-editable">
-                    <h3 class="detalle-subtitulo">Ubicación exacta</h3>
-                    <span class="edit-icon oculto"><svg width="19" height="19" viewBox="0 0 19 19"><path d="M3.875 4.8335H2.91667C2.40834 4.8335 1.92082 5.03543 1.56138 5.39487C1.20193 5.75432 1 6.24183 1 6.75016V15.3752C1 15.8835 1.20193 16.371 1.56138 16.7305C1.92082 17.0899 2.40834 17.2918 2.91667 17.2918H11.5417C12.05 17.2918 12.5375 17.0899 12.897 16.7305C13.2564 16.371 13.4583 15.8835 13.4583 15.3752V14.4168" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.5 2.91677L15.375 5.79177M16.7023 4.43573C17.0797 4.05829 17.2918 3.54638 17.2918 3.0126C17.2918 2.47883 17.0797 1.96691 16.7023 1.58948C16.3249 1.21204 15.813 1 15.2792 1C14.7454 1 14.2335 1.21204 13.8561 1.58948L5.79169 9.6251V12.5001H8.66669L16.7023 4.43573Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                </div>
-                <div class="ubicacion-wrapper">
-                    <div id="ubicacion-texto" class="ubicacion-texto" contenteditable="false">Jr. Los Laureles 312, Urbanización Las Palmeras, ZMP, Limo, Perú</div>
-                    <button id="botonVerMapa" class="boton-ver-mapa">Ver dirección en el mapa</button>
-                </div>
-            </div>
-
-            <div class="detalle-seccion">
-                <div class="header-editable">
-                    <h3 class="detalle-subtitulo">Descripción</h3>
-                    <span class="edit-icon oculto"><svg width="19" height="19" viewBox="0 0 19 19"><path d="M3.875 4.8335H2.91667C2.40834 4.8335 1.92082 5.03543 1.56138 5.39487C1.20193 5.75432 1 6.24183 1 6.75016V15.3752C1 15.8835 1.20193 16.371 1.56138 16.7305C1.92082 17.0899 2.40834 17.2918 2.91667 17.2918H11.5417C12.05 17.2918 12.5375 17.0899 12.897 16.7305C13.2564 16.371 13.4583 15.8835 13.4583 15.3752V14.4168" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.5 2.91677L15.375 5.79177M16.7023 4.43573C17.0797 4.05829 17.2918 3.54638 17.2918 3.0126C17.2918 2.47883 17.0797 1.96691 16.7023 1.58948C16.3249 1.21204 15.813 1 15.2792 1C14.7454 1 14.2335 1.21204 13.8561 1.58948L5.79169 9.6251V12.5001H8.66669L16.7023 4.43573Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                </div>
-                <div id="descripcion-texto" class="descripcion-texto" contenteditable="false">Un vehículo fue sustraído sin autorización mientras estaba estacionado en la vía pública, sin vigilancia directa, frente a la gasolinera SUDO. El hecho ocurrió en la tarde, yo con mi familia lo vimos desde la ventana de nuestra casa.</div>
-            </div>
-            
-            <div class="detalle-seccion">
-                <h3 class="detalle-subtitulo">Reportado por:</h3>
-                <div class="reporter-identidad">
-                    <div class="reporter-avatar" style="background-color: #DAA520;" title="Maria Garcia">MG</div>
-                    <span class="reporter-name">Maria Garcia</span>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    
-    <div class="acciones-flotantes-detalle">
-        <button id="botonEditar" class="boton-editar">
-            <span>Editar</span>
-            <svg width="26" height="26" viewBox="0 0 26 26"><path d="M5.125 6.5H3.75C3.02065 6.5 2.32118 6.78973 1.80546 7.30546C1.28973 7.82118 1 8.52065 1 9.25V21.625C1 22.3543 1.28973 23.0538 1.80546 23.5695C2.32118 24.0853 3.02065 24.375 3.75 24.375H16.125C16.8543 24.375 17.5538 24.0853 18.0695 23.5695C18.5853 23.0538 18.875 22.3543 18.875 21.625V20.25" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 3.75015L21.625 7.87515M23.5294 5.92952C24.0709 5.38798 24.3751 4.6535 24.3751 3.88765C24.3751 3.1218 24.0709 2.38731 23.5294 1.84577C22.9878 1.30423 22.2534 1 21.4875 1C20.7216 1 19.9872 1.30423 19.4456 1.84577L7.875 13.3751V17.5001H12L23.5294 5.92952Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div id="accionesConfirmacionEdicion" class="grupo-botones-accion oculto">
-            <button id="botonCancelarEdicion" class="boton-accion">Cancelar</button>
-            <button id="botonGuardarEdicion" class="boton-accion guardar">Guardar</button>
-        </div>
-    </div>
-    
-    
-    <!-- Vista de Mapa -->
-    <div id="mapaFullscreen" class="mapa-fullscreen oculto">
-        <img src="assets/images/mapabg.png" alt="Mapa de fondo" class="mapa-bg">
-        <a href="#" id="mapaBackButton" class="back-button mapa-back-button">
-            <svg width="25" height="30" viewBox="0 0 25 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22.5 2.5L2.5 15L22.5 27.5" stroke="#EAE9E7" stroke-width="5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </a>
-        <div class="mapa-marcador">
-            <h4 class="marcador-titulo">Robo de celular enfrente de vivienda de Lucas</h4>
-            <img src="assets/images/adjuntar-imagen-1.jpg" alt="Imagen del incidente" class="marcador-imagen">
-        </div>
-    </div>
-
-    <!-- para cambiar Imagen -->
-    <div id="modal-imagenes" class="modal-base oculto">
-        <div class="modal-imagenes-contenido">
-          <h3>Reemplazar imagen del incidente</h3>
-          <div class="imagenes-recientes">
-            <img src="assets/images/adjuntar-imagen-4.jpg" class="imagen-opcion" alt="Imagen 4">
-            <img src="assets/images/adjuntar-imagen-5.jpg" class="imagen-opcion" alt="Imagen 5">
-            <img src="assets/images/adjuntar-imagen-6.jpg" class="imagen-opcion" alt="Imagen 6">
           </div>
-        </div>
-    </div>
+        </header>
 
-    <!-- Agregar Etiquetas -->
-    <div id="modal-etiquetas" class="modal-base oculto">
-        <div class="modal-etiquetas-contenido">
-            <a href="#" class="etiqueta-back-button">
-                <svg width="29" height="36" viewBox="0 0 29 36"><path d="M26.5 2.50049L2.5 18.0005L26.5 33.5005" stroke="#0D0D0D" stroke-width="5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <h2>Agregar Etiqueta</h2>
-            <div class="lista-etiquetas-disponibles">
-                <span class="etiqueta-opcion" data-valor="Robo">Robo</span>
-                <span class="etiqueta-opcion" data-valor="Daño">Daño</span>
-                <span class="etiqueta-opcion" data-valor="Incendio">Incendio</span>
-                <span class="etiqueta-opcion" data-valor="Reunión">Reunión</span>
-                <span class="etiqueta-opcion" data-valor="Importante">Importante</span>
-                <span class="etiqueta-opcion" data-valor="Día">Día</span>
-                <span class="etiqueta-opcion" data-valor="Noche">Noche</span>
-                <span class="etiqueta-opcion" data-valor="Tarde">Tarde</span>
+        <main style="padding:8px;">
+          <section id="manage-section" style="max-width:920px;margin:0 auto;">
+            <h2>Panel de usuarios</h2>
+            
+
+            <div id="membersList" style="margin-top:12px; display:flex; flex-direction:column; gap:8px;"></div>
+
+            <hr style="margin:18px 0;" />
+
+            <div style="display:flex;gap:8px;align-items:center;margin-top:8px;justify-content:flex-end;">
+              <button id="showAddNeighborsBtn" style="padding:10px 14px;border-radius:8px;border:none;background:#1C2542;color:#fff;font-weight:600;">Agregar Vecino +</button>
             </div>
-        </div>
+            <div id="addMsg" style="margin-top:8px;color:#444;font-size:13px;"></div>
+
+          </section>
+        </main>
+
+      </div>
     </div>
+  </section>
 
-
-    <div id="modal-exito-edicion" class="modal-base oculto">
-        <div class="alerta-contenido">
-            <p>Edición hecha correctamente</p>
-        </div>
+  <!-- Delete confirmation modal -->
+  <div id="deleteModal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:2000;">
+    <div style="background:#fff;padding:18px;border-radius:10px;max-width:520px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+      <h3>¿Estás seguro de eliminar al vecino del grupo vecinal?</h3>
+      <p>Eliminar al vecino hará que algún reporte importante que se haga para el grupo ya no le llegue, ni tampoco podrá enterarse de inmediato sobre algún evento o incidente que ocurra.</p>
+      <p>Si está seguro, escriba su usuario aquí:</p>
+      <input id="confirmDeleteInput" type="text" placeholder="Nombre exacto del vecino" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);margin-top:8px;" />
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+        <button id="cancelDeleteBtn" style="padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;">Cancelar</button>
+        <button id="confirmDeleteBtn" style="padding:8px 12px;border-radius:8px;border:none;background:#c62828;color:#fff;">Eliminar</button>
+      </div>
     </div>
-    <!-- MODAL DE PREVISUALIZACIÓN DE DESCARGA -->
-<div id="modal-descarga" class="modal-descarga oculto">
-    <div class="modal-contenido-descarga">
-        <h2 class="titulo-modal">Confirmar Descarga</h2>
+  </div>
 
-        <div class="modal-info">
-
-          <p><strong>Título:</strong></p>
-    <p id="modal-titulo"></p>
-
-            <p><strong>Ubicación:</strong></p>
-            <p id="modal-ubicacion"></p>
-
-            <p><strong>Descripción:</strong></p>
-            <p id="modal-descripcion"></p>
-
-            <p><strong>Reportado por:</strong></p>
-            <p id="modal-reportado"></p>
-        </div>
-
-        <button id="btn-descargar-confirmar" class="boton-descargar-modal">
-            DESCARGAR
-        </button>
+  <!-- Add neighbors modal -->
+  <div id="addNeighborsModal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:2000;">
+    <div style="background:#fff;padding:18px;border-radius:10px;max-width:520px;width:90%;max-height:80vh;box-shadow:0 10px 30px rgba(0,0,0,0.2);display:flex;flex-direction:column;">
+      <h3 style="margin-top:0;">Agregar vecinos al grupo</h3>
+      <div id="availableNeighborsDropdown" style="flex:1;overflow-y:auto;border:1px solid rgba(0,0,0,0.06);border-radius:8px;padding:10px;"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+        <button id="closeAddNeighborsBtn" style="padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;">Cerrar</button>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- ALERTA -->
-<div id="alerta-descarga" class="alerta-popup oculto">
-    <img src="assets/images/Vector.png" class="icono-alerta" alt="check">
-    <p>¡Descarga exitosa!</p>
-</div>
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>Urban Safe - 2025 - Lima, Peru</div>
+        <div class="muted">© 2025 Urban Trust. Todos los derechos reservados.</div>
+        <div class="social">
+          <a href="#" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
+            </svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465A4.902 4.902 0 0120.322 3.678c.735.735 1.006 1.328 1.153 1.772.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 8a3 3 0 110-6 3 3 0 010 6zm6.406-11.845a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
 
-
-
-    <script src="assets/scripts/reportsinfo1.js"></script>    
-
+  <script src="assets/scripts/gestion_chat.js"></script>
 </body>
 </html>
