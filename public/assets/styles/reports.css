@@ -314,7 +314,7 @@ body {
   background-color: #0C132D;
   border-radius: 15px;
   color: #c5c5c5;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   font-size: 1em;
 }
 .modal-contenido input[type="text"]::placeholder,
@@ -337,7 +337,7 @@ body {
   padding: 10px 20px;
   border-radius: 15px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   font-weight: 600;
   font-size: 1em;
 }
@@ -399,7 +399,7 @@ body {
   padding: 12px 24px;
   font-size: 1em;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s, transform 0.1s;

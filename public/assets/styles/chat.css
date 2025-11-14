@@ -295,6 +295,7 @@ body {
   padding: 12px 14px;
   border-top: 1px solid rgba(0,0,0,0.06);
   background: rgb(46, 56, 89);
+  position: relative;
 }
 
 .chat-input input {
@@ -303,8 +304,13 @@ body {
   border-radius: 22px;
   border: 1px solid rgba(0,0,0,0.08);
   background: white;
+  color: #000;
   font-size: 14px;
   outline: none;
+}
+
+.chat-input input::placeholder {
+  color: #888;
 }
 
 .chat-input button {
@@ -326,6 +332,48 @@ body {
 
 .chat-input button:hover {
   filter: brightness(0.85);
+}
+
+/* Menú desplegable de adjuntos */
+.attach-menu-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #39516B;
+  padding: 12px 14px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1100;
+  border-radius: 8px 8px 0 0;
+}
+
+.attach-menu-dropdown.hidden {
+  display: none;
+}
+
+.attach-menu-option {
+  background: none;
+  border: none;
+  padding: 6px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.attach-menu-option:hover {
+  opacity: 0.8;
+}
+
+.attach-menu-option img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
 
 /* Responsivo */
@@ -577,5 +625,6 @@ body {
 .poll-option { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px; margin:6px 0; border-radius:8px; background: #f6f7f8; }
 .poll-option button.vote-btn { background: none; border: none; padding:6px 10px; border-radius:8px; cursor:pointer; }
 .voters-list-popup { position: absolute; background: var(--panel); padding:8px 10px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.12); z-index:1300; }
+
 .hidden { display: none !important; }
 

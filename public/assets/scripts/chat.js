@@ -3,6 +3,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('chatForm');
   const input = document.getElementById('msgInput');
   const attachBtn = document.getElementById('attachBtn');
+  const attachMenuDropdown = document.getElementById('attachMenuDropdown');
+  const attachImageBtn = document.getElementById('attachImageBtn');
+  const attachPollBtn = document.getElementById('attachPollBtn');
+  const attachEventBtn = document.getElementById('attachEventBtn');
+  let menuOpen = false;
+
+  // Toggle attach menu on button click
+  attachBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    menuOpen = !menuOpen;
+    if (menuOpen) {
+      attachMenuDropdown.classList.remove('hidden');
+    } else {
+      attachMenuDropdown.classList.add('hidden');
+    }
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (menuOpen && !form.contains(e.target)) {
+      menuOpen = false;
+      attachMenuDropdown.classList.add('hidden');
+    }
+  });
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -15,8 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
     input.value = '';
   });
 
-  // Adjuntar imagen
-  attachBtn.addEventListener('click', () => {
+  // Adjuntar imagen via menu option
+  attachImageBtn.addEventListener('click', () => {
+    menuOpen = false;
+    attachMenuDropdown.classList.add('hidden');
+    
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
@@ -40,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
   chatArea.scrollTop = chatArea.scrollHeight;
   
     // --- Poll creation UI handlers ---
-    const createPollBtn = document.getElementById('createPollBtn');
     const pollModal = document.getElementById('pollModal');
     const pollQuestion = document.getElementById('pollQuestion');
     const pollOptionsContainer = document.getElementById('pollOptions');
@@ -64,7 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
       pollModal.setAttribute('aria-hidden','true');
     }
 
-    createPollBtn && createPollBtn.addEventListener('click', openPollModal);
+    attachPollBtn && attachPollBtn.addEventListener('click', () => {
+      menuOpen = false;
+      attachMenuDropdown.classList.add('hidden');
+      openPollModal();
+    });
+    
     addPollOption && addPollOption.addEventListener('click', () => {
       const idx = pollOptionsContainer.querySelectorAll('.poll-option').length + 1;
       const lbl = document.createElement('label');
@@ -90,6 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!chatId) { alert('No se encontró conversación activa'); closePollModal(); return; }
       window.chatAPI.createPollInChat(chatId, pollObj);
       closePollModal();
+    });
+
+    // Event button (no functionality yet)
+    attachEventBtn && attachEventBtn.addEventListener('click', () => {
+      menuOpen = false;
+      attachMenuDropdown.classList.add('hidden');
+      console.log('Crear evento: Sin funcionalidad todavía');
     });
 
 });

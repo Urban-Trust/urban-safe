@@ -134,6 +134,26 @@
   justify-content: flex-end;
 }
 
+/* Make modal footer buttons more compact when they contain icons */
+.modal-footer .btn-primary,
+.modal-footer .btn-cancel,
+.modal-footer .btn-secondary {
+  padding: 6px 10px;
+}
+
+.modal-footer button img {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  object-fit: contain;
+}
+
+/* Keep create button image at full size - don't restrict it */
+#createGroupConfirmBtn img {
+  width: auto;
+  height: auto;
+}
+
 .form-group {
   margin-bottom: 16px;
 }
@@ -180,6 +200,19 @@
 
 .btn-primary:hover {
   background: #25605f;
+}
+
+/* Override for create group button to remove background and show only image */
+#createGroupConfirmBtn {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer;
+}
+
+#createGroupConfirmBtn:hover {
+  background: none !important;
+  opacity: 0.8;
 }
 
 .btn-cancel {
