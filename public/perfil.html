@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urban Safe - Mapa</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="assets/styles/perfil.css" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <div class="brand-wrap">
+                <input type="checkbox" id="menu-toggle" class="menu-toggle" />
+                <label for="menu-toggle" class="brand" aria-label="Urban Safe">
+                    <img class="brand-logo" src="assets/images/UrbanSafe-Logo-Horizontal-Sin Fondo.png" alt="Urban Safe" />
+                    <span class="arrow-icon">
+                        <svg width="58" height="58" fill="none">
+                            <path d="...." fill="black"/>
+                        </svg>
+                    </span>
+                </label>
+
+                <button id="panic-navbar-button" class="panic-nav-btn oculto" title="Botón de pánico" aria-label="Botón de pánico">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2C9.243 2 7 4.243 7 7v5l-2 2v1h14v-1l-2-2V7c0-2.757-2.243-5-5-5zM12 22c1.1046 0 2-.8954 2-2h-4c0 1.1046.8954 2 2 2z" fill="white"/>
+                    </svg>
+                </button>
+
+                <div class="user-menu">
+                    <div class="menu-section">
+                        <div class="menu-title">Menu</div>
+
+                        <a href="#" class="menu-item">
+                            <span class="icon">
+                                <svg width="38" height="38"><path d="...." stroke="#1E1E1E" stroke-width="4"/></svg>
+                            </span>
+                            <span>Ver perfil</span>
+                        </a>
+
+                        <a href="admin.html" class="menu-item">
+                            <span class="icon">
+                                <svg width="46" height="46"><path d="...." /></svg>
+                            </span>
+                            <span>Panel de control vecinal</span>
+                        </a>
+
+                        <a href="#" class="menu-item">
+                            <span class="icon">
+                                <svg width="30" height="39"><path d="...." /></svg>
+                            </span>
+                            <span>Biblioteca</span>
+                        </a>
+
+                        <a href="#" class="menu-item">
+                            <span class="icon">
+                                <svg width="38" height="38"><path d="...." /></svg>
+                            </span>
+                            <span>Ayuda</span>
+                        </a>
+                    </div>
+
+                    <div class="menu-section">
+                        <div class="menu-title">Ajustes</div>
+
+                        <a href="confi.html" class="menu-item">
+                            <span class="icon">
+                                <svg width="38" height="38"><path d="...."/></svg>
+                            </span>
+                            <span>Ajustes de aplicacion</span>
+                        </a>
+
+                        <a href="#" class="menu-item">
+                            <span class="icon">
+                                <svg width="46" height="46"><path d="...." /></svg>
+                            </span>
+                            <span>Preferencias</span>
+                        </a>
+                    </div>
+
+                    <a href="login.html" class="menu-item">
+                        <span class="icon">
+                            <svg width="44" height="44"><path d="...." /></svg>
+                        </span>
+                        <span>Cerrar sesion</span>
+                    </a>
+                </div>
+            </div>
+
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="map.html">Mapa</a></li>
+                <li><a href="chat.html">Chats</a></li>
+                <li><a href="reports.html">Incidentes</a></li>
+            </ul>
+
+            <a href="login.html" class="login-link"><span>Iniciar sesion</span></a>
+        </div>
+    </nav>
+
+    <main class="flex-grow relative">
+        <a href="map.html" class="back-button">
+            <svg width="25" height="30" fill="none">
+                <path d="M22.5 2.5L2.5 15L22.5 27.5" stroke="#EAE9E7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+
+        <div class="profile-wrapper">
+            <div class="relative py-12 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mx-auto bg-card-light rounded-3xl shadow-lg p-8 sm:p-12">
+                    <div class="profile-header">
+                        <img src="assets/images/Lorena2.png" alt="Foto de perfil" class="profile-photo" />
+                        <div class="profile-info">
+                            <h1 class="nombre">Maria Fernandez</h1>
+                            <p class="apellido">mariafernandez@gmail.com</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm mb-10">
+                        <div class="flex gap-4">
+                            <span class="font-semibold text-gray-700">Fecha de registro:</span>
+                            <span class="text-gray-600">13/02/25</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="font-semibold text-gray-700">Grupo vecinal:</span>
+                            <span class="text-gray-600">Grupo V-21C2</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 class="text-lg font-bold mb-4">Últimos reportes:</h2>
+                        <div class="bg-report-bg-light dark:bg-report-bg-dark rounded-2xl" style="padding:20px;">
+                            <div class="mb-4 text-sm" style="display:flex; flex-direction:row; align-items:center; gap:300px;">
+                                <div style="display:flex; flex-direction:row; align-items:baseline; gap:4px;">
+                                    <span class="font-bold text-gray-800 dark:text-gray-200"><strong>ID</strong></span>
+                                    <span class="text-gray-700 dark:text-gray-300">0024</span>
+                                </div>
+                                <div style="display:flex; flex-direction:row; align-items:baseline; gap:4px;">
+                                    <span class="font-bold text-gray-800 dark:text-gray-200"><strong>Titulo</strong></span>
+                                    <span class="text-gray-700 dark:text-gray-300">0024</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm mb-4">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="font-bold text-gray-800 dark:text-gray-200 w-20 shrink-0"><strong>Tipo:</strong></span>
+                                    <span class="text-gray-700 dark:text-gray-300">0024</span>
+                                </div>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="font-bold text-gray-800 dark:text-gray-200 w-20 shrink-0"><strong>Ubicación:</strong></span>
+                                    <span class="text-gray-700 dark:text-gray-300">0024</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2 text-sm mb-6">
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    <strong>Descripción:</strong> No se que escribir aca asi que estoy poniendo cualquier cosa literalmente.<br>
+                                    Y no se que mas poner acae.
+                                </p>
+                            </div>
+
+                            <div 
+                                style="
+                                    width: 100%;
+                                    margin-top: 20px;
+                                    border-top: 1px solid #d1d1d1;
+                                    padding-top: 10px;
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: space-between;
+                                    gap: 0;
+                                "
+                            >
+                                <button 
+                                    style="
+                                        width: 50%;
+                                        background: #e2e2e2;
+                                        padding: 12px;
+                                        border: none;
+                                        border-right: 1px solid #ccc;
+                                        display: flex;
+                                        justify-content: center;
+                                        cursor: pointer;
+                                        border-bottom-left-radius: 12px;
+                                        font-size: 1.5rem;
+                                        font-weight: bold;
+                                        align-items: center;
+                                    "
+                                    class="dark:bg-gray-500 dark:hover:bg-gray-600 dark:text-gray-200 hover:bg-gray-300"
+                                >
+                                    &lt;
+                                </button>
+
+                                <button 
+                                    style="
+                                        width: 50%;
+                                        background: #ffffff;
+                                        padding: 12px;
+                                        border: none;
+                                        display: flex;
+                                        justify-content: center;
+                                        cursor: pointer;
+                                        border-bottom-right-radius: 12px;
+                                        font-size: 1.5rem;
+                                        font-weight: bold;
+                                        align-items: center;
+                                    "
+                                    class="dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800 hover:bg-gray-100"
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div> </div> </div> </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div>Urban Safe - 2025 - Lima, Peru</div>
+            <div class="muted">© 2025 Urban Trust. Todos los derechos reservados.</div>
+
+            <div class="social">
+                <a href="assets/documents/legal.pdf" target="_blank">
+                    <img src="assets/images/legal.png" width="24" height="24" />
+                </a>
+
+                <a href="#"><svg width="24" height="24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path></svg></a>
+
+                <a href="#"><svg width="24" height="24"><path d="...."></path></svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/scripts/map.js"></script>
+</body>
+</html>
