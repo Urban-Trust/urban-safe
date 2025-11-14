@@ -296,6 +296,34 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestionsList.classList.add('oculto');
       }
     });
+  
+  // Crear un reporte de ejemplo al cargar la página
+  function crearReporteEjemplo() {
+    const mapaContainer = document.querySelector('.mapa-container');
+    if (!mapaContainer) return;
+
+    // Construir elemento con misma estructura/estética pero indicando que es un ejemplo
+    const ejemplo = document.createElement('div');
+    ejemplo.className = 'reporte-en-mapa reporte-ejemplo';
+    ejemplo.innerHTML = `
+      <div class="reporte-contenido">
+        <img src="assets/images/Acci_1.png" alt="Imagen de ejemplo" class="reporte-imagen">
+        <h4 class="reporte-titulo">Daño auto</h4>
+        <div class="reporte-meta">Hace 5 minutos</div>
+      </div>
+    `;
+
+    // Posicionar en esquina superior derecha, conservar tamaño y estética
+  ejemplo.style.top = '24px';
+  ejemplo.style.right = '24px';
+  ejemplo.style.left = 'auto';
+  ejemplo.style.transform = 'none';
+
+    mapaContainer.appendChild(ejemplo);
+  }
+
+  // Ejecutar creación del ejemplo inmediatamente
+  crearReporteEjemplo();
   }
 
   // --- Botón de pánico en la navbar según preferencia en ajustes ---
