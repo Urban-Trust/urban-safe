@@ -177,14 +177,14 @@
 	cursor: pointer;
 	align-self: flex-start;
 	min-height: 40px;
-	min-width: 170px;
+	min-width: 100px;
 	justify-content: center;
 	transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .help-call svg {
-	width: 16px;
-	height: 16px;
+	width: 14px;
+	height: 14px;
 	fill: currentColor;
 }
 
