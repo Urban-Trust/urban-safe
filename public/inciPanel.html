@@ -115,13 +115,59 @@
             </div>
 
             <div class="search-bar">
+              <div class="search-bar-input">
                 <span class="material-icons search-icon">search</span>
-                <input type="text" placeholder="Buscar incidentes por nombre"/>
+                <input type="text" placeholder="Buscar incidentes por nombre" id="incidentSearch" autocomplete="off" aria-autocomplete="list" aria-controls="incidentSuggestions"/>
+                <div id="incidentSuggestions" class="search-suggestions hidden" role="listbox"></div>
+              </div>
+                <button id="filterToggleBtn" class="filter-toggle" type="button" aria-expanded="false" aria-controls="filterPanel">
+                    <span class="material-icons" aria-hidden="true">tune</span>
+                    <span>Filtros</span>
+                </button>
+                <div id="filterPanel" class="filter-panel hidden" role="dialog" aria-modal="false" aria-hidden="true">
+                    <div class="filter-row">
+                        <label for="filterType">Tipo</label>
+                        <select id="filterType">
+                            <option value="">Todos</option>
+                            <option value="incendio">Incendio</option>
+                            <option value="sospechoso">Actividad sospechosa</option>
+                            <option value="vehiculo">Vehículo</option>
+                            <option value="robo">Robo</option>
+                        </select>
+                    </div>
+                    <div class="filter-row">
+                        <label for="filterDate">Fecha</label>
+                        <input type="date" id="filterDate"/>
+                    </div>
+                    <div class="filter-row">
+                        <label for="filterLocation">Lugar</label>
+                        <input type="text" id="filterLocation" placeholder="Filtrar por ubicación"/>
+                    </div>
+                    <div class="filter-actions">
+                        <button type="button" id="filterApply" class="btn btn-primary">Generar gráfico basado en los filtros</button>
+                        <button type="button" id="filterReset" class="btn btn-outline">Limpiar</button>
+                    </div>
+                </div>
             </div>
 
             <div class="incidents-card">
-                <ul class="incident-list">
-                    <li>
+                <div class="incidents-layout">
+                <ul class="incident-list" id="incidentList">
+                    <li class="incident-item" tabindex="0"
+                        data-incident-id="#INC-72421"
+                        data-status="Nuevo"
+                        data-status-key="nuevo"
+                        data-title="Alarma de Incendio Activada"
+                        data-type="incendio"
+                        data-date="2024-05-24"
+                        data-datetime="10:42 AM, Hoy (24/05/24)"
+                        data-location="Calle Picsi 123, Depto 4B, Barrio El Sol"
+                        data-reporter="Kamil Noches D."
+                        data-contact="N/A"
+                        data-map="assets/images/mapabg.png"
+                        data-description="El panel contra incendios detectó humo en el cuarto piso. Brigada en camino para validar."
+                        data-icon-type="material"
+                        data-icon="local_fire_department">
                         <div class="incident-info">
                             <div class="incident-icon-wrapper">
                                 <span class="material-icons">local_fire_department</span>
@@ -133,7 +179,21 @@
                         </div>
                         <p class="incident-time">10:42 AM, Hoy</p>
                     </li>
-                    <li>
+                    <li class="incident-item" tabindex="0"
+                        data-incident-id="#INC-91834"
+                        data-status="En seguimiento"
+                        data-status-key="proceso"
+                        data-title="Actividad Sospechosa"
+                        data-type="sospechoso"
+                        data-date="2024-05-24"
+                        data-datetime="08:13 AM, Hoy (24/05/24)"
+                        data-location="Parque Central, zona de juegos"
+                        data-reporter="Luis Campos"
+                        data-contact="987-444-102"
+                        data-map="assets/images/adjuntar-imagen-2.jpg"
+                        data-description="Vecino reportó movimientos inusuales cerca de los juegos infantiles. Patrulla vecinal monitorea."
+                        data-icon-type="material"
+                        data-icon="report_problem">
                         <div class="incident-info">
                             <div class="incident-icon-wrapper">
                                 <span class="material-icons">report</span>
@@ -145,7 +205,21 @@
                         </div>
                         <p class="incident-time">8:13 AM, Hoy</p>
                     </li>
-                    <li>
+                    <li class="incident-item" tabindex="0"
+                        data-incident-id="#INC-53102"
+                        data-status="En atención"
+                        data-status-key="proceso"
+                        data-title="Vehículo Mal Estacionado"
+                        data-type="vehiculo"
+                        data-date="2024-05-24"
+                        data-datetime="07:04 AM, Hoy (24/05/24)"
+                        data-location="Parque Central - Av. Los Olivos"
+                        data-reporter="María Quispe"
+                        data-contact="945-323-909"
+                        data-map="assets/images/adjuntar-imagen-5.jpg"
+                        data-description="Automóvil bloqueando salida de emergencia del parque. Se solicitó a la policía municipal el retiro."
+                        data-icon-type="material"
+                        data-icon="directions_car">
                         <div class="incident-info">
                             <div class="incident-icon-wrapper">
                                 <span class="material-icons">directions_car</span>
@@ -157,7 +231,21 @@
                         </div>
                         <p class="incident-time">7:04 AM, Hoy</p>
                     </li>
-                    <li>
+                    <li class="incident-item" tabindex="0"
+                        data-incident-id="#INC-81203"
+                        data-status="Crítico"
+                        data-status-key="critico"
+                        data-title="Robo a mano armada"
+                        data-type="robo"
+                        data-date="2024-05-23"
+                        data-datetime="06:51 PM, Ayer (23/05/24)"
+                        data-location="Residencia de la Familia Picsina"
+                        data-reporter="Central 105"
+                        data-contact="911"
+                        data-map="assets/images/adjuntar-imagen-6.jpg"
+                        data-description="Vecinos escucharon disparos. Policía llegó al lugar y aseguró el perímetro."
+                        data-icon-type="image"
+                        data-icon="assets/images/armafuego.png">
                         <div class="incident-info">
                             <div class="incident-icon-wrapper">
                                 <img alt="gun icon" src="assets\images\armafuego.png"/>
@@ -169,7 +257,21 @@
                         </div>
                         <p class="incident-time">18:51 PM, Ayer</p>
                     </li>
-                    <li>
+                    <li class="incident-item" tabindex="0"
+                        data-incident-id="#INC-81237"
+                        data-status="En seguimiento"
+                        data-status-key="proceso"
+                        data-title="Robo a mano armada"
+                        data-type="robo"
+                        data-date="2024-05-24"
+                        data-datetime="03:42 PM, Hoy (24/05/24)"
+                        data-location="Residencia de los Gonzales"
+                        data-reporter="Marcos Ibarra"
+                        data-contact="N/A"
+                        data-map="assets/images/adjuntar-imagen-7.jpg"
+                        data-description="Intento de robo con arma blanca frustrado por rondas vecinales. Se reforzó vigilancia de la cuadra."
+                        data-icon-type="image"
+                        data-icon="assets/images/armafuego.png">
                         <div class="incident-info">
                             <div class="incident-icon-wrapper">
                                 <img alt="gun icon" src="assets\images\armafuego.png"/>
@@ -182,6 +284,89 @@
                         <p class="incident-time">15:42 PM, Hoy</p>
                     </li>
                 </ul>
+                <p id="incidentNoResults" class="no-results hidden">No se encontraron incidentes con ese nombre.</p>
+                <div id="chartPanel" class="chart-panel hidden" aria-live="polite">
+                    <div class="chart-panel-header">
+                        <div class="chart-filter-tag" id="chartFilterType">Tipo: Todos</div>
+                        <div class="chart-filter-tag" id="chartFilterDate">Fecha: Todas</div>
+                        <div class="chart-filter-tag" id="chartFilterLocation">Lugar: Todos</div>
+                    </div>
+                    <div class="chart-panel-body">
+                        <div class="chart-info">
+                            <h3 id="chartTitle">40% de los reportes son robos leves</h3>
+                            <p id="chartSubtitle">Incidente más reportado</p>
+                            <span id="chartDateLabel">12/02/2024</span>
+                        </div>
+                        <div class="chart-visual">
+                            <div class="chart-pie">
+                                <div class="chart-pie-highlight"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-actions">
+                        <button type="button" class="chart-btn primary">
+                            <span class="material-icons" aria-hidden="true">cloud_upload</span>
+                            Enviar reporte a autoridades
+                        </button>
+                        <button type="button" class="chart-btn secondary">
+                            <span class="material-icons" aria-hidden="true">download</span>
+                            Descargar estadística
+                        </button>
+                    </div>
+                </div>
+                <div class="incident-detail-panel-wrapper" id="incidentDetailPanelWrapper">
+                <aside class="incident-detail-panel" id="incidentDetailPanel" aria-live="polite" aria-hidden="true">
+                    <div id="incidentDetailPlaceholder" class="detail-placeholder">
+                        <p>Selecciona un incidente para ver los detalles.</p>
+                    </div>
+                    <div id="incidentDetailBody" class="detail-body hidden">
+                        <h3>Detalles del incidente</h3>
+                        <div class="detail-header">
+                            <div class="detail-icon" id="detailIcon" aria-hidden="true">
+                                <span class="material-icons">report</span>
+                            </div>
+                            <div>
+                                <p class="detail-title" id="detailTitle">Alarma de Incendio</p>
+                                <p class="detail-id" id="detailId">ID del incidente: #INC-0000</p>
+                            </div>
+                        </div>
+                        <div class="detail-grid">
+                            <div>
+                                <span>Estado</span>
+                                <div class="detail-status">
+                                    <span id="detailStatusDot" class="status-dot status-nuevo" aria-hidden="true"></span>
+                                    <strong id="detailStatus">Nuevo</strong>
+                                </div>
+                            </div>
+                            <div>
+                                <span>Fecha y hora</span>
+                                <strong id="detailDatetime">--</strong>
+                            </div>
+                            <div>
+                                <span>Ubicación</span>
+                                <strong id="detailLocation">--</strong>
+                            </div>
+                            <div>
+                                <span>Reportado por</span>
+                                <strong id="detailReporter">--</strong>
+                            </div>
+                            <div>
+                                <span>Contacto</span>
+                                <strong id="detailContact">--</strong>
+                            </div>
+                        </div>
+                        <p class="detail-description" id="detailDescription"></p>
+                        <div class="detail-map">
+                            <img id="detailMap" src="assets/images/mapabg.png" alt="Mapa del incidente" loading="lazy"/>
+                        </div>
+                        <div class="detail-actions">
+                            <button class="btn btn-outline" type="button">Añadir nota</button>
+                            <button class="btn btn-dark" type="button" id="closeIncidentBtn">Cerrar incidente</button>
+                        </div>
+                    </div>
+                </aside>
+                </div>
+                </div>
             </div>
 
             <div class="pagination">
@@ -198,6 +383,8 @@
         </div>
     </div>
 </main>
+
+<script src="assets/scripts/inciPanel.js"></script>
 
         <footer class="footer">
             <div class="container footer-inner">
