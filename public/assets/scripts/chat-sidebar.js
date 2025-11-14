@@ -204,8 +204,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Minimizar / restaurar sidebar
   toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('minimized');
+    sidebar.classList.add('minimized');
+    const maximizeBtn = document.querySelector('.sidebar-maximize');
+    if (maximizeBtn) {
+      maximizeBtn.classList.remove('hidden');
+    }
   });
+
+  // Botón para maximizar sidebar
+  const maximizeBtn = document.querySelector('.sidebar-maximize');
+  if (maximizeBtn) {
+    maximizeBtn.addEventListener('click', () => {
+      sidebar.classList.remove('minimized');
+      maximizeBtn.classList.add('hidden');
+    });
+  }
 
   // --------- helper functions for unread badges & messages ---------
   function updateBadge(chatEl, count) {
@@ -272,34 +285,68 @@ document.addEventListener('DOMContentLoaded', () => {
       const pollWrap = document.createElement('div');
       pollWrap.className = 'chat-poll';
       pollWrap.innerHTML = `<strong>${escapeHtml(m.question)}</strong>`;
+      
+      // Calculate total votes
+      const totalVotes = m.options.reduce((sum, opt) => sum + opt.voters.length, 0);
+      
       m.options.forEach((opt, idx) => {
         const optNode = document.createElement('div');
         optNode.className = 'poll-option';
         optNode.dataset.pollId = m.pollId;
         optNode.dataset.optIndex = idx;
+        
+        // Calculate percentage for this option
+        const percentage = totalVotes > 0 ? (opt.voters.length / totalVotes) * 100 : 0;
+        
+        // Left: checkbox + label
         const left = document.createElement('div');
-        left.textContent = opt.text;
-        const right = document.createElement('div');
-        // Vote button (click to vote)
-        const voteBtn = document.createElement('button');
-        voteBtn.className = 'vote-btn';
-        voteBtn.textContent = 'Votar';
-        voteBtn.dataset.pollId = m.pollId;
-        voteBtn.dataset.optIndex = idx;
-        voteBtn.addEventListener('click', (ev) => {
+        left.className = 'poll-option-left';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'poll-checkbox';
+        checkbox.dataset.pollId = m.pollId;
+        checkbox.dataset.optIndex = idx;
+        // Check if current user has voted for this option
+        const hasVoted = opt.voters.includes(currentUser);
+        checkbox.checked = hasVoted;
+        checkbox.addEventListener('change', (ev) => {
           window.voteOnPoll(m.pollId, idx, ev.currentTarget);
         });
-        // Count button (click to view voters)
+        
+        const label = document.createElement('label');
+        label.className = 'poll-option-label';
+        label.textContent = opt.text;
+        
+        left.appendChild(checkbox);
+        left.appendChild(label);
+        
+        // Right: vote count
+        const right = document.createElement('div');
+        right.className = 'poll-option-right';
+        
         const countBtn = document.createElement('button');
         countBtn.className = 'vote-count-btn';
-        countBtn.textContent = `${opt.voters.length} ✓`;
+        countBtn.textContent = `${opt.voters.length}`;
         countBtn.dataset.pollId = m.pollId;
         countBtn.dataset.optIndex = idx;
-        countBtn.addEventListener('click', (ev)=>{ showVotersModal(m.pollId, idx); });
-        right.appendChild(voteBtn);
+        countBtn.addEventListener('click', (ev) => { showVotersModal(m.pollId, idx); });
+        
         right.appendChild(countBtn);
+        
+        // Progress bar container
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'poll-progress-container';
+        
+        const progressBar = document.createElement('div');
+        progressBar.className = 'poll-progress-bar';
+        progressBar.style.width = percentage + '%';
+        
+        progressContainer.appendChild(progressBar);
+        
         optNode.appendChild(left);
         optNode.appendChild(right);
+        optNode.appendChild(progressContainer);
         pollWrap.appendChild(optNode);
       });
       body.appendChild(pollWrap);
