@@ -879,6 +879,32 @@ select {
   pointer-events: none;
 }
 
+/* Variación para el reporte de ejemplo que aparece al inicio (esquina superior derecha) */
+.reporte-ejemplo {
+  /* reutiliza ancho/alto del reporte normal, pero con fondo acorde */
+  width: 180px;
+  background-color: #EAE9E7; /* fondo similar a tarjeta en lista */
+  color: #0C132D;
+  padding-top: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  pointer-events: auto;
+  z-index: 1000; /* debajo del navbar (1001) para no taparlo al scrollear */
+}
+
+.reporte-ejemplo::after {
+  /* Mantener el triangulito, adaptado al fondo del ejemplo */
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: #EAE9E7;
+}
+
+.reporte-ejemplo .reporte-meta {
+  font-size: 0.85em;
+  color: #5E5D5C;
+  margin-top: 6px;
+}
+
 /* ESTILOS PARA EL MODAL DE ÉXITO */
 .modal-exito {
   position: fixed;
