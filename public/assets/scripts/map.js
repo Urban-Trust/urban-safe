@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- AUTOCOMPLETADO EN LA BARRA DE BÚSQUEDA ---
+  // --- Autocompletado en la barra de búsqueda ---
   const inputBusqueda = document.getElementById('input-busqueda');
   const suggestionsList = document.getElementById('suggestions');
   
@@ -296,7 +296,8 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestionsList.classList.add('oculto');
       }
     });
-  
+  }
+
   // Crear un reporte de ejemplo al cargar la página
   function crearReporteEjemplo() {
     const mapaContainer = document.querySelector('.mapa-container');
@@ -314,16 +315,38 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     // Posicionar en esquina superior derecha, conservar tamaño y estética
-  ejemplo.style.top = '24px';
-  ejemplo.style.right = '24px';
-  ejemplo.style.left = 'auto';
-  ejemplo.style.transform = 'none';
+    ejemplo.style.top = '24px';
+    ejemplo.style.right = '24px';
+    ejemplo.style.left = 'auto';
+    ejemplo.style.transform = 'none';
 
     mapaContainer.appendChild(ejemplo);
   }
 
   // Ejecutar creación del ejemplo inmediatamente
   crearReporteEjemplo();
+
+  // Historial sidebar functionality
+  const btnVerHistorial = document.getElementById("btn-ver-historial");
+  const sidebarHistorial = document.getElementById("sidebar-historial");
+  const propiedadInfoBox = document.querySelector(".propiedad-info");
+
+  if (btnVerHistorial && sidebarHistorial) {
+    btnVerHistorial.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      if (propiedadInfoBox) {
+        propiedadInfoBox.classList.add("oculto");
+        propiedadInfoBox.setAttribute("aria-hidden", "true");
+      }
+      sidebarHistorial.classList.remove("oculto");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!sidebarHistorial.contains(e.target) && !btnVerHistorial.contains(e.target)) {
+        sidebarHistorial.classList.add("oculto");
+      }
+    });
   }
 
   // --- Botón de pánico en la navbar según preferencia en ajustes ---
@@ -332,6 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalPanic = document.getElementById('modal-panic');
     const modalPanicClose = document.getElementById('modal-panic-close');
     const enabled = localStorage.getItem('panicEnabled') === 'true';
+    
     if (panicBtn) {
       panicBtn.classList.toggle('oculto', !enabled);
       panicBtn.addEventListener('click', () => {
@@ -348,6 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2200);
       });
     }
+    
     if (modalPanicClose) {
       modalPanicClose.addEventListener('click', () => {
         if (modalPanic) {
@@ -356,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+    
     // si se cambia la preferencia en otra pestaña, actualizar visibilidad
     window.addEventListener('storage', (e) => {
       if (e.key === 'panicEnabled' && panicBtn) {
@@ -363,5 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
         panicBtn.classList.toggle('oculto', !now);
       }
     });
-  } catch (e) { /* noop */ }
+  } catch (e) { 
+    console.log('Error en configuración de botón de pánico:', e);
+  }
 });
