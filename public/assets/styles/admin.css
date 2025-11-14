@@ -106,6 +106,7 @@ body {
 .menu a { text-decoration: none; color: #0C132D; padding: 8px 10px; border-radius: 6px; font-weight: 500; }
 .menu a:hover { color: #39716C; background: rgba(57, 113, 108, 0.08); }
 .login-link { text-decoration: none; color: #0C132D; display: flex; align-items: center; gap: 6px; }
+.login-link:hover { color: #39716C; }
 .login-link::after {
   content: "";
   display: inline-block;
@@ -255,6 +256,7 @@ body {
     gap: 8px;
     margin-top: auto;
     cursor: pointer;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 .manage-button:hover {
@@ -351,6 +353,115 @@ body {
     justify-self: end;
 }
 
+/* Util */
+.oculto { display: none !important; }
+
+/* HU41: Tendencia de incidentes */
+.trend-card .trend-summary {
+    color: #6B7280;
+    margin: 0 0 12px;
+}
+
+/* Mejora visual de la card de tendencia */
+.trend-card {
+    border: 1px solid #e5e7eb;
+    background: white;
+}
+.trend-card .card-header h2 { color: #1C2542; }
+.trend-card .title-with-icon { display: flex; align-items: center; gap: 8px; }
+.trend-card .trend-icon { display: inline-block; }
+.trend-card { position: relative; }
+.trend-mini { max-width: 380px; margin: 0 auto 8px; }
+.trend-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 12px; }
+.th-item { background: #FFFFFF; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px; text-align: center; }
+.th-item .th-label { display: block; font-size: 12px; color: #6B7280; }
+.th-item .th-value { display: block; font-size: 18px; font-weight: 700; color: #1C2542; }
+
+.trend-mini {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 80px;
+    margin: 8px 0 16px;
+}
+
+.trend-mini-bar {
+    flex: 1;
+    background: #3D4F7C;
+    border-radius: 6px 6px 0 0;
+}
+
+/* Vista de tendencia en página */
+.trend-layout { display: grid; grid-template-columns: 280px 1fr; gap: 16px; padding: 0 0 40px; }
+.trend-filters {
+    background: #738B8B;
+    border: 2px solid #576969;
+    border-radius: 12px;
+    padding: 12px;
+    color: #FFFFFF;
+    position: relative;
+    z-index: 1; /* evita que cambie visualmente al abrir acordeón */
+    transition: none;
+}
+.trend-view .trend-filters { background: #738B8B; border-color: #576969; }
+.trend-filter-group { transition: none; }
+.trend-content { background: transparent; min-width: 0; }
+.trend-filters h3 { margin: 0 0 8px; font-size: 18px; }
+.trend-search { position: relative; }
+.trend-search input { width: 100%; padding: 10px 40px 10px 12px; border-radius: 8px; border: none; margin-bottom: 10px; font-family: 'Poppins', Arial, Helvetica, sans-serif; background-color: #EAE9E7;}
+.trend-search-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.trend-search-btn img { width: 18px; height: 18px; display: block; }
+.trend-filter-group { background: #2F7372; border-radius: 8px; margin: 8px 0; padding: 6px; color: white;}
+.trend-filter-group summary { cursor: pointer; font-weight: 600; }
+.trend-filter-body { margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+.trend-filter-body label { color: #FFFFFF; display: flex; align-items: center; gap: 6px; }
+.trend-filter-body input[type="text"] { padding: 8px 10px; border-radius: 8px; border: none; font-family: 'Poppins', Arial, Helvetica, sans-serif; }
+
+/* Mantener el mismo fondo al abrir/clicar el filtro */
+.trend-filter-group[open] { background: #2F7372; }
+.trend-filter-group > summary { background: transparent; outline: none; -webkit-tap-highlight-color: transparent; }
+.trend-filter-group > summary:focus,
+.trend-filter-group > summary:active { background: transparent; outline: none; }
+
+/* Robustez de layout: asegurar que el grid no provoque overflow horizontal */
+.trend-layout { max-width: 1100px; margin: 0 auto; }
+
+.trend-head h2 { margin: 0; }
+.trend-head .muted { color: #6B7280; margin: 2px 0 12px; }
+
+.trend-accordion { background: #738B8B; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; }
+.trend-accordion > summary { list-style: none; }
+.trend-accordion > summary::-webkit-details-marker { display: none; }
+.trend-acc-header { background: #1C2542; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; }
+.trend-acc-header .acc-left { display: flex; align-items: center; gap: 8px; }
+.trend-acc-header h3 { margin: 0; font-size: 16px; }
+.trend-acc-header .acc-right { display: flex; align-items: center; gap: 6px; }
+.acc-action { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; padding: 4px 8px; cursor: pointer; font-family: 'Poppins', Arial, Helvetica, sans-serif; display: inline-flex; align-items: center; gap: 6px; }
+.acc-action:hover { background: rgba(255,255,255,0.2); }
+.acc-chevron { opacity: 0.8; }
+.acc-chevron-btn { background: transparent; border: none; padding: 0; margin: 0; width: 33px; height: 19px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.acc-chevron-btn svg { transform: rotate(180deg); transition: transform .25s ease; }
+.trend-accordion.open .acc-chevron-btn svg { transform: rotate(0deg); }
+
+.trend-acc-body { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+.trend-accordion.open .trend-acc-body { padding: 12px; max-height: 1200px; }
+.trend-section-title { margin: 0 0 10px; font-weight: 600; color: #0C132D;}
+.trend-chart { display: flex; align-items: flex-end; }
+.trend-bars { display: flex; gap: 8px; width: 100%; align-items: flex-end; }
+.trend-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; height: 180px; }
+.trend-bar { width: 100%; background: #2E3859; border-radius: 8px 8px 0 0; min-height: 4px; }
+.trend-value { font-size: 12px; color: #1E293B; }
+.trend-year { margin: 6px 0 0; font-size: 12px; color: #000000; }
+
+.trend-ring-and-more { display: flex; align-items: center; gap: 16px; margin: 0 auto; }
+.trend-ring { width: 160px; height: 160px; }
+.trend-more-block .small { font-size: 12px; color: white; margin: 4px 0; }
+.btn-simple { background: #39716C; color: #fff; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-family: 'Poppins', Arial, Helvetica, sans-serif; }
+.btn-simple:hover { opacity: .9; }
+.trend-more-content { margin-top: 10px; font-size: 14px; color: #1E293B; }
+
+@media (max-width: 900px) { .trend-layout { grid-template-columns: 1fr; } }
+
 
 /* Responsive */
 @media (min-width: 768px) {
@@ -373,3 +484,18 @@ body {
         grid-template-columns: 1fr;
     }
 }
+/* Normaliza box-sizing para evitar descuadres */
+* { box-sizing: border-box; }
+.trend-head-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+/* Trend view width fixes */
+.trend-view {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    max-width: 100vw;
+    width: 100vw;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.trend-layout > * { min-width: 0; }
