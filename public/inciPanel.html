@@ -304,7 +304,7 @@
                         </div>
                     </div>
                     <div class="chart-actions">
-                        <button type="button" class="chart-btn primary">
+                        <button type="button" class="chart-btn primary" id="reportAuthoritiesBtn">
                             <span class="material-icons" aria-hidden="true">cloud_upload</span>
                             Enviar reporte a autoridades
                         </button>
@@ -312,6 +312,55 @@
                             <span class="material-icons" aria-hidden="true">download</span>
                             Descargar estadística
                         </button>
+                    </div>
+                </div>
+                <div id="reportModal" class="report-modal hidden" aria-hidden="true" role="dialog">
+                    <div class="report-modal-inner">
+                        <div class="report-modal-header">
+                            <input type="text" placeholder="Buscar autoridades" />
+                            <div class="report-modal-actions">
+                                <span class="material-icons" aria-hidden="true">tune</span>
+                                <span class="material-icons" aria-hidden="true" id="reportModalClose">close</span>
+                            </div>
+                        </div>
+                        <div class="report-modal-body">
+                            <div class="report-target">
+                                <div class="report-target-avatar green"></div>
+                                <div>
+                                    <strong>Policía de Bellavista</strong>
+                                    <span>Rol: Vecino aliado</span>
+                                </div>
+                                <button type="button" class="authority-btn" data-authority="Policía de Bellavista">
+                                    <span class="material-icons" aria-hidden="true">cloud_upload</span>
+                                </button>
+                            </div>
+                            <div class="report-target">
+                                <div class="report-target-avatar red"></div>
+                                <div>
+                                    <strong>Bomberos de Bellavista</strong>
+                                    <span>Rol: Vecino</span>
+                                </div>
+                                <button type="button" class="authority-btn" data-authority="Bomberos de Bellavista">
+                                    <span class="material-icons" aria-hidden="true">cloud_upload</span>
+                                </button>
+                            </div>
+                            <div class="report-target">
+                                <div class="report-target-avatar yellow">P</div>
+                                <div>
+                                    <strong>Posta de Bellavista</strong>
+                                    <span>Rol: Vecino</span>
+                                </div>
+                                <button type="button" class="authority-btn" data-authority="Posta de Bellavista">
+                                    <span class="material-icons" aria-hidden="true">north</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="reportConfirm" class="report-confirm hidden" role="alert">
+                    <div class="report-confirm-inner">
+                        <p id="reportConfirmMessage">Reporte enviado</p>
+                        <button type="button" id="reportConfirmClose">Aceptar</button>
                     </div>
                 </div>
                 <div class="incident-detail-panel-wrapper" id="incidentDetailPanelWrapper">

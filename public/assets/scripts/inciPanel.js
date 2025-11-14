@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const chartTitle = document.getElementById('chartTitle');
   const chartSubtitle = document.getElementById('chartSubtitle');
   const chartDateLabel = document.getElementById('chartDateLabel');
+  const reportModal = document.getElementById('reportModal');
+  const reportAuthoritiesBtn = document.getElementById('reportAuthoritiesBtn');
+  const reportModalClose = document.getElementById('reportModalClose');
 
   let currentSuggestions = [];
   let highlightedSuggestion = -1;
@@ -265,6 +268,38 @@ document.addEventListener('DOMContentLoaded', () => {
     filterToggleBtn.setAttribute('aria-expanded', 'false');
   });
 
+  reportAuthoritiesBtn?.addEventListener('click', () => {
+    if (!reportModal) return;
+    reportModal.classList.remove('hidden');
+    reportModal.setAttribute('aria-hidden', 'false');
+  });
+
+  const closeReportModal = () => {
+    if (!reportModal) return;
+    reportModal.classList.add('hidden');
+    reportModal.setAttribute('aria-hidden', 'true');
+  };
+
+  reportModalClose?.addEventListener('click', closeReportModal);
+  reportModal?.addEventListener('click', (e) => {
+    if (e.target === reportModal) closeReportModal();
+  });
+
+  document.querySelectorAll('.authority-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.dataset.authority || 'Autoridad local';
+      closeReportModal();
+      reportConfirmMessage && (reportConfirmMessage.textContent = `Reporte enviado a ${name}`);
+      reportConfirm?.classList.remove('hidden');
+    });
+  });
+
+  const closeConfirm = () => reportConfirm?.classList.add('hidden');
+  reportConfirmClose?.addEventListener('click', closeConfirm);
+  reportConfirm?.addEventListener('click', (e) => {
+    if (e.target === reportConfirm) closeConfirm();
+  });
+
   filterToggleBtn?.addEventListener('click', () => {
     if (!filterPanel) return;
     const isHidden = filterPanel.classList.contains('hidden');
@@ -314,3 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // auto select first item by default
   selectIncident(incidentItems[0]);
 });
+  const reportConfirm = document.getElementById('reportConfirm');
+  const reportConfirmMessage = document.getElementById('reportConfirmMessage');
+  const reportConfirmClose = document.getElementById('reportConfirmClose');
