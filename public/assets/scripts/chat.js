@@ -22,6 +22,116 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastFocusedElement = null;
   let successTimer = null;
 
+  // --- NUEVO: Lógica de borrado de mensajes ---
+  const deleteModal = document.getElementById('deleteConfirmationModal');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+  let messageElementToDelete = null;
+
+  const showDeleteModal = (messageEl) => {
+    messageElementToDelete = messageEl;
+    deleteModal.classList.remove('hidden');
+    deleteModal.setAttribute('aria-hidden', 'false');
+  };
+
+  const hideDeleteModal = () => {
+    messageElementToDelete = null;
+    deleteModal.classList.add('hidden');
+    deleteModal.setAttribute('aria-hidden', 'true');
+  };
+
+  confirmDeleteBtn.addEventListener('click', () => {
+    if (messageElementToDelete) {
+      messageElementToDelete.remove();
+      hideDeleteModal();
+    }
+  });
+
+  cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+  deleteModal.addEventListener('click', (e) => {
+    if (e.target === deleteModal) {
+      hideDeleteModal();
+    }
+  });
+  // --- FIN NUEVO ---
+
+  // --- NUEVO: Datos de ejemplo y renderizado de mensajes ---
+  const currentUserId = 'user1'; // Asumimos que este es el usuario actual
+
+  const users = {
+    'user1': { id: 'user1', name: 'Tú', avatarInitial: 'T' },
+    'user2': { id: 'user2', name: 'Lorena', avatarInitial: 'L' },
+    'user3': { id: 'user3', name: 'Carlos', avatarInitial: 'C' },
+  };
+
+  const initialMessages = [
+    { id: 'msg1', text: 'Hola a todos, recuerden la reunión de seguridad de mañana a las 8pm en la plaza.', userId: 'user2', timestamp: '9:40 AM' },
+    { id: 'msg2', text: '¡Claro! Ahí estaré. Gracias por el aviso.', userId: 'user3', timestamp: '9:41 AM' },
+    { id: 'msg3', text: 'Confirmado, gracias por el recordatorio, Lorena.', userId: 'user1', timestamp: '9:42 AM' },
+  ];
+
+  function createMessageElement(message) {
+    const user = users[message.userId];
+    const isSelf = user.id === currentUserId;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `msg ${isSelf ? 'msg-self' : 'msg-other'}`;
+    msgDiv.dataset.messageId = message.id;
+
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = 'msg-avatar';
+    avatarDiv.textContent = user.avatarInitial;
+
+    const bodyDiv = document.createElement('div');
+    bodyDiv.className = 'msg-body';
+
+    const textDiv = document.createElement('div');
+    textDiv.className = 'msg-text';
+    textDiv.textContent = message.text;
+
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'msg-meta';
+    metaDiv.textContent = `${isSelf ? '' : user.name + ' - '}${message.timestamp}`;
+    
+    bodyDiv.appendChild(textDiv);
+    bodyDiv.appendChild(metaDiv);
+
+    // --- NUEVO: Crear y añadir el botón de borrar ---
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-msg-btn';
+    deleteBtn.setAttribute('aria-label', 'Eliminar mensaje');
+    deleteBtn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path>
+      </svg>
+    `;
+    deleteBtn.addEventListener('click', () => {
+      showDeleteModal(msgDiv);
+    });
+    msgDiv.appendChild(deleteBtn);
+    // --- FIN NUEVO ---
+
+    if (isSelf) {
+      msgDiv.appendChild(bodyDiv);
+      msgDiv.appendChild(avatarDiv);
+    } else {
+      msgDiv.appendChild(avatarDiv);
+      msgDiv.appendChild(bodyDiv);
+    }
+
+    return msgDiv;
+  }
+
+  function addMessageToDOM(message) {
+    const msgEl = createMessageElement(message);
+    chatArea.appendChild(msgEl);
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  initialMessages.forEach(addMessageToDOM);
+  // --- FIN NUEVO ---
+
+
   const projectImages = [
     { src: 'assets/images/adjuntar-imagen-4.jpg', label: 'Patrullaje - Plaza' },
     { src: 'assets/images/adjuntar-imagen-6.jpg', label: 'Control del parque' },
@@ -142,11 +252,25 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const text = input.value.trim();
     if (!text) return;
+
+    // --- NUEVO: Crear y renderizar el mensaje localmente ---
+    const newMessage = {
+      id: `msg_${Date.now()}`,
+      text: text,
+      userId: currentUserId,
+      timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
+    };
+    addMessageToDOM(newMessage);
+    // --- FIN NUEVO ---
+
     const chatId = window.chatAPI && window.chatAPI.getCurrentChatId ? window.chatAPI.getCurrentChatId() : null;
-    if (!chatId) return;
-    // use central API to send message
-    window.chatAPI.sendMessageToChat(chatId, text);
+    if (chatId) {
+      // use central API to send message (simulado)
+      window.chatAPI.sendMessageToChat(chatId, text);
+    }
+    
     input.value = '';
+    input.focus();
   });
 
   // Adjuntar imagen via menu option (solo biblioteca interna)
