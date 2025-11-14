@@ -154,7 +154,7 @@
 			</section>
 
 			<section class="card quick-links">
-				<button class="quick-link">
+				<button class="quick-link" id="notificationsBtn">
 					<span>Notificaciones</span>
 					<span>›</span>
 				</button>
@@ -198,19 +198,49 @@
 			</div>
 		</footer>
 
-		<script>
-			document.addEventListener("DOMContentLoaded", () => {
-				const backButton = document.querySelector(".back-button");
-				if (backButton) {
-					backButton.addEventListener("click", () => {
-						if (window.history.length > 1) {
-							window.history.back();
-						} else {
-							window.location.href = "admin.html";
-						}
-					});
-				}
-			});
-		</script>
+		<div id="notificationsModal" class="notif-modal hidden" aria-hidden="true" role="dialog">
+			<div class="notif-modal-inner">
+				<div class="notif-modal-header">
+					<h2>Notificaciones</h2>
+					<button type="button" id="notifModalClose" aria-label="Cerrar">×</button>
+				</div>
+				<div class="notif-section">
+					<div>
+						<h3>Permisos</h3>
+						<p class="muted">Recibe alertas sobre eventos importantes y actualizaciones.</p>
+					</div>
+					<label class="switch">
+						<input type="checkbox" />
+						<span></span>
+					</label>
+				</div>
+				<div class="notif-section">
+					<div>
+						<h3>Zonas de interés</h3>
+						<p class="muted">Selecciona zonas para recibir alertas personalizadas.</p>
+					</div>
+					<button class="arrow-btn" type="button">›</button>
+				</div>
+				<div class="notif-section">
+					<div>
+						<h3>Frecuencia de alertas</h3>
+						<p class="muted">Ajusta cada cuánto recibes notificaciones.</p>
+					</div>
+					<button class="arrow-btn" type="button">›</button>
+				</div>
+				<div class="notif-section">
+					<div>
+						<h3>Silenciar notificaciones</h3>
+						<p class="muted">Desactiva temporalmente los avisos.</p>
+					</div>
+					<label class="switch">
+						<input type="checkbox" />
+						<span></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<script src="assets/scripts/confi.js"></script>
 	</body>
 </html>
