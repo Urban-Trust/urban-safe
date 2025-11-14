@@ -466,6 +466,39 @@ body {
   overflow: hidden;
 }
 
+/* Botón para maximizar sidebar (cuando está minimizado) */
+.sidebar-maximize {
+  position: fixed;
+  left: 12px;
+  top: 80px;
+  z-index: 1000;
+  background: var(--panel);
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.sidebar-maximize:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.sidebar-maximize img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.sidebar-maximize.hidden {
+  display: none !important;
+}
+
 /* Imagen del grupo junto al título del chat */
 .group-icon-chat {
   width: 40px;        /* tamaño ajustable */
@@ -622,8 +655,135 @@ body {
   color: var(--accent-dark);
   border: 1px solid rgba(0,0,0,0.04);
 }
-.poll-option { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px; margin:6px 0; border-radius:8px; background: #f6f7f8; }
-.poll-option button.vote-btn { background: none; border: none; padding:6px 10px; border-radius:8px; cursor:pointer; }
+
+.chat-poll > strong {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Contenedor de opción de encuesta - UNA LÍNEA COMPLETA */
+.poll-option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  margin: 6px 0;
+  border-radius: 8px;
+  background: #f6f7f8;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Left side: checkbox y label */
+.poll-option-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: fit-content;
+  flex-shrink: 0;
+}
+
+/* Checkbox circular personalizado */
+.poll-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #39516B;
+  border-radius: 50%;
+  cursor: pointer;
+  background: white;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.poll-checkbox:hover {
+  border-color: #2E3859;
+  box-shadow: 0 0 6px rgba(46, 56, 89, 0.2);
+}
+
+.poll-checkbox:checked {
+  background: #39516B;
+  border-color: #39516B;
+  box-shadow: 0 0 6px rgba(46, 56, 89, 0.3);
+}
+
+/* Checkmark dentro del checkbox */
+.poll-checkbox:checked::after {
+  content: '✓';
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Label del checkbox - ocupa espacio disponible */
+.poll-option-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent-dark);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right side: contador y barra de progreso */
+.poll-option-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: fit-content;
+  flex-shrink: 0;
+}
+
+.vote-count-btn {
+  background: none;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: #39516B;
+  transition: all 0.2s ease;
+  min-width: 24px;
+  text-align: center;
+}
+
+.vote-count-btn:hover {
+  background: rgba(57, 81, 107, 0.15);
+}
+
+/* Barra de progreso debajo de la opción, en columna 2 (full width) */
+.poll-progress-container {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 5px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+/* Barra de progreso rellena */
+.poll-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #39516B 0%, #2E3859 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  box-shadow: 0 1px 3px rgba(57, 81, 107, 0.2);
+}
+
 .voters-list-popup { position: absolute; background: var(--panel); padding:8px 10px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.12); z-index:1300; }
 
 .hidden { display: none !important; }
