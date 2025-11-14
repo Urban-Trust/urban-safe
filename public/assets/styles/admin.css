@@ -1,7 +1,7 @@
 /* General Body Styles */
 body {
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
     background-color: #ccd1d1;
     color: #2D3748;
     line-height: 1.5;

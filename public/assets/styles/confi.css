@@ -309,7 +309,7 @@ textarea {
     border-radius: 8px;
     border: 1px solid #e2e8f0;
     padding: 8px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
     font-size: 14px;
     resize: vertical;
     min-height: 80px;

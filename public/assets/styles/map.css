@@ -1050,7 +1050,7 @@ input.error {
 .suggestions-list li {
   padding: 10px 14px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   font-size: 14px;
 }
 

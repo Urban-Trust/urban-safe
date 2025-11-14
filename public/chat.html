@@ -171,7 +171,6 @@
       <p class="chat-zone">Zona: Los Álamos — Lima</p>
     </div>
     <div style="display:flex; gap:8px; align-items:center;">
-      <button id="createPollBtn" class="sidebar-toggle" aria-label="Crear encuesta" title="Crear encuesta">Crear encuesta</button>
     </div>
   </div>
 </header>
@@ -223,6 +222,19 @@
     </div>
 
     <form id="chatForm" class="chat-input" aria-label="Enviar mensaje">
+      <!-- Menú desplegable para opciones de adjuntos -->
+      <div id="attachMenuDropdown" class="attach-menu-dropdown hidden">
+        <button type="button" id="attachImageBtn" class="attach-menu-option" aria-label="Adjuntar imagen" title="Adjuntar imagen">
+          <img src="assets/images/Ima_.png" alt="Imagen" />
+        </button>
+        <button type="button" id="attachPollBtn" class="attach-menu-option" aria-label="Crear encuesta" title="Crear encuesta">
+          <img src="assets/images/Enc_.png" alt="Encuesta" />
+        </button>
+        <button type="button" id="attachEventBtn" class="attach-menu-option" aria-label="Crear evento" title="Crear evento">
+          <img src="assets/images/Even_.png" alt="Evento" />
+        </button>
+      </div>
+
       <button type="button" id="attachBtn" aria-label="Adjuntar imagen">
         <img src="assets/images/Adjuntar_imagen.png" alt="Adjuntar imagen" />
       </button>
@@ -305,7 +317,7 @@
     <div class="modal-footer">
       <button class="btn-cancel" data-target="#createGroupModal">Cancelar</button>
       <button id="createGroupConfirmBtn" class="btn-primary">
-        <img src="assets/images/Crear.png" alt="Crear" />
+        <img src="assets/images/Crear1.png" alt="Crear" />
       </button>
     </div>
   </div>
