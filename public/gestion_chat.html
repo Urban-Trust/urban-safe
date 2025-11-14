@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Urban Safe - Chat Vecinal</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/styles/map.css"/>
-    <link rel="stylesheet" href="assets/styles/chat.css"/>
-    <link rel="stylesheet" href="assets/styles/chat-groups.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestionar Vecinos — Vecinos Los Álamos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles/map.css" />
+  <link rel="stylesheet" href="assets/styles/chat.css" />
+  <link rel="stylesheet" href="assets/styles/gestion_chat.css" />
 </head>
 <body>
-    <!-- NAVBAR (idéntico a map.html) -->
-    <nav class="navbar">
+  <!-- Reuse same header as chat.html for consistency -->
+      <nav class="navbar">
       <div class="container nav-inner">
         <div class="brand-wrap">
           <input type="checkbox" id="menu-toggle" class="menu-toggle" />
@@ -91,361 +89,71 @@
       </div>
     </nav>
 
-    <!-- REEMPLAZAMOS LA ZONA DEL MAPA POR EL CHAT, PERO CONSERVAMOS LA CLASE .mapa -->
-    <section class="mapa">
-      <div class="mapa-container chat-layout">
+  <section class="mapa" style="background:#B9C2C5; padding-bottom:0; margin-bottom:0; height:auto; overflow:visible; min-height:calc(100vh - 200px); display:flex; align-items:center; justify-content:center;">
+    <div class="mapa-container" style="padding:10px; padding-bottom:0; height:auto; width:100%;">
+      <div class="chat-wrap" style="height:auto; min-height:auto; background:#D9D9D9;">
+        <header class="chat-top" style="background:#1C2542;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div style="display:flex; align-items:center; gap:12px; position:relative;">
+              <!-- Back button moved to the left, near title, using image -->
+              <a href="chat.html" id="backToChatBtn" title="Volver al chat" style="display:inline-flex;align-items:center;justify-content:center;position:absolute;left:-50px;">
+                <img src="assets/images/return_minimized.png" alt="Volver" style="width:44px;height:44px;" />
+              </a>
+              <img src="assets/images/img_group.png" alt="Grupo" style="width:56px;height:56px;border-radius:50%;background:#fff;" />
+              <div>
+                <h1 style="margin:0;color:#fff;">Vecinos Los Álamos — Gestión</h1>
+                <p class="chat-zone" style="margin:0;font-size:13px;opacity:0.95;color:#fff;">Gestiona miembros del grupo</p>
+              </div>
+            </div>
+          </div>
+        </header>
 
- <!-- Columna izquierda: Buscar chats -->
-<div class="chat-sidebar">
+        <main style="padding:8px;">
+          <section id="manage-section" style="max-width:920px;margin:0 auto;">
+            <h2>Panel de usuarios</h2>
+            
 
-  <!-- Botón para minimizar sidebar -->
-  <button class="sidebar-toggle" aria-label="Minimizar sidebar">
-    <img src="assets/images/return_minimized.png" alt="Minimizar" />
-  </button>
+            <div id="membersList" style="margin-top:12px; display:flex; flex-direction:column; gap:8px;"></div>
 
-  <!-- Botón para maximizar sidebar (oculto por defecto) -->
-  <button class="sidebar-maximize hidden" aria-label="Maximizar sidebar" title="Mostrar chats">
-    <img src="assets/images/maximi.png" alt="Maximizar" />
-  </button>
+            <hr style="margin:18px 0;" />
 
-  <!-- Buscador de chats -->
-  <div class="chat-search">
-    <input type="text" id="searchChat" placeholder="Buscar chats...">
-    <img src="assets/images/search_blanco.png" alt="Buscar" class="search-icon" />
-  </div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:8px;justify-content:flex-end;">
+              <button id="showAddNeighborsBtn" style="padding:10px 14px;border-radius:8px;border:none;background:#1C2542;color:#fff;font-weight:600;">Agregar Vecino +</button>
+            </div>
+            <div id="addMsg" style="margin-top:8px;color:#444;font-size:13px;"></div>
 
-  <!-- Lista de chats -->
-  <div id="chatList" class="chat-list">
-    <!-- Vecinos Los Álamos -->
-    <div class="chat-item" data-id="alamos" data-name="Vecinos Los Álamos">
-      <img src="assets/images/Logo_Alamos.png" alt="Vecinos Los Álamos" class="chat-item-img" />
-      <div class="chat-item-info">
-        <span class="chat-item-name">Vecinos Los Álamos</span>
-        <span class="chat-item-time">7:50 AM</span>
+          </section>
+        </main>
+
       </div>
-      <span class="chat-unread hidden" aria-hidden="true">0</span>
     </div>
+  </section>
 
-    <!-- Seguridad -->
-    <div class="chat-item" data-id="seguridad" data-name="Seguridad">
-      <img src="assets/images/seguridad.png" alt="Seguridad" class="chat-item-img" />
-      <div class="chat-item-info">
-        <span class="chat-item-name">Seguridad</span>
-        <span class="chat-item-time">7:50 AM</span>
-      </div>
-      <span class="chat-unread hidden" aria-hidden="true">0</span>
-    </div>
-
-    <!-- Lorena (Administradora) -->
-    <div class="chat-item" data-id="lorena" data-name="Lorena (Administradora)">
-      <img src="assets/images/Lorena.png" alt="Lorena" class="chat-item-img" />
-      <div class="chat-item-info">
-        <span class="chat-item-name">Lorena (Administradora)</span>
-        <span class="chat-item-time">7:50 AM</span>
-      </div>
-      <span class="chat-unread hidden" aria-hidden="true">0</span>
-    </div>
-
-    <!-- Botón "Nuevo +" con dropdown -->
-    <div class="chat-nuevo-btn-wrapper">
-      <button id="chatNuevoBtn" class="chat-nuevo-btn">
-        Nuevo <strong>+</strong>
-      </button>
-      <div id="chatNuevoDropdown" class="chat-nuevo-dropdown hidden">
-        <button id="chatNuevoGrupoBtn" class="dropdown-option">
-          Nuevo grupo <strong>+</strong>
-        </button>
-        <button id="chatNotificacionBtn" class="dropdown-option">
-          Nueva notificación masiva <strong>+</strong>
-        </button>
+  <!-- Delete confirmation modal -->
+  <div id="deleteModal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:2000;">
+    <div style="background:#fff;padding:18px;border-radius:10px;max-width:520px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+      <h3>¿Estás seguro de eliminar al vecino del grupo vecinal?</h3>
+      <p>Eliminar al vecino hará que algún reporte importante que se haga para el grupo ya no le llegue, ni tampoco podrá enterarse de inmediato sobre algún evento o incidente que ocurra.</p>
+      <p>Si está seguro, escriba su usuario aquí:</p>
+      <input id="confirmDeleteInput" type="text" placeholder="Nombre exacto del vecino" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);margin-top:8px;" />
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+        <button id="cancelDeleteBtn" style="padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;">Cancelar</button>
+        <button id="confirmDeleteBtn" style="padding:8px 12px;border-radius:8px;border:none;background:#c62828;color:#fff;">Eliminar</button>
       </div>
     </div>
   </div>
-</div>
 
-
-  <!-- Columna derecha: Chat actual -->
-  <div class="chat-wrap" role="main" aria-label="Chat Vecinal">
-   <header class="chat-top">
-  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-    <div>
-      <h1 id="chatTitle">
-        <img src="assets/images/img_group.png" alt="Grupo" class="group-icon-chat" />
-        Grupo Vecinal
-      </h1>
-      <p class="chat-zone">Zona: Los Álamos — Lima</p>
-    </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-    </div>
-  </div>
-</header>
-
-<!-- Modal / panel para crear encuestas -->
-<div id="pollModal" class="hidden" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="poll-modal-inner">
-    <h3>Crear encuesta</h3>
-    <label>
-      Pregunta
-      <input id="pollQuestion" type="text" placeholder="Escribe la pregunta..." />
-    </label>
-    <div id="pollOptions">
-      <label>Opción 1 <input type="text" class="poll-option" placeholder="Texto opción 1" /></label>
-      <label>Opción 2 <input type="text" class="poll-option" placeholder="Texto opción 2" /></label>
-    </div>
-    <div class="poll-actions">
-      <button id="addPollOption" type="button">Añadir opción</button>
-      <button id="createPollConfirm" type="button">Crear</button>
-      <button id="createPollCancel" type="button">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal para ver votantes de una opción de encuesta -->
-<div id="votersModal" class="hidden" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="voters-modal-inner">
-    <button id="votersModalClose" class="voters-modal-close" aria-label="Cerrar">✕</button>
-    <h3 id="votersModalTitle">Votantes</h3>
-    <div id="votersList" class="voters-list"></div>
-  </div>
-</div>
-
-<!-- Emoji picker modal -->
-<div id="emojiPickerModal" class="hidden" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="emoji-modal-inner">
-    <button id="emojiPickerClose" class="voters-modal-close" aria-label="Cerrar">✕</button>
-    <h3>Emojis</h3>
-    <div id="emojiGrid" class="emoji-grid"></div>
-  </div>
-</div>
-    <!-- area para mensajes anclados (movido aquí, queda visible entre header y mensajes) -->
-    <div id="pinnedArea" class="pinned-area"></div>
-
-    <div id="chatArea" class="chat-area" aria-live="polite">
-      <!-- mensajes de ejemplo -->
-      
-      
-    </div>
-
-    <form id="chatForm" class="chat-input" aria-label="Enviar mensaje">
-      <!-- Menú desplegable para opciones de adjuntos -->
-      <div id="attachMenuDropdown" class="attach-menu-dropdown hidden">
-        <button type="button" id="attachImageBtn" class="attach-menu-option" aria-label="Adjuntar imagen" title="Adjuntar imagen">
-          <img src="assets/images/Ima_.png" alt="Imagen" />
-        </button>
-        <button type="button" id="attachPollBtn" class="attach-menu-option" aria-label="Crear encuesta" title="Crear encuesta">
-          <img src="assets/images/Enc_.png" alt="Encuesta" />
-        </button>
-        <button type="button" id="attachEventBtn" class="attach-menu-option" aria-label="Crear evento" title="Crear evento">
-          <img src="assets/images/Even_.png" alt="Evento" />
-        </button>
-      </div>
-
-      <button type="button" id="attachBtn" aria-label="Adjuntar imagen">
-        <img src="assets/images/Adjuntar_imagen.png" alt="Adjuntar imagen" />
-      </button>
-
-      <input id="msgInput" type="text" placeholder="Escribe tu mensaje..." aria-label="Mensaje" autocomplete="off" />
-
-      <button type="submit" id="sendBtn" aria-label="Enviar mensaje">
-        <img src="assets/images/Enviar_Mensaje.png" alt="Enviar mensaje" />
-      </button>
-    </form>
-  </div>
-
-<!-- MODALES PARA NUEVO GRUPO Y NOTIFICACIÓN MASIVA -->
-
-<!-- 1. Modal: Selector de vecinos para nuevo grupo -->
-<div id="selectNeighborsModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content modal-large">
-    <div class="modal-header">
-      <h3>Selecciona vecinos para el grupo</h3>
-      <button class="modal-close" data-target="#selectNeighborsModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <!-- Buscador de vecinos -->
-      <div class="search-neighbors">
-        <input type="text" id="neighborsSearchInput" placeholder="Buscar vecinos..." />
-        <img src="assets/images/search_blanco.png" alt="Buscar" class="search-icon" />
-      </div>
-
-      <!-- Lista de vecinos disponibles -->
-      <div id="neighborsList" class="neighbors-list"></div>
-
-      <!-- Vecinos seleccionados (avatares circulares con iniciales) -->
-      <div class="selected-neighbors-title">Seleccionados:</div>
-      <div id="selectedNeighborsDisplay" class="selected-neighbors-display"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" data-target="#selectNeighborsModal">Cancelar</button>
-      <button id="nextToGroupDetailsBtn" class="btn-primary">
-        <img src="assets/images/Enviar_Mensaje.png" alt="Siguiente" />
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- 2. Modal: Crear grupo (nombre, imagen, descripción) -->
-<div id="createGroupModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content modal-large">
-    <div class="modal-header">
-      <h3>Crear chat grupal vecinal</h3>
-      <button class="modal-close" data-target="#createGroupModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <!-- Imagen del grupo -->
-      <div class="form-group">
-        <label>Imagen del grupo</label>
-        <div class="image-upload">
-          <input type="file" id="groupImageInput" accept="image/*" />
-          <img id="groupImagePreview" src="assets/images/img_group.png" alt="Imagen del grupo" />
-        </div>
-      </div>
-
-      <!-- Nombre del grupo -->
-      <div class="form-group">
-        <label>Nombre del grupo</label>
-        <input type="text" id="groupNameInput" placeholder="Ej: Grupo de Seguridad" />
-      </div>
-
-      <!-- Descripción del grupo -->
-      <div class="form-group">
-        <label>Descripción</label>
-        <textarea id="groupDescriptionInput" placeholder="Describe el propósito del grupo..."></textarea>
-      </div>
-
-      <!-- Miembros seleccionados (lista visual) -->
-      <div class="form-group">
-        <label>Integrantes:</label>
-        <div id="groupMembersPreview" class="group-members-preview"></div>
+  <!-- Add neighbors modal -->
+  <div id="addNeighborsModal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:2000;">
+    <div style="background:#fff;padding:18px;border-radius:10px;max-width:520px;width:90%;max-height:80vh;box-shadow:0 10px 30px rgba(0,0,0,0.2);display:flex;flex-direction:column;">
+      <h3 style="margin-top:0;">Agregar vecinos al grupo</h3>
+      <div id="availableNeighborsDropdown" style="flex:1;overflow-y:auto;border:1px solid rgba(0,0,0,0.06);border-radius:8px;padding:10px;"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+        <button id="closeAddNeighborsBtn" style="padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;">Cerrar</button>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" data-target="#createGroupModal">Cancelar</button>
-      <button id="createGroupConfirmBtn" class="btn-primary">
-        <img src="assets/images/Crear1.png" alt="Crear" />
-      </button>
-    </div>
   </div>
-</div>
 
-<!-- 3. Modal: Confirmación de grupo creado (imagen "GrupoCreado.png") -->
-<div id="groupCreatedModal" class="hidden modal-overlay modal-success" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content modal-success-content">
-    <img src="assets/images/GrupoCreado.png" alt="Grupo Creado" />
-  </div>
-</div>
-
-<!-- 4. Modal: Seleccionar grupo para notificación masiva -->
-<div id="selectGroupForNotifModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Selecciona a qué grupo enviar mensaje masivo</h3>
-      <button class="modal-close" data-target="#selectGroupForNotifModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <div id="groupsForNotifList" class="groups-list"></div>
-    </div>
-  </div>
-</div>
-
-<!-- 5. Modal: Redactar mensaje masivo -->
-<div id="composeNotificationModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content modal-large">
-    <div class="modal-header">
-      <h3>Redacta mensaje masivo</h3>
-      <button class="modal-close" data-target="#composeNotificationModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Título del mensaje</label>
-        <input type="text" id="notifTitleInput" placeholder="Ej: Aviso de seguridad" />
-      </div>
-
-      <div class="form-group">
-        <label>Descripción</label>
-        <textarea id="notifDescriptionInput" placeholder="Escribe el mensaje..."></textarea>
-      </div>
-
-      <div class="users-excluded-info">
-        Usuarios excluidos: <span id="excludedCount">0</span>
-      </div>
-
-      <div class="form-group">
-        <label>Seleccionar usuarios para exclusión:</label>
-        <button id="selectExcludedUsersBtn" class="btn-secondary">Seleccionar usuarios</button>
-        <button id="selectByLocationBtn" class="btn-secondary">Filtrar por ubicación</button>
-        <button id="selectAllUsersBtn" class="btn-secondary">Seleccionar todos</button>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" data-target="#composeNotificationModal">Cancelar</button>
-      <button id="sendNotificationBtn" class="btn-primary">Enviar</button>
-    </div>
-  </div>
-</div>
-
-<!-- 6. Modal: Seleccionar usuarios para exclusión -->
-<div id="selectExcludedUsersModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content modal-large">
-    <div class="modal-header">
-      <h3>Selecciona usuarios a EXCLUIR</h3>
-      <button class="modal-close" data-target="#selectExcludedUsersModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <button id="selectAllInModalBtn" class="btn-secondary">Seleccionar todos</button>
-      <div id="usersForExclusionList" class="users-list"></div>
-    </div>
-    <div class="modal-footer">
-      <button id="acceptExclusionBtn" class="btn-primary">Aceptar</button>
-    </div>
-  </div>
-</div>
-
-<!-- 7. Modal: Filtrar por ubicación -->
-<div id="filterByLocationModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Filtrar por ubicación</h3>
-      <button class="modal-close" data-target="#filterByLocationModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <img src="assets/images/mapabg.png" alt="Mapa" class="location-map" />
-      <div id="locationExcludedInfo" class="info-text"></div>
-    </div>
-    <div class="modal-footer">
-      <button id="acceptLocationFilterBtn" class="btn-primary">Aceptar</button>
-    </div>
-  </div>
-</div>
-
-<!-- 8. Modal: Confirmación de envío (pregunta de seguridad) -->
-<div id="confirmSendModal" class="hidden modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content modal-confirmation">
-    <div class="modal-header">
-      <h3>¿Estás seguro?</h3>
-    </div>
-    <div class="modal-body">
-      <p>Se enviará el mensaje masivo a <span id="confirmGroupName"></span></p>
-    </div>
-    <div class="modal-footer">
-      <button id="confirmSendCancelBtn" class="btn-cancel">✕</button>
-      <button id="confirmSendAcceptBtn" class="btn-primary">✓</button>
-    </div>
-  </div>
-</div>
-
-<!-- 9. Modal: Notificación enviada (imagen "MsjEnv.png") -->
-<div id="notificationSentModal" class="hidden modal-overlay modal-success" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-content modal-success-content">
-    <img src="assets/images/MsjEnv.png" alt="Mensaje Enviado" />
-  </div>
-</div>
-
-</div>
-
-    </section>
-
-    <!-- FOOTER (idéntico a map.html) -->
     <footer class="footer">
       <div class="container footer-inner">
         <div>Urban Safe - 2025 - Lima, Peru</div>
@@ -468,9 +176,6 @@
       </div>
     </footer>
 
-<script src="assets/scripts/chat.js"></script>
-<script src="assets/scripts/chat-sidebar.js"></script>
-<script src="assets/scripts/chat-groups.js"></script>
-
+  <script src="assets/scripts/gestion_chat.js"></script>
 </body>
 </html>

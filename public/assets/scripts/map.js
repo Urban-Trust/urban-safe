@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  
+  // --- Autocompletado en la barra de búsqueda ---
   const inputBusqueda = document.getElementById('input-busqueda');
   const suggestionsList = document.getElementById('suggestions');
   
@@ -298,24 +298,98 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Crear un reporte de ejemplo al cargar la página
+  function crearReporteEjemplo() {
+    const mapaContainer = document.querySelector('.mapa-container');
+    if (!mapaContainer) return;
 
-const btnVerHistorial = document.getElementById("btn-ver-historial");
-const sidebarHistorial = document.getElementById("sidebar-historial");
-const propiedadInfoBox = document.querySelector(".propiedad-info");
+    // Construir elemento con misma estructura/estética pero indicando que es un ejemplo
+    const ejemplo = document.createElement('div');
+    ejemplo.className = 'reporte-en-mapa reporte-ejemplo';
+    ejemplo.innerHTML = `
+      <div class="reporte-contenido">
+        <img src="assets/images/Acci_1.png" alt="Imagen de ejemplo" class="reporte-imagen">
+        <h4 class="reporte-titulo">Daño auto</h4>
+        <div class="reporte-meta">Hace 5 minutos</div>
+      </div>
+    `;
 
+    // Posicionar en esquina superior derecha, conservar tamaño y estética
+    ejemplo.style.top = '24px';
+    ejemplo.style.right = '24px';
+    ejemplo.style.left = 'auto';
+    ejemplo.style.transform = 'none';
 
-btnVerHistorial.addEventListener("click", (e) => {
-    e.stopPropagation();
+    mapaContainer.appendChild(ejemplo);
+  }
 
-    propiedadInfoBox.classList.add("oculto");
-    propiedadInfoBox.setAttribute("aria-hidden", "true");
-    sidebarHistorial.classList.remove("oculto");
-});
-document.addEventListener("click", (e) => {
-    if (!sidebarHistorial.contains(e.target) && !btnVerHistorial.contains(e.target)) {
+  // Ejecutar creación del ejemplo inmediatamente
+  crearReporteEjemplo();
+
+  // Historial sidebar functionality
+  const btnVerHistorial = document.getElementById("btn-ver-historial");
+  const sidebarHistorial = document.getElementById("sidebar-historial");
+  const propiedadInfoBox = document.querySelector(".propiedad-info");
+
+  if (btnVerHistorial && sidebarHistorial) {
+    btnVerHistorial.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      if (propiedadInfoBox) {
+        propiedadInfoBox.classList.add("oculto");
+        propiedadInfoBox.setAttribute("aria-hidden", "true");
+      }
+      sidebarHistorial.classList.remove("oculto");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!sidebarHistorial.contains(e.target) && !btnVerHistorial.contains(e.target)) {
         sidebarHistorial.classList.add("oculto");
-    }
-});
+      }
+    });
+  }
 
-  
+  // --- Botón de pánico en la navbar según preferencia en ajustes ---
+  try {
+    const panicBtn = document.getElementById('panic-navbar-button');
+    const modalPanic = document.getElementById('modal-panic');
+    const modalPanicClose = document.getElementById('modal-panic-close');
+    const enabled = localStorage.getItem('panicEnabled') === 'true';
+    
+    if (panicBtn) {
+      panicBtn.classList.toggle('oculto', !enabled);
+      panicBtn.addEventListener('click', () => {
+        if (modalPanic) {
+          modalPanic.classList.remove('oculto');
+          modalPanic.setAttribute('aria-hidden', 'false');
+        }
+        // cerrar automaticamente despues de 2.2s
+        setTimeout(() => {
+          if (modalPanic) {
+            modalPanic.classList.add('oculto');
+            modalPanic.setAttribute('aria-hidden', 'true');
+          }
+        }, 2200);
+      });
+    }
+    
+    if (modalPanicClose) {
+      modalPanicClose.addEventListener('click', () => {
+        if (modalPanic) {
+          modalPanic.classList.add('oculto');
+          modalPanic.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+    
+    // si se cambia la preferencia en otra pestaña, actualizar visibilidad
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'panicEnabled' && panicBtn) {
+        const now = e.newValue === 'true';
+        panicBtn.classList.toggle('oculto', !now);
+      }
+    });
+  } catch (e) { 
+    console.log('Error en configuración de botón de pánico:', e);
+  }
 });

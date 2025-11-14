@@ -1,7 +1,7 @@
 /* chat.css — estilos específicos del chat, respetando el estilo institucional */
 :root {
   --bg-page: #738B8B;
-  --panel: #EAE9E7;
+  --panel: #B9C2C5;
   --accent: #2E3859;
   --accent-dark: #1C2542;
   --muted: #B8BBC5;
@@ -10,7 +10,7 @@
 body {
   background: var(--bg-page);
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 /* Contenedor principal */
@@ -108,12 +108,37 @@ body {
   background: var(--accent);
   color: white;
   padding: 14px 20px;
-  text-align: center;
+  /* layout adjusted to center title while keeping actions on the right */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .chat-top h1 {
   font-size: 20px;
   margin-bottom: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-top .group-icon-chat {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Ensure the create poll button sits at the right without affecting centered title */
+#createPollBtn {
+  background: #ffffff; /* requested: botón en color blanco */
+  color: var(--accent-dark);
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  position: absolute;
+  right: 30px;
 }
 
 .chat-zone {
@@ -129,6 +154,53 @@ body {
   overflow-y: auto;
 }
 
+/* Pinned area */
+.pinned-area { margin-bottom: 12px; }
+/* single thin banner across top for pinned message (sticky & visible) */
+.pinned-banner { width: 100%; background: #2F7372; color: white; padding: 8px 12px; border-radius: 8px; display:flex; align-items:center; gap:12px; cursor:pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.12); height:52px; box-sizing:border-box; position: sticky; top: 8px; z-index: 1200; }
+.pinned-banner .pinned-preview { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.pinned-banner .pinned-avatar { width:40px; height:40px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.08); }
+
+/* Make pinned banner fully rectangular (no rounded corners) */
+.pinned-banner { border-radius: 0 !important; }
+.pinned-banner .pinned-avatar { border-radius: 0 !important; }
+
+/* Presentation/welcome message styling (Lucía) */
+.msg.presentation .msg-text {
+  /* Match the lighter "mention" appearance: white bubble with dark text */
+  background: #ffffff !important;
+  color: var(--accent-dark) !important;
+  border-radius: 8px;
+  padding: 10px;
+}
+.msg.presentation .msg-meta { color: rgba(255,255,255,0.75); }
+
+/* Pin icon that sits at the right edge overlapping slightly outside the banner */
+.pinned-banner { position: relative; }
+/* banner-level pin icon removed — icon now displayed next to the pinned message itself */
+
+/* Message action dropdown */
+.msg-actions { position: relative; }
+.msg-dropdown { position: absolute; left: 0; top: 100%; margin-top:4px; background: #2E3859; color: #fff; padding:4px; border-radius:8px; display:flex; gap:6px; box-shadow:0 6px 14px rgba(0,0,0,0.14); z-index:1400; transform-origin: top left; }
+.msg-dropdown button { background: none; border: none; padding:4px; cursor:pointer; display:flex; align-items:center; }
+/* Slightly smaller icons and reduced padding so dropdown is less tall */
+.msg-dropdown img { width:26px; height:26px; object-fit:contain; transform: scale(1.05); transition: transform 120ms ease; }
+.msg-dropdown button:hover img { transform: scale(1.12); }
+
+/* reactions area under message */
+.reactions { margin-top:6px; display:flex; gap:8px; align-items:center; }
+.reaction { display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; background:#f0f2f5; }
+.reaction .count { font-weight:600; }
+
+/* Emoji picker */
+#emojiPickerModal { position: fixed; left:0; top:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.35); z-index:1500; }
+.emoji-modal-inner { background: var(--panel); color: var(--accent-dark); padding:12px; border-radius:10px; width:360px; max-width:calc(100% - 32px); }
+.emoji-grid { display:grid; grid-template-columns: repeat(8,1fr); gap:8px; max-height:360px; overflow:auto; padding:8px; }
+.emoji-grid button { font-size:20px; padding:8px; border-radius:8px; background:transparent; border:none; cursor:pointer; }
+
+/* Mention highlight (background slightly grey behind message) */
+.msg.mention-highlight { background-color: rgba(0,0,0,0.06); }
+
 /* Mensajes */
 .msg {
   display: flex;
@@ -136,6 +208,26 @@ body {
   margin-bottom: 14px;
   align-items: flex-end;
 }
+
+/* allow positioning a pin icon outside the message bubble without cutting text */
+.msg { position: relative; }
+.msg.pinned-msg { padding-right: 64px; /* leave space for the pin icon */ }
+
+.pinned-pin-icon-msg {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  right: 12px; /* sits inside the message area but near the right edge */
+  top: 50%;
+  transform: translateY(-50%);
+  object-fit: contain;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  background: transparent;
+  cursor: default;
+  z-index: 1300;
+}
+
+.pinned-pin-icon-msg { pointer-events: none; }
 
 .msg-avatar {
   width: 44px;
@@ -161,6 +253,15 @@ body {
   font-size: 14px;
   line-height: 1.3;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Truncate long messages and show ellipsis after a few lines */
+.msg-text.truncate {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4; /* show up to 4 lines */
+  line-clamp: 4;
+  overflow: hidden;
 }
 
 /* Estilos para otros y para tuyo */
@@ -194,6 +295,7 @@ body {
   padding: 12px 14px;
   border-top: 1px solid rgba(0,0,0,0.06);
   background: rgb(46, 56, 89);
+  position: relative;
 }
 
 .chat-input input {
@@ -202,8 +304,13 @@ body {
   border-radius: 22px;
   border: 1px solid rgba(0,0,0,0.08);
   background: white;
+  color: #000;
   font-size: 14px;
   outline: none;
+}
+
+.chat-input input::placeholder {
+  color: #888;
 }
 
 .chat-input button {
@@ -225,6 +332,48 @@ body {
 
 .chat-input button:hover {
   filter: brightness(0.85);
+}
+
+/* Menú desplegable de adjuntos */
+.attach-menu-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #39516B;
+  padding: 12px 14px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1100;
+  border-radius: 8px 8px 0 0;
+}
+
+.attach-menu-dropdown.hidden {
+  display: none;
+}
+
+.attach-menu-option {
+  background: none;
+  border: none;
+  padding: 6px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.attach-menu-option:hover {
+  opacity: 0.8;
+}
+
+.attach-menu-option img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
 
 /* Responsivo */
@@ -255,10 +404,16 @@ body {
 }
 
 .sidebar-toggle img {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
 }
+
+/* Make the full toggle button easier to hit */
+.sidebar-toggle { padding: 8px 12px; }
+
+/* Make group / chat images show pointer cursor when clickable */
+.group-icon-chat, .chat-item-img { cursor: pointer; }
 
 /* Buscador de chats */
 .chat-search {
@@ -309,6 +464,39 @@ body {
   width: 0;
   padding: 0;
   overflow: hidden;
+}
+
+/* Botón para maximizar sidebar (cuando está minimizado) */
+.sidebar-maximize {
+  position: fixed;
+  left: 12px;
+  top: 80px;
+  z-index: 1000;
+  background: var(--panel);
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.sidebar-maximize:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.sidebar-maximize img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.sidebar-maximize.hidden {
+  display: none !important;
 }
 
 /* Imagen del grupo junto al título del chat */
@@ -374,4 +562,229 @@ body {
   font-size: 0.8rem;
   color: #888; /* puedes mantener tu color existente */
 }
+
+/* Badge para mensajes no leídos (no cambia paleta global) */
+.chat-unread {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  position: absolute;
+  right: 14px;
+  top: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.chat-item { position: relative; }
+
+/* Modal de encuesta (estilos discretos, reutilizan variables existentes) */
+#pollModal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.35);
+  z-index: 1300;
+}
+.poll-modal-inner {
+  background: var(--panel);
+  color: var(--accent-dark);
+  padding: 18px;
+  border-radius: 12px;
+  width: 420px;
+  max-width: calc(100% - 32px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+}
+.poll-modal-inner h3 { margin-top: 0; }
+.poll-modal-inner label { display:block; margin:8px 0; font-size:14px; }
+.poll-modal-inner input[type="text"] { width:100%; padding:8px 10px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); }
+.poll-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+.poll-actions button { padding:8px 10px; border-radius:8px; border: none; cursor:pointer; }
+
+/* Voters modal (pantalla en blanco) */
+#votersModal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.35);
+  z-index: 1400;
+}
+.voters-modal-inner {
+  background: #ffffff; /* pantalla en blanco solicitado */
+  color: var(--accent-dark);
+  padding: 16px 18px;
+  border-radius: 10px;
+  width: 360px;
+  max-width: calc(100% - 32px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  position: relative;
+}
+.voters-modal-close {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+.voters-list { margin-top: 8px; max-height: 320px; overflow:auto; }
+.voter-item { padding:8px 10px; border-radius:8px; background:#f6f7f8; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.voter-item.me { background: #e8f0ff; font-weight:600; }
+
+/* Estilos para mensaje de encuesta dentro del chat */
+.chat-poll {
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  color: var(--accent-dark);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.chat-poll > strong {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Contenedor de opción de encuesta - UNA LÍNEA COMPLETA */
+.poll-option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  margin: 6px 0;
+  border-radius: 8px;
+  background: #f6f7f8;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Left side: checkbox y label */
+.poll-option-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: fit-content;
+  flex-shrink: 0;
+}
+
+/* Checkbox circular personalizado */
+.poll-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #39516B;
+  border-radius: 50%;
+  cursor: pointer;
+  background: white;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.poll-checkbox:hover {
+  border-color: #2E3859;
+  box-shadow: 0 0 6px rgba(46, 56, 89, 0.2);
+}
+
+.poll-checkbox:checked {
+  background: #39516B;
+  border-color: #39516B;
+  box-shadow: 0 0 6px rgba(46, 56, 89, 0.3);
+}
+
+/* Checkmark dentro del checkbox */
+.poll-checkbox:checked::after {
+  content: '✓';
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Label del checkbox - ocupa espacio disponible */
+.poll-option-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent-dark);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right side: contador y barra de progreso */
+.poll-option-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: fit-content;
+  flex-shrink: 0;
+}
+
+.vote-count-btn {
+  background: none;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: #39516B;
+  transition: all 0.2s ease;
+  min-width: 24px;
+  text-align: center;
+}
+
+.vote-count-btn:hover {
+  background: rgba(57, 81, 107, 0.15);
+}
+
+/* Barra de progreso debajo de la opción, en columna 2 (full width) */
+.poll-progress-container {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 5px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+/* Barra de progreso rellena */
+.poll-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #39516B 0%, #2E3859 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  box-shadow: 0 1px 3px rgba(57, 81, 107, 0.2);
+}
+
+.voters-list-popup { position: absolute; background: var(--panel); padding:8px 10px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.12); z-index:1300; }
+
+.hidden { display: none !important; }
 
