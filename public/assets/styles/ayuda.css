@@ -1,219 +1,178 @@
-* {
-	box-sizing: border-box;
-}
-
+/* (H-52) Estilos reutilizables para el overlay de ayuda */
 :root {
-	font-family: "Poppins", Arial, sans-serif;
+  --help-surface: #6a8f9c;
+  --help-surface-muted: #7ba5b4;
+  --help-text: #f9fbff;
+  --help-muted: #e1ecf0;
+  --help-divider: rgba(255, 255, 255, 0.18);
+  --help-card-bg: #101c3a;
 }
 
-/* (HU-52) Estilos encapsulados para que el overlay no altere la página principal */
-
-.help-layer {
-	position: fixed;
-	inset: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: clamp(16px, 4vw, 32px);
-	transition: opacity 0.2s ease;
-	overflow-y: auto;
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(3, 5, 18, 0.68);
+  backdrop-filter: blur(6px);
+  z-index: 1200;
 }
 
-.help-layer::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	background: rgba(7, 12, 32, 0.35);
-	backdrop-filter: blur(3px);
-	-webkit-backdrop-filter: blur(3px);
-	z-index: 0;
+body.help-overlay-open {
+  overflow: hidden;
 }
 
-.help-layer.is-hidden {
-	opacity: 0;
-	pointer-events: none;
+.help-dialog {
+  width: min(420px, 100%);
+  max-height: 85vh;
+  background: linear-gradient(155deg, var(--help-surface) 0%, var(--help-surface-muted) 100%);
+  color: var(--help-text);
+  border-radius: 24px;
+  padding: 24px 28px 28px;
+  box-shadow: 0 30px 120px rgba(4, 10, 37, 0.75);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
 }
 
-.help-card {
-	position: relative;
-	width: min(420px, calc(100vw - 32px));
-	max-height: calc(100vh - clamp(48px, 8vh, 120px));
-	display: flex;
-	flex-direction: column;
-	background: linear-gradient(180deg, rgba(120, 161, 164, 0.92) 0%, rgba(79, 108, 136, 0.88) 100%);
-	border-radius: 26px;
-	padding: 22px;
-	box-shadow: 0 30px 60px rgba(4, 9, 23, 0.35);
-	z-index: 1;
-	overflow: hidden;
-	color: #ffffff; /* (HU-52) Garantiza contraste dentro de la tarjeta sin tocar el body */
+.help-dialog-header {
+  text-align: center;
+  margin-bottom: 24px;
 }
 
-.help-card__header {
-	margin-bottom: 20px;
-	flex-shrink: 0;
+.help-dialog-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--help-muted);
+  margin-bottom: 12px;
 }
 
-.help-eyebrow {
-	margin: 0;
-	text-transform: uppercase;
-	letter-spacing: 0.2em;
-	font-size: 0.75rem;
-	color: rgba(255, 255, 255, 0.8);
-}
-
-#help-title {
-	margin: 6px 0;
-	font-size: 1.5rem;
-}
-
-.help-text {
-	margin: 0;
-	color: rgba(255, 255, 255, 0.85);
-	font-size: 0.95rem;
+.help-subtitle {
+  margin: 8px 0 0;
+  color: var(--help-muted);
+  font-size: 0.9rem;
 }
 
 .help-close {
-	position: absolute;
-	top: 14px;
-	right: 14px;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	border: none;
-	background: rgba(7, 13, 35, 0.9);
-	color: #ffffff;
-	font-size: 1.25rem;
-	font-weight: 600;
-	cursor: pointer;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(15, 21, 41, 0.55);
+  color: var(--help-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.help-list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 14px;
-	flex: 1;
-	min-height: 0;
-	overflow-y: auto;
-	padding-right: 4px;
+.help-close:hover {
+  background: rgba(15, 21, 41, 0.85);
 }
 
-.help-list::-webkit-scrollbar {
-	width: 6px;
+/* (H-52) Se optimiza la altura del bloque de contactos y se agrega scroll controlado */
+.help-contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 360px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
-.help-list::-webkit-scrollbar-thumb {
-	background: rgba(0, 0, 0, 0.25);
-	border-radius: 999px;
+.help-contact-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--help-card-bg);
+  border-radius: 18px;
+  border: 1px solid rgba(9, 20, 46, 0.4);
+  box-shadow: 0 12px 24px rgba(5, 10, 25, 0.4);
 }
 
-.help-item {
-	display: flex;
-	align-items: flex-start;
-	flex-wrap: wrap;
-	gap: 14px;
-	padding: 10px 14px;
-	border-radius: 20px;
-	background: rgba(12, 26, 63, 0.72);
-	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+.help-contact-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.help-icon {
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
-	flex-shrink: 0;
-	background: #ffffff;
+.help-contact-icon {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--help-icon-color, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 8px 16px rgba(3, 5, 18, 0.35);
 }
 
-.help-icon--medical {
-	background: #ffffff;
-	color: #c82b34;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 1.5rem;
-	font-weight: 700;
+.help-contact-icon svg {
+  position: relative;
 }
 
-.help-info {
-	flex: 1;
-	color: #ffffff;
-	display: flex;
-	flex-direction: column;
-	min-width: 0;
-	width: 100%;
-	gap: 8px;
+.help-contact-agency {
+  margin: 0;
+  font-weight: 600;
 }
 
-.help-info strong {
-	display: block;
-	margin-bottom: 6px;
-	font-size: 1rem;
-}
-
-.help-description {
-	margin: 0;
-	font-size: 0.85rem;
-	color: rgba(255, 255, 255, 0.78);
+.help-contact-note {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--help-muted);
 }
 
 .help-call {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	border: none;
-	border-radius: 999px;
-	padding: 10px 20px;
-	background: rgba(245, 247, 250, 0.9);
-	color: #081326;
-	font-weight: 600;
-	font-size: 0.95rem;
-	line-height: 1.2;
-	text-decoration: none;
-	cursor: pointer;
-	align-self: flex-start;
-	min-height: 40px;
-	min-width: 100px;
-	justify-content: center;
-	transition: background 0.2s ease, transform 0.15s ease;
-}
-
-.help-call svg {
-	width: 14px;
-	height: 14px;
-	fill: currentColor;
-}
-
-.help-call__label {
-	white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 999px;
+  background: #f0f1f8;
+  color: #0b1830;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .help-call:hover {
-	background: #ffffff;
-	transform: translateY(-1px);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(9, 20, 46, 0.35);
+  background: #ffffff;
 }
 
-.help-call:focus-visible {
-	outline: 2px solid rgba(255, 255, 255, 0.85);
-	outline-offset: 3px;
-}
+@media (max-width: 540px) {
+  .help-dialog {
+    width: 100%;
+    max-height: 90vh;
+    padding: 20px 22px 24px;
+  }
 
-@media (max-width: 520px) {
-	.help-card {
-		padding: 22px;
-	}
+  .help-contact-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-	.help-item {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
-	.help-call {
-		width: 100%;
-		justify-content: center;
-	}
+  .help-call {
+    width: 100%;
+    justify-content: center;
+  }
 }
