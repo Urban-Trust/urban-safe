@@ -334,6 +334,14 @@ body {
   filter: brightness(0.85);
 }
 
+.chat-image-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Menú desplegable de adjuntos */
 .attach-menu-dropdown {
   position: absolute;

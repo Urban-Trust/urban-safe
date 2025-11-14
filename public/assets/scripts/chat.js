@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const attachImageBtn = document.getElementById('attachImageBtn');
   const attachPollBtn = document.getElementById('attachPollBtn');
   const attachEventBtn = document.getElementById('attachEventBtn');
+  const chatImageInput = document.getElementById('chatImageInput');
   const eventModal = document.getElementById('eventModal');
   const eventModalClose = document.getElementById('eventModalClose');
   const eventForm = document.getElementById('eventForm');
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let menuOpen = false;
   let lastFocusedElement = null;
   let successTimer = null;
+  let pendingImageChatId = null;
 
   const projectImages = [
     { src: 'assets/images/adjuntar-imagen-4.jpg', label: 'Patrullaje - Plaza' },
@@ -148,19 +150,63 @@ document.addEventListener('DOMContentLoaded', () => {
     window.chatAPI.sendMessageToChat(chatId, text);
     input.value = '';
   });
-
-  // Adjuntar imagen via menu option (solo biblioteca interna)
+  // Adjuntar imagen cargando un archivo local
   attachImageBtn.addEventListener('click', () => {
     menuOpen = false;
     attachMenuDropdown.classList.add('hidden');
     const chatId = window.chatAPI?.getCurrentChatId?.();
     if (!chatId) {
-      alert('Selecciona una conversación antes de adjuntar imágenes.');
+      alert('Selecciona una conversacion antes de adjuntar imagenes.');
       return;
     }
-    openImagePicker((item) => {
-      window.chatAPI?.sendImageInChat(chatId, item.src);
-    });
+    if (!chatImageInput) {
+      alert('No se encontro el selector de archivos.');
+      return;
+    }
+    pendingImageChatId = chatId;
+    chatImageInput.value = '';
+    chatImageInput.click();
+  });
+
+  chatImageInput && chatImageInput.addEventListener('change', (event) => {
+    const inputEl = event.target;
+    const file = inputEl.files && inputEl.files[0];
+    if (!file) {
+      pendingImageChatId = null;
+      return;
+    }
+    if (!file.type || !file.type.startsWith('image/')) {
+      alert('Selecciona un archivo de imagen valido.');
+      inputEl.value = '';
+      pendingImageChatId = null;
+      return;
+    }
+    if (!pendingImageChatId) {
+      alert('Selecciona una conversacion antes de adjuntar imagenes.');
+      inputEl.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = typeof reader.result === 'string' ? reader.result : '';
+      if (dataUrl) {
+        if (window.chatAPI?.sendImageInChat) {
+          window.chatAPI.sendImageInChat(pendingImageChatId, dataUrl);
+        } else {
+          console.info('Imagen lista para enviar al chat');
+        }
+      } else {
+        alert('No se pudo leer la imagen seleccionada.');
+      }
+      pendingImageChatId = null;
+      inputEl.value = '';
+    };
+    reader.onerror = () => {
+      alert('Ocurrio un problema al leer la imagen. Intentalo nuevamente.');
+      pendingImageChatId = null;
+      inputEl.value = '';
+    };
+    reader.readAsDataURL(file);
   });
 
   imagePickerClose && imagePickerClose.addEventListener('click', closeImagePicker);
