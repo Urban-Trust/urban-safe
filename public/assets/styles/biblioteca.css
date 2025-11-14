@@ -104,6 +104,7 @@ main .container {
 
 .upload-controls {
 	position: relative;
+	z-index: 5;
 }
 
 .upload-panel {
@@ -120,6 +121,7 @@ main .container {
 	pointer-events: none;
 	transform: translateY(-6px);
 	transition: opacity 0.2s ease, transform 0.2s ease;
+	z-index: 10;
 }
 
 .upload-panel.is-visible {
