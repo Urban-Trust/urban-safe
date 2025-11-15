@@ -11,15 +11,8 @@
     <link rel="stylesheet" href="assets/styles/map.css"/>
     <link rel="stylesheet" href="assets/styles/chat.css"/>
     <link rel="stylesheet" href="assets/styles/chat-groups.css"/>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/"
-  }
-}
-</script>
+    <!-- (H-52) Se reutilizan los estilos del overlay de ayuda -->
+    <link rel="stylesheet" href="assets/styles/ayuda.css"/>
 </head>
 <body>
     <!-- NAVBAR (idéntico a map.html) -->
@@ -56,7 +49,8 @@
                 </span>
                 <span>Biblioteca</span>
               </a>
-              <a href="#" class="menu-item">
+              <!-- (H-52) Este botón dispara el overlay reutilizable de ayuda -->
+              <a href="#" class="menu-item" data-help-trigger>
                 <span class="icon">
                   <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M31.5875 33.25C28.2889 33.25 25.0235 32.5375 21.7914 31.1125C18.5593 29.6875 15.6233 27.6556 12.9833 25.0167C10.3434 22.3778 8.31144 19.4486 6.8875 16.2292C5.46356 13.0097 4.75106 9.7375 4.75 6.4125V4.75H14.0917L15.5562 12.7062L11.0437 17.2583C11.6243 18.2875 12.2708 19.2639 12.9833 20.1875C13.6958 21.1111 14.4611 21.9688 15.2792 22.7604C16.0444 23.5257 16.8826 24.2582 17.7935 24.9581C18.7044 25.6579 19.6872 26.3108 20.7417 26.9167L25.3333 22.325L33.25 23.9479V33.25H31.5875ZM9.53958 14.25L12.1521 11.6375L11.4792 7.91667H7.95625C8.08819 9.10417 8.28611 10.2194 8.55 11.2622C8.81389 12.3051 9.14375 13.3011 9.53958 14.25ZM23.7104 28.4208C24.766 28.8694 25.8284 29.2257 26.8977 29.4896C27.9669 29.7535 29.0288 29.925 30.0833 30.0042V26.5208L26.3625 25.7687L23.7104 28.4208Z" fill="black"/></svg>
                 </span>
@@ -346,6 +340,8 @@
         </button>
       </div>
 
+      <input type="file" id="chatImageInput" class="chat-image-input" accept="image/*" aria-hidden="true" tabindex="-1" />
+
       <button type="button" id="attachBtn" aria-label="Adjuntar imagen">
         <img src="assets/images/Adjuntar_imagen.png" alt="Adjuntar imagen" />
       </button>
@@ -568,6 +564,116 @@
 
     </section>
 
+    <!-- (H-52) Overlay reutilizable de ayuda con accesibilidad básica -->
+    <div id="help-overlay" class="help-overlay oculto" aria-hidden="true">
+      <div class="help-dialog" role="dialog" aria-modal="true" aria-labelledby="help-overlay-title" tabindex="-1">
+        <button type="button" class="help-close" aria-label="Cerrar ayuda">✖</button>
+        <div class="help-dialog-header">
+          <p class="help-dialog-chip">Emergencias</p>
+          <h2 id="help-overlay-title">Contactos rápidos</h2>
+          <p class="help-subtitle">Solicita apoyo inmediato a las entidades correspondientes.</p>
+        </div>
+        <!-- (H-52) Se actualiza la iconografía y estructura de los contactos de emergencia -->
+        <ul class="help-contact-list">
+          <li class="help-contact-card">
+            <div class="help-contact-info">
+              <span class="help-contact-icon" aria-hidden="true" style="--help-icon-color:#2E7D32;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L4 6V12C4 16.97 7.58 21.43 12 22C16.42 21.43 20 16.97 20 12V6L12 2Z" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 8V13" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 12H15" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <div>
+                <p class="help-contact-agency">Policía Nacional del Perú</p>
+                <p class="help-contact-note">Central de emergencia 105</p>
+              </div>
+            </div>
+            <!-- (H-52) Botón solo clickeable sin funcionalidad real -->
+            <button type="button" class="help-call" aria-label="Intentar llamar a la Policía">
+              <span aria-hidden="true">📞</span>
+              Llamar
+            </button>
+          </li>
+          <li class="help-contact-card">
+            <div class="help-contact-info">
+              <span class="help-contact-icon" aria-hidden="true" style="--help-icon-color:#E53935;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 3L4 7V11H20V7L18 3H6Z" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6 11V15L8 21H16L18 15V11" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <div>
+                <p class="help-contact-agency">Cuerpo General de Bomberos</p>
+                <p class="help-contact-note">Atención 116</p>
+              </div>
+            </div>
+            <button type="button" class="help-call" aria-label="Intentar llamar a los Bomberos">
+              <span aria-hidden="true">📞</span>
+              Llamar
+            </button>
+          </li>
+          <li class="help-contact-card">
+            <div class="help-contact-info">
+              <span class="help-contact-icon" aria-hidden="true" style="--help-icon-color:#F5F5F5;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="9" stroke="#EB5757" stroke-width="1.6"/>
+                  <path d="M12 8V16" stroke="#EB5757" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M8 12H16" stroke="#EB5757" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <div>
+                <p class="help-contact-agency">Ambulancias</p>
+                <p class="help-contact-note">SAMU 106</p>
+              </div>
+            </div>
+            <button type="button" class="help-call" aria-label="Intentar llamar a Ambulancias">
+              <span aria-hidden="true">📞</span>
+              Llamar
+            </button>
+          </li>
+          <li class="help-contact-card">
+            <div class="help-contact-info">
+              <span class="help-contact-icon" aria-hidden="true" style="--help-icon-color:#FF8C32;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L3 7L12 12L21 7L12 2Z" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M3 17L12 22L21 17" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M3 12L12 17L21 12" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <div>
+                <p class="help-contact-agency">Defensa Civil</p>
+                <p class="help-contact-note">Centro 115</p>
+              </div>
+            </div>
+            <button type="button" class="help-call" aria-label="Intentar contactar Defensa Civil">
+              <span aria-hidden="true">📞</span>
+              Llamar
+            </button>
+          </li>
+          <li class="help-contact-card">
+            <div class="help-contact-info">
+              <span class="help-contact-icon" aria-hidden="true" style="--help-icon-color:#6DECF4;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="6" width="16" height="12" rx="3" stroke="#0B1830" stroke-width="1.6"/>
+                  <path d="M8 15H16" stroke="#0B1830" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M8 11H12" stroke="#0B1830" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <div>
+                <p class="help-contact-agency">Bloqueo de tarjetas</p>
+                <p class="help-contact-note">Línea 0-800-0000</p>
+              </div>
+            </div>
+            <button type="button" class="help-call" aria-label="Intentar bloqueo de tarjetas">
+              <span aria-hidden="true">📞</span>
+              Llamar
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <!-- FOOTER (idéntico a map.html) -->
     <footer class="footer">
       <div class="container footer-inner">
@@ -591,6 +697,8 @@
       </div>
     </footer>
 
+<!-- (H-52) Se carga la lógica del overlay reutilizable de ayuda -->
+<script src="assets/scripts/ayuda.js"></script>
 <script src="assets/scripts/chat.js"></script>
 <script src="assets/scripts/chat-sidebar.js"></script>
 <script src="assets/scripts/chat-groups.js"></script>
