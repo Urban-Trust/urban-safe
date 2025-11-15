@@ -1,0 +1,120 @@
+body {
+  background: #e9e7e5;
+  color: #0c132d;
+}
+
+.preferences-main {
+  flex: 1;
+  padding: 48px 0 64px;
+}
+
+.preferences-header h1 {
+  margin: 0 0 24px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.preferences-group {
+  margin-bottom: 32px;
+}
+
+.group-title {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: #7b8588;
+}
+
+.preference-card {
+  background: #fdfdfc;
+  border-radius: 18px;
+  padding: 14px 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(12, 19, 45, 0.06);
+}
+
+.preference-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.preference-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.preference-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #f2f1ef;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.preference-label {
+  font-weight: 500;
+}
+
+.switch {
+  position: relative;
+  width: 48px;
+  height: 26px;
+}
+
+.switch input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.switch span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #d5d5d5;
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.switch span::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  top: 3px;
+  left: 4px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.switch input:checked + span {
+  background: #3d8a86;
+}
+
+.switch input:checked + span::after {
+  transform: translateX(18px);
+}
+
+@media (max-width: 768px) {
+  .preferences-main {
+    padding: 32px 0 48px;
+  }
+
+  .preference-card {
+    padding-inline: 16px;
+  }
+}
+

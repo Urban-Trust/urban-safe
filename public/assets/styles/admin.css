@@ -2,7 +2,7 @@
 body {
     margin: 0;
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
-    background-color: #ccd1d1;
+    background-color: #B9C2C5;
     color: #2D3748;
     line-height: 1.5;
     display: flex;
@@ -146,7 +146,7 @@ body {
 }
 
 .card {
-    background: white;
+    background: #EAE9E7;
     border-radius: 16px;
     padding: 24px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -264,6 +264,25 @@ body {
     opacity: 0.9;
 }
 
+.reminders-summary {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+    color: #4B5563;
+}
+
+.reminders-summary .reminders-main {
+    font-weight: 600;
+    color: #111827;
+}
+
+.reminders-summary .reminders-meta {
+    font-size: 13px;
+    color: #6B7280;
+}
+
 .participation-stat {
     display: flex;
     align-items: baseline;
@@ -365,8 +384,8 @@ body {
 
 /* Mejora visual de la card de tendencia */
 .trend-card {
-    border: 1px solid #e5e7eb;
-    background: white;
+    border: 1px solid #EAE9E7;
+    background: #EAE9E7;
 }
 .trend-card .card-header h2 { color: #1C2542; }
 .trend-card .title-with-icon { display: flex; align-items: center; gap: 8px; }
@@ -374,7 +393,7 @@ body {
 .trend-card { position: relative; }
 .trend-mini { max-width: 380px; margin: 0 auto 8px; }
 .trend-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 12px; }
-.th-item { background: #FFFFFF; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px; text-align: center; }
+.th-item { background: #FFFFFF; border: 1px solid #c9cacb; border-radius: 8px; padding: 8px; text-align: center; }
 .th-item .th-label { display: block; font-size: 12px; color: #6B7280; }
 .th-item .th-value { display: block; font-size: 18px; font-weight: 700; color: #1C2542; }
 
@@ -536,7 +555,7 @@ body {
 .trend-ring-and-more { display: flex; align-items: center; gap: 16px; margin: 0 auto; }
 .trend-ring { width: 160px; height: 160px; }
 .trend-more-block .small { font-size: 12px; color: white; margin: 4px 0; }
-.btn-simple { background: #39716C; color: #fff; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-family: 'Poppins', Arial, Helvetica, sans-serif; }
+.btn-simple { background: #39716C; color: #fff; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-family: 'Poppins', Arial, Helvetica, sans-serif; text-decoration: none;}
 .btn-simple:hover { opacity: .9; }
 .trend-more-content { margin-top: 10px; font-size: 14px; color: #1E293B; }
 
