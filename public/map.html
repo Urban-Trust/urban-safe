@@ -334,6 +334,105 @@
         </div>
       
     </section>
+    
+    <!-- Vista de información de propiedad (HU015) -->
+    <section class="propiedad-info oculto" aria-hidden="true">
+      <header class="prop-header">
+        <div class="prop-header-inner">
+          <button type="button" class="prop-back" aria-label="Volver">&#8592;</button>
+          <img class="prop-logo" src="assets/images/UrbanSafe-Logo-Horizontal-Sin Fondo.png" alt="Urban Safe" />
+        </div>
+      </header>
+
+      <div class="prop-container">
+        <div class="prop-hero">
+          <div class="prop-photo"><img src="assets/images/casa-laura.png" alt="Casa de Laura" class="prop-photo-img" /></div>
+          <div class="prop-info">
+            <h1 class="prop-title">Casa de Laura</h1>
+            <button id="btn-ver-historial" class="boton-historial-prop">Ver historial</button>
+            <p class="prop-address">Av. Horacio Urteaga 704, Lima 17, Perú</p>
+            <div class="prop-user">
+              <div class="prop-avatar" style="background-image: url('../public/assets/images/laura-sans.png'); background-size: cover; background-position: center;"></div>
+              <div>
+                <div class="prop-label">De:</div>
+                <div class="prop-name">Laura Sans (Fiscal)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prop-incidents">
+          <h2>Incidentes o Situaciones</h2>
+
+          <article class="prop-card">
+            <div class="prop-card-image">
+              <img class="prop-card-cover" src="assets/images/incendio-leve.png" alt="Incendio leve" />
+              <div class="prop-badge">18/09/25</div>
+            </div>
+            <div class="prop-card-body">
+              <h3>Incendio leve</h3>
+              <p>
+                Se registró un incendio de baja intensidad en una vivienda, controlado rápidamente por los vecinos antes de la llegada de los bomberos.
+              </p>
+              <div class="prop-card-footer">
+                <div class="prop-mini-user">
+                  <div class="prop-mini-avatar" style="background-image: url('../public/assets/images/laura-sans.png'); background-size: cover; background-position: center;"></div>
+                  <span>Laura</span>
+                </div>
+                <a class="prop-more" href="#">Ver más</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="prop-card">
+            <div class="prop-card-image">
+              <img class="prop-card-cover" src="assets/images/nombramiento-fiscal.png" alt="Nombramiento de fiscal" />
+              <div class="prop-badge">02/08/24</div>
+            </div>
+            <div class="prop-card-body">
+              <h3>Nombramiento de fiscal</h3>
+              <p>
+                La junta vecinal designó a la fiscal comunitaria Laura Sans para supervisar y coordinar las acciones de seguridad en el vecindario.
+              </p>
+              <div class="prop-card-footer">
+                <div class="prop-mini-user">
+                  <div class="prop-mini-avatar prop-mini-avatar--green">M</div>
+                  <span>Vecina María</span>
+                </div>
+                <a class="prop-more" href="#">Ver más</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!--HISTORIAL -->
+<aside id="sidebar-historial" class="sidebar oculto">
+    <h2 class="sidebar-title">Historial de incidentes</h2>
+    
+    <div class="sidebar-item">
+        <img src="assets/images/incendio-leve.png" class="sidebar-img">
+        <div class="sidebar-info">
+            <h3>Incendio leve</h3>
+            <p>Fecha: 18/09/2025</p>
+            <p>Dirección: Av. Horacio Urteaga 704</p>
+            <button class="btn-vermas">Ver más >></button>
+        </div>
+    </div>
+
+    <div class="sidebar-item">
+        <img src="assets/images/nombramiento-fiscal.png" class="sidebar-img">
+        <div class="sidebar-info">
+            <h3>Nombramiento de fiscal</h3>
+            <p>Fecha: 02/08/2024</p>
+            <p>Dirección: Av. Horacio Urteaga 704</p>
+            <button class="btn-vermas">Ver más >></button>
+        </div>
+    </div>
+</aside>
+
 
     <!-- (H-52) Overlay reutilizable de ayuda con accesibilidad básica -->
     <div id="help-overlay" class="help-overlay oculto" aria-hidden="true">
