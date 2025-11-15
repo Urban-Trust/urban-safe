@@ -68,6 +68,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+    // --- SISTEMA DE ROLES ---
+
+  // Vuelve a conectar los eventos cada vez que se renderizan vecinos
+  function attachNeighborClickEvents() {
+      document.querySelectorAll(".neighbor-row").forEach(row => {
+          row.addEventListener("click", () => {
+              document.getElementById("rolePanel").classList.add("show");
+          });
+      });
+  }
+
+  // Reemplaza tu renderMembers con esta versión extendida:
+  const originalRenderMembers = renderMembers;
+  renderMembers = function() {
+      originalRenderMembers();      // Llama a tu función original
+      attachNeighborClickEvents();  // Activa clic en cada vecino renderizado
+  };
+
+  // ACTIVA al inicio
+  attachNeighborClickEvents();
+
+  // Abrir selector
+  document.getElementById("openRoleSelector").addEventListener("click", () => {
+      document.getElementById("roleSelector").style.display = "flex";
+  });
+
+  // Cerrar selector
+  document.getElementById("closeRoleSelector").addEventListener("click", () => {
+      document.getElementById("roleSelector").style.display = "none";
+  });
+
+  // Elegir rol
+  document.querySelectorAll(".role-option").forEach(btn => {
+      btn.addEventListener("click", () => {
+          alert("Rol asignado: " + btn.textContent);
+          document.getElementById("roleSelector").style.display = "none";
+      });
+  });
+
+
+
   // Show/hide modal of available neighbors to add
   showAddNeighborsBtn.addEventListener('click', () => {
     // populate with neighbors that are not yet in group

@@ -207,10 +207,10 @@ body {
   gap: 12px;
   margin-bottom: 14px;
   align-items: flex-end;
+  position: relative; /* Para posicionar el botón de borrar */
 }
 
 /* allow positioning a pin icon outside the message bubble without cutting text */
-.msg { position: relative; }
 .msg.pinned-msg { padding-right: 64px; /* leave space for the pin icon */ }
 
 .pinned-pin-icon-msg {
@@ -281,6 +281,55 @@ body {
   border-radius: 12px 12px 4px 12px;
 }
 
+/* --- NUEVO: Estilos del botón de borrar --- */
+.delete-msg-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #f0f2f5;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+  border: 1px solid #ddd;
+  z-index: 10;
+}
+
+/* Mostrar botón al pasar el cursor sobre el mensaje */
+.msg:hover .delete-msg-btn {
+  opacity: 1;
+}
+
+/* Posicionar botón a la izquierda para mensajes propios */
+.msg-self .delete-msg-btn {
+  left: -15px;
+}
+
+/* Posicionar botón a la derecha para mensajes de otros */
+.msg-other .delete-msg-btn {
+  right: -15px;
+}
+
+.delete-msg-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #65676b;
+}
+
+.delete-msg-btn:hover {
+  background-color: #e4e6eb;
+}
+
+.delete-msg-btn:hover svg {
+  fill: #d9534f; /* rojo al pasar el cursor */
+}
+/* --- FIN NUEVO --- */
+
 /* Meta info (nombre y hora) */
 .msg-meta {
   font-size: 12px;
@@ -332,6 +381,14 @@ body {
 
 .chat-input button:hover {
   filter: brightness(0.85);
+}
+
+.chat-image-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Menú desplegable de adjuntos */

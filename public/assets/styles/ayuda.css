@@ -1,0 +1,178 @@
+/* (H-52) Estilos reutilizables para el overlay de ayuda */
+:root {
+  --help-surface: #6a8f9c;
+  --help-surface-muted: #7ba5b4;
+  --help-text: #f9fbff;
+  --help-muted: #e1ecf0;
+  --help-divider: rgba(255, 255, 255, 0.18);
+  --help-card-bg: #101c3a;
+}
+
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(3, 5, 18, 0.68);
+  backdrop-filter: blur(6px);
+  z-index: 1200;
+}
+
+body.help-overlay-open {
+  overflow: hidden;
+}
+
+.help-dialog {
+  width: min(420px, 100%);
+  max-height: 85vh;
+  background: linear-gradient(155deg, var(--help-surface) 0%, var(--help-surface-muted) 100%);
+  color: var(--help-text);
+  border-radius: 24px;
+  padding: 24px 28px 28px;
+  box-shadow: 0 30px 120px rgba(4, 10, 37, 0.75);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.help-dialog-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.help-dialog-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--help-muted);
+  margin-bottom: 12px;
+}
+
+.help-subtitle {
+  margin: 8px 0 0;
+  color: var(--help-muted);
+  font-size: 0.9rem;
+}
+
+.help-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(15, 21, 41, 0.55);
+  color: var(--help-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.help-close:hover {
+  background: rgba(15, 21, 41, 0.85);
+}
+
+/* (H-52) Se optimiza la altura del bloque de contactos y se agrega scroll controlado */
+.help-contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 360px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.help-contact-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--help-card-bg);
+  border-radius: 18px;
+  border: 1px solid rgba(9, 20, 46, 0.4);
+  box-shadow: 0 12px 24px rgba(5, 10, 25, 0.4);
+}
+
+.help-contact-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.help-contact-icon {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--help-icon-color, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 8px 16px rgba(3, 5, 18, 0.35);
+}
+
+.help-contact-icon svg {
+  position: relative;
+}
+
+.help-contact-agency {
+  margin: 0;
+  font-weight: 600;
+}
+
+.help-contact-note {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--help-muted);
+}
+
+.help-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 999px;
+  background: #f0f1f8;
+  color: #0b1830;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.help-call:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(9, 20, 46, 0.35);
+  background: #ffffff;
+}
+
+@media (max-width: 540px) {
+  .help-dialog {
+    width: 100%;
+    max-height: 90vh;
+    padding: 20px 22px 24px;
+  }
+
+  .help-contact-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .help-call {
+    width: 100%;
+    justify-content: center;
+  }
+}
