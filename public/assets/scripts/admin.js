@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const dashboard = document.querySelector('.dashboard-grid');
   const dashHeader = document.querySelector('.dashboard-header');
   const openButtons = document.querySelectorAll('.trend-more-btn');
+  const trendCard = document.querySelector('.trend-card');
   const backBtn = document.querySelector('.btn-back-trend');
 
   function openTrend(ev) {
@@ -13,9 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dashHeader) dashHeader.classList.add('oculto');
     trendView.classList.remove('oculto');
     trendView.setAttribute('aria-hidden', 'false');
+    if (typeof trendView.scrollIntoView === 'function') {
+      trendView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
-  openButtons.forEach((btn) => btn.addEventListener('click', openTrend));
+  // Aseguramos compatibilidad aunque NodeList no tenga forEach
+  if (openButtons && openButtons.length) {
+    Array.prototype.forEach.call(openButtons, (btn) => {
+      btn.addEventListener('click', openTrend);
+    });
+  }
+
+  if (trendCard) {
+    trendCard.addEventListener('click', (ev) => {
+      const link = ev.target.closest('a');
+      if (link && !link.classList.contains('trend-more-btn')) {
+        return;
+      }
+      openTrend(ev);
+    });
+  }
 
   if (backBtn) {
     backBtn.addEventListener('click', () => {
@@ -218,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       ];
 
-      extraStats.forEach((stat) => {
+      Array.prototype.forEach.call(extraStats, (stat) => {
         const acc = document.createElement('div');
         acc.className = 'trend-accordion';
         acc.dataset.tipo = stat.tipo;
@@ -256,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const typeMap = ['robo', 'danio', 'incendio'];
     const activeTypes = [];
-    typeCheckboxes.forEach((cb, index) => {
+    Array.prototype.forEach.call(typeCheckboxes, (cb, index) => {
       if (cb.checked) {
         const mapped = typeMap[index];
         if (mapped) activeTypes.push(mapped);
@@ -265,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fechaMap = ['hoy', 'semana', 'mes'];
     const activeFechas = [];
-    fechaCheckboxes.forEach((cb, index) => {
+    Array.prototype.forEach.call(fechaCheckboxes, (cb, index) => {
       if (cb.checked) {
         const mapped = (cb.value || fechaMap[index] || '').toLowerCase();
         if (mapped) activeFechas.push(mapped);
@@ -274,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const ubic = ubicacionInput ? ubicacionInput.value.trim().toLowerCase() : '';
 
-    accordions.forEach((acc) => {
+    Array.prototype.forEach.call(accordions, (acc) => {
       let visible = true;
       const tipo = (acc.dataset.tipo || '').toLowerCase();
       const fecha = (acc.dataset.fecha || '').toLowerCase();
@@ -312,8 +331,12 @@ document.addEventListener('DOMContentLoaded', () => {
       applyTrendFilters();
     });
   }
-  typeCheckboxes.forEach((cb) => cb.addEventListener('change', applyTrendFilters));
-  fechaCheckboxes.forEach((cb) => cb.addEventListener('change', applyTrendFilters));
+  Array.prototype.forEach.call(typeCheckboxes, (cb) =>
+    cb.addEventListener('change', applyTrendFilters)
+  );
+  Array.prototype.forEach.call(fechaCheckboxes, (cb) =>
+    cb.addEventListener('change', applyTrendFilters)
+  );
   if (ubicacionInput) {
     ubicacionInput.addEventListener('input', applyTrendFilters);
   }
