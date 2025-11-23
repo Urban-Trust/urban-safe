@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gestionar Vecinos — Vecinos Los Álamos</title>
+  <title>Gestionar Vecinos</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/styles/map.css" />
@@ -88,41 +88,45 @@
       </div>
     </nav>
 
-  <section class="mapa" style="background:#B9C2C5; padding-bottom:0; margin-bottom:0; height:auto; overflow:visible; min-height:calc(100vh - 200px); display:flex; align-items:center; justify-content:center;">
-    <div class="mapa-container" style="padding:10px; padding-bottom:0; height:auto; width:100%;">
-      <div class="chat-wrap" style="height:auto; min-height:auto; background:#D9D9D9;">
-        <header class="chat-top" style="background:#1C2542;">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-            <div style="display:flex; align-items:center; gap:12px; position:relative;">
-              <!-- Back button moved to the left, near title, using image -->
-              <a href="chat.html" id="backToChatBtn" title="Volver al chat" style="display:inline-flex;align-items:center;justify-content:center;position:absolute;left:-50px;">
-                <img src="assets/images/return_minimized.png" alt="Volver" style="width:44px;height:44px;" />
-              </a>
-              <img src="assets/images/img_group.png" alt="Grupo" style="width:56px;height:56px;border-radius:50%;background:#fff;" />
-              <div>
-                <h1 style="margin:0;color:#fff;">Vecinos Los Álamos — Gestión</h1>
-                <p class="chat-zone" style="margin:0;font-size:13px;opacity:0.95;color:#fff;">Gestiona miembros del grupo</p>
-              </div>
+      <main class="page-content">
+    <section class="mapa">
+      <div class="panel-container">
+
+        <!-- PANEL IZQUIERDO (LISTA DE USUARIOS) -->
+        <div class="left-panel">
+          <div class="left-header">
+            <img src="assets/images/Logo_Alamos.png" alt="Logo Álamos" class="logo-alamos" />
+            <h2 class="panel-title">Panel de usuarios</h2>
+          </div>
+
+          <div id="membersList" class="members-list" aria-label="Lista de vecinos"></div>
+
+          <div class="add-neighbor-container">
+            <button id="showAddNeighborsBtn" class="add-btn" aria-label="Agregar vecino">
+              <span>Agregar Vecino</span>
+              <strong class="add-plus">+</strong>
+            </button>
+          </div>
+
+          <div id="addMsg" class="add-msg" aria-live="polite"></div>
+        </div>
+
+        <!-- PANEL DERECHO (ROLES) - oculto hasta seleccionar -->
+        <aside id="rolePanel" class="right-panel hidden" aria-hidden="true">
+          <div class="right-header">
+            <div class="selected-avatar" id="selectedAvatar"></div>
+            <div>
+              <h3 id="selectedName" class="selected-name">Nombre</h3>
+              <div id="selectedRolesList" class="selected-roles"></div>
             </div>
           </div>
-        </header>
 
-        <main style="padding:8px;">
-          <section id="manage-section" style="max-width:920px;margin:0 auto;">
-            <h2>Panel de usuarios</h2>
-            
+          <h2 class="right-title">Acciones</h2>
 
-            <div id="membersList" style="margin-top:12px; display:flex; flex-direction:column; gap:8px;"></div>
-
-            <hr style="margin:18px 0;" />
-
-            <div style="display:flex;gap:8px;align-items:center;margin-top:8px;justify-content:flex-end;">
-              <button id="showAddNeighborsBtn" style="padding:10px 14px;border-radius:8px;border:none;background:#1C2542;color:#fff;font-weight:600;">Agregar Vecino +</button>
-            </div>
-            <div id="addMsg" style="margin-top:8px;color:#444;font-size:13px;"></div>
-
-          </section>
-        </main>
+          <button id="openRoleSelector" class="primary-btn" disabled>Agregar rol</button>
+          <div style="height:10px"></div>
+          <button id="removeNeighborBtn" class="danger-btn" title="Eliminar vecino">Eliminar vecino</button>
+        </aside>
 
                   <!-- PANEL LATERAL PRINCIPAL -->
           <div id="rolePanel" class="role-panel">
@@ -147,33 +151,8 @@
 
 
       </div>
-    </div>
-  </section>
-
-  <!-- Delete confirmation modal -->
-  <div id="deleteModal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:2000;">
-    <div style="background:#fff;padding:18px;border-radius:10px;max-width:520px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
-      <h3>¿Estás seguro de eliminar al vecino del grupo vecinal?</h3>
-      <p>Eliminar al vecino hará que algún reporte importante que se haga para el grupo ya no le llegue, ni tampoco podrá enterarse de inmediato sobre algún evento o incidente que ocurra.</p>
-      <p>Si está seguro, escriba su usuario aquí:</p>
-      <input id="confirmDeleteInput" type="text" placeholder="Nombre exacto del vecino" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);margin-top:8px;" />
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-        <button id="cancelDeleteBtn" style="padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;">Cancelar</button>
-        <button id="confirmDeleteBtn" style="padding:8px 12px;border-radius:8px;border:none;background:#c62828;color:#fff;">Eliminar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add neighbors modal -->
-  <div id="addNeighborsModal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:2000;">
-    <div style="background:#fff;padding:18px;border-radius:10px;max-width:520px;width:90%;max-height:80vh;box-shadow:0 10px 30px rgba(0,0,0,0.2);display:flex;flex-direction:column;">
-      <h3 style="margin-top:0;">Agregar vecinos al grupo</h3>
-      <div id="availableNeighborsDropdown" style="flex:1;overflow-y:auto;border:1px solid rgba(0,0,0,0.06);border-radius:8px;padding:10px;"></div>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-        <button id="closeAddNeighborsBtn" style="padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;">Cerrar</button>
-      </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
     <footer class="footer">
       <div class="container footer-inner">
@@ -196,6 +175,26 @@
         </div>
       </div>
     </footer>
+
+    
+  <!-- MODAL / OVERLAY: Selector de roles -->
+  <div id="roleModal" class="role-modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="role-modal-backdrop"></div>
+    <div class="role-modal-content" role="document" aria-labelledby="roleModalTitle">
+      <div class="role-modal-top">
+        <button id="closeRoleModal" class="role-modal-close" aria-label="Cerrar selector">↩</button>
+        <h3 id="roleModalTitle">Agregar rol</h3>
+      </div>
+
+      <div class="role-options" id="roleOptions">
+        <!-- botones generados por JS -->
+      </div>
+
+      <div style="margin-top:10px;display:flex;justify-content:flex-end;">
+        <button id="doneRoleModal" class="btn-done">Listo</button>
+      </div>
+    </div>
+  </div>
 
   <script src="assets/scripts/gestion_chat.js"></script>
 </body>
