@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const reporteImagen = document.querySelector('.reporte-imagen');
   const inputTituloIncidente = document.querySelector('#titulo-incidente');
   const modalExito = document.querySelector('.modal-exito');
+  const menuToggle = document.querySelector('#menu-toggle');
+  const hamburgerBtn = document.querySelector('.hamburger-btn');
   
   // HU015: elementos de vista de propiedad (overlay)
   const propiedadInfo = document.querySelector('.propiedad-info');
@@ -82,6 +84,16 @@ document.addEventListener('DOMContentLoaded', () => {
   modalImagenes.classList.add('oculto');
   mapaSeleccionDireccion.classList.add('oculto');
   modalExito.classList.add('oculto');
+
+  // Toggle del menú de usuario desde el botón hamburguesa (vista móvil)
+  if (hamburgerBtn && menuToggle) {
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = !menuToggle.checked;
+      menuToggle.checked = isOpen;
+      hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  }
 
   botonAlerta.addEventListener('click', () => {
     modal.classList.remove('oculto');
@@ -303,6 +315,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const mapaContainer = document.querySelector('.mapa-container');
     if (!mapaContainer) return;
 
+    const setPosicionEjemplo = (el) => {
+      const isMobile = document.documentElement.classList.contains('is-mobile') || window.innerWidth <= 768;
+      el.style.top = isMobile ? '160px' : '24px';
+      el.style.right = isMobile ? '12px' : '24px';
+      el.style.left = 'auto';
+      el.style.transform = 'none';
+      el.style.zIndex = '1'; // debajo de los controles de búsqueda/filtros
+    };
+
     // Construir elemento con misma estructura/estética pero indicando que es un ejemplo
     const ejemplo = document.createElement('div');
     ejemplo.className = 'reporte-en-mapa reporte-ejemplo';
@@ -314,13 +335,14 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    // Posicionar en esquina superior derecha, conservar tamaño y estética
-    ejemplo.style.top = '24px';
-    ejemplo.style.right = '24px';
-    ejemplo.style.left = 'auto';
-    ejemplo.style.transform = 'none';
+    // Posicionar en esquina superior derecha, con ajuste para móvil
+    setPosicionEjemplo(ejemplo);
 
     mapaContainer.appendChild(ejemplo);
+
+    const reubicarEjemplo = () => setPosicionEjemplo(ejemplo);
+    window.addEventListener('resize', reubicarEjemplo);
+    window.addEventListener('orientationchange', reubicarEjemplo);
   }
 
   // Ejecutar creación del ejemplo inmediatamente
