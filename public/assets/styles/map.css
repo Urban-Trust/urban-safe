@@ -200,6 +200,43 @@ body {
   mask-size: contain;
 }
 
+.hamburger-btn {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #1C2542;
+  color: #EAE9E7;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-left: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.hamburger-lines {
+  position: relative;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 3px;
+}
+
+.hamburger-lines::before,
+.hamburger-lines::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 3px;
+}
+
+.hamburger-lines::before { top: -6px; }
+.hamburger-lines::after { top: 6px; }
 
 .mapa {
   position: relative;
@@ -343,6 +380,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  z-index: 150;
 }
 
 /* Estilo para el input de búsqueda */
@@ -372,6 +410,7 @@ body {
   max-width: calc(100vw - 48px);
   box-shadow: 0 8px 24px rgba(0,0,0,0.15);
   color: #1C2542;
+  z-index: 200;
 }
 
 .filters-toggle:checked ~ .filters-panel { display: block; }
@@ -888,8 +927,8 @@ select {
   padding-top: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
-  pointer-events: auto;
-  z-index: 1000; /* debajo del navbar (1001) para no taparlo al scrollear */
+  pointer-events: none;
+  z-index: 1; /* por debajo de buscador/filtros */
 }
 
 .reporte-ejemplo::after {
@@ -1028,6 +1067,39 @@ input.error {
 
 .footer-inner .social {
     justify-self: end;
+}
+
+.mobile-footer-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0C132D;
+  border-top: 1px solid #1F2C4F;
+  padding: 10px 16px 14px;
+  z-index: 1002;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.mobile-footer-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #EAE9E7;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.mobile-footer-link:hover { opacity: 0.92; }
+
+.mobile-footer-icon svg {
+  width: 32px;
+  height: 32px;
+  display: block;
 }
 
 /* --- Estilo de la lista de autocompletado --- */
@@ -1250,6 +1322,160 @@ input.error {
     display: flex;
     flex-direction: column;
     gap: 28px;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 60px;
+  }
+
+  .arrow-icon {
+    display: none;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .login-link {
+    padding: 8px 12px;
+    background: #0C132D;
+    color: #EAE9E7;
+    border-radius: 18px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .hamburger-btn {
+    display: inline-flex;
+  }
+
+  .user-menu {
+    left: auto;
+    right: 0;
+    width: 88vw;
+    max-width: 380px;
+    height: calc(100vh - 86px);
+    padding: 16px 16px 96px;
+    overflow-y: auto;
+  }
+
+  .user-menu > .menu-item:last-child {
+    align-self: stretch;
+    margin-bottom: 8px;
+  }
+
+  .footer-inner {
+    display: none;
+  }
+
+  .mobile-footer-nav {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .mapa-controles {
+    top: 18px;
+    left: 12px;
+    right: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .busqueda {
+    width: 100%;
+    max-width: none;
+    padding: 10px 12px;
+  }
+
+  .icono-filtro {
+    margin-left: 6px;
+  }
+
+  .filters-panel {
+    width: calc(100vw - 32px);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+
+  .boton-alerta {
+    width: 78px;
+    height: 78px;
+    bottom: 96px; /* sobre el footer móvil */
+    right: 16px;
+  }
+}
+
+/* Forzar modo móvil cuando JS agrega .is-mobile (mismo ajuste) */
+.is-mobile .mapa-controles {
+  top: 18px;
+  left: 12px;
+  right: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+.is-mobile .busqueda {
+  width: 100%;
+  max-width: none;
+  padding: 10px 12px;
+}
+.is-mobile .icono-filtro { margin-left: 6px; }
+.is-mobile .filters-panel {
+  width: calc(100vw - 32px);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+.is-mobile .boton-alerta {
+  width: 78px;
+  height: 78px;
+  bottom: 96px;
+  right: 16px;
+}
+
+/* Forzar modo móvil cuando JS agrega .is-mobile (sin depender del resize del navegador) */
+.is-mobile body {
+  padding-top: 60px;
+}
+.is-mobile .arrow-icon {
+  display: none;
+}
+.is-mobile .menu {
+  display: none;
+}
+.is-mobile .login-link {
+  padding: 8px 12px;
+  background: #0C132D;
+  color: #EAE9E7;
+  border-radius: 18px;
+  font-weight: 600;
+  font-size: 13px;
+}
+.is-mobile .hamburger-btn {
+  display: inline-flex;
+}
+.is-mobile .user-menu {
+  left: auto;
+  right: 8px;
+  width: 88vw;
+  max-width: 380px;
+  height: calc(100vh - 86px);
+  padding: 16px 16px 96px;
+  overflow-y: auto;
+}
+.is-mobile .user-menu > .menu-item:last-child {
+  align-self: stretch;
+  margin-bottom: 8px;
+}
+.is-mobile .footer-inner {
+  display: none;
+}
+.is-mobile .mobile-footer-nav {
+  display: flex;
 }
 
 
