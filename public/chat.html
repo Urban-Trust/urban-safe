@@ -183,6 +183,10 @@
       <p class="chat-zone">Zona: Los Álamos — Lima</p>
     </div>
     <div style="display:flex; gap:8px; align-items:center;">
+      <div id="voiceListenControls">
+        <button id="startListenBtn" class="btn-primary" title="Escuchar mensajes">🔊 Escuchar</button>
+        <button id="stopListenBtn" class="btn-secondary hidden" title="Detener lectura">⏹ Detener</button>
+      </div>
     </div>
   </div>
 </header>
@@ -222,6 +226,27 @@
     <button id="emojiPickerClose" class="voters-modal-close" aria-label="Cerrar">✕</button>
     <h3>Emojis</h3>
     <div id="emojiGrid" class="emoji-grid"></div>
+  </div>
+</div>
+
+<!-- Voice dictation modal -->
+<div id="voiceModal" class="hidden role-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="role-modal-backdrop"></div>
+  <div class="voice-modal-content role-modal-content" role="document" aria-labelledby="voiceModalTitle">
+    <div class="voice-modal-top">
+      <button id="closeVoiceModal" class="role-modal-close" aria-label="Cerrar">↩</button>
+      <h3 id="voiceModalTitle">Dictado por voz</h3>
+    </div>
+    <div class="voice-transcription">
+      <div class="voice-status" id="voiceStatus">Listo para dictar</div>
+      <textarea id="voiceTranscript" rows="4" placeholder="Tu transcripción aparecerá aquí..." aria-label="Transcripción"></textarea>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;">
+      <button id="startVoiceBtn" class="btn-primary">● Iniciar dictado</button>
+      <button id="stopVoiceBtn" class="btn-secondary hidden">■ Detener</button>
+      <button id="sendVoiceBtn" class="btn-primary" disabled>Enviar</button>
+      <button id="cancelVoiceBtn" class="btn-cancel">Cancelar</button>
+    </div>
   </div>
 </div>
 
@@ -341,6 +366,14 @@
         </button>
         <button type="button" id="attachEventBtn" class="attach-menu-option" aria-label="Crear evento" title="Crear evento">
           <img src="assets/images/Even_.png" alt="Evento" />
+        </button>
+        <button type="button" id="attachVoiceBtn" class="attach-menu-option" aria-label="Dictar mensaje" title="Dictar mensaje">
+          <!-- inline mic icon -->
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 14a3 3 0 003-3V5a3 3 0 10-6 0v6a3 3 0 003 3z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19 11v1a7 7 0 01-14 0v-1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 19v3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
       </div>
 
