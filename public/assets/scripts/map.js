@@ -1,255 +1,246 @@
 document.addEventListener('DOMContentLoaded', () => {
   // --- REFERENCIAS A ELEMENTOS DEL DOM ---
   const botonAlerta = document.querySelector('.boton-alerta');
-  const modal = document.querySelector('.modal-alerta');
+  const modal = document.querySelector('.modal-alerta'); // El formulario principal
   const cerrarModal = document.querySelector('.cerrar-modal');
   const botonSeleccionarMapa = document.querySelector('.boton-seleccionar-mapa');
   const mapaSection = document.querySelector('.mapa');
   const mapaSeleccionDireccion = document.querySelector('.mapa-seleccion-direccion');
   const inputDireccionIncidente = document.querySelector('#direccion-incidente');
   const mapaBg = document.querySelector('.mapa-bg');
+  
+  // Referencias de imagen
   const modalImagenes = document.querySelector('.modal-imagenes');
   const imagenOpciones = document.querySelectorAll('.imagen-opcion');
   const contenedorAdjunta = document.querySelector('.contenedor-imagen-adjunta');
+  const inputImagenHidden = document.getElementById('imagen-seleccionada-hidden'); // Referencia al input oculto
+  
+  // Referencias del formulario
   const formulario = document.querySelector('.formulario-registro');
+  const inputTituloIncidente = document.querySelector('#titulo-incidente');
+  const tituloError = document.querySelector('#titulo-error');
+  const direccionError = document.querySelector('#direccion-error');
+  
+  // Referencias de reporte en mapa y éxito
   const reporteEnMapa = document.querySelector('.reporte-en-mapa');
   const reporteTitulo = document.querySelector('.reporte-titulo');
   const reporteImagen = document.querySelector('.reporte-imagen');
-  const inputTituloIncidente = document.querySelector('#titulo-incidente');
   const modalExito = document.querySelector('.modal-exito');
+  
+  // Referencias de menú y paneles
   const menuToggle = document.querySelector('#menu-toggle');
   const hamburgerBtn = document.querySelector('.hamburger-btn');
-  
-  // HU015: elementos de vista de propiedad (overlay)
   const propiedadInfo = document.querySelector('.propiedad-info');
   const propBackBtn = document.querySelector('.prop-back');
-  if (propBackBtn && propiedadInfo) {
-    propBackBtn.addEventListener('click', () => {
-      propiedadInfo.classList.add('oculto');
-      propiedadInfo.setAttribute('aria-hidden', 'true');
-    });
-  }
-  
-  // Nota: el marcador generado al enviar reporte ya no abre la info de casa
-  // Abrir overlay al clicar marcador fijo "Casa de Laura"
   const markerLaura = document.querySelector('.marker-laura');
-  if (markerLaura && propiedadInfo) {
-    markerLaura.addEventListener('click', () => {
-      propiedadInfo.classList.remove('oculto');
-      propiedadInfo.setAttribute('aria-hidden', 'false');
-    });
-  }
+  const btnVerHistorial = document.getElementById("btn-ver-historial");
+  const sidebarHistorial = document.getElementById("sidebar-historial");
   
-  // Cerrar overlay clicando el fondo
-  if (propiedadInfo) {
-    propiedadInfo.addEventListener('click', (e) => {
-      if (e.target === propiedadInfo) {
-        propiedadInfo.classList.add('oculto');
-        propiedadInfo.setAttribute('aria-hidden', 'true');
-      }
-    });
-  }
-  
-  // Referencias a los párrafos de error del HTML (ahora funcionarán)
-  const tituloError = document.querySelector('#titulo-error');
-  const direccionError = document.querySelector('#direccion-error');
+  // REFERENCIAS PARA EL MODAL DE REPORTE POR VOZ
+  const botonReporteVoz = document.getElementById('boton-reporte-voz');
+  const modalVoz = document.getElementById('modal-voz');
+  const cerrarModalVoz = modalVoz ? modalVoz.querySelector('.cerrar-modal') : null;
+  const vozPasosContainer = document.getElementById('voz-pasos');
+  const botonVozConfirmar = document.getElementById('voz-confirmar');
+  const botonVozCancelar = document.getElementById('voz-cancelar');
 
-  let inputHidden = document.querySelector('#imagen-seleccionada-hidden');
-  if (!inputHidden) {
-    inputHidden = document.createElement('input');
-    inputHidden.type = 'hidden';
-    inputHidden.id = 'imagen-seleccionada-hidden';
-    inputHidden.name = 'imagen-seleccionada';
-    formulario.appendChild(inputHidden);
-  }
+  // --- FUNCIONES AUXILIARES ---
 
   function crearBotonClip() {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'boton-clip';
-    btn.innerHTML = `
-      <svg width="43" height="44" viewBox="0 0 43 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10.75 14.5017V29.3333C10.75 32.2507 11.8826 35.0486 13.8986 37.1115C15.9146 39.1744 18.6489 40.3333 21.5 40.3333C24.3511 40.3333 27.0854 39.1744 29.1014 37.1115C31.1174 35.0486 32.25 32.2507 32.25 29.3333V11C32.25 9.05508 31.4949 7.18982 30.1509 5.81455C28.8069 4.43928 26.9841 3.66667 25.0833 3.66667C23.1826 3.66667 21.3597 4.43928 20.0157 5.81455C18.6717 7.18982 17.9167 9.05508 17.9167 11V27.8337C17.9167 28.3152 18.0094 28.792 18.1894 29.2368C18.3695 29.6817 18.6335 30.0859 18.9662 30.4264C19.2989 30.7669 19.694 31.037 20.1287 31.2212C20.5635 31.4055 21.0294 31.5003 21.5 31.5003C22.4504 31.5003 23.3618 31.114 24.0338 30.4264C24.7058 29.7388 25.0833 28.8061 25.0833 27.8337V14.6667" stroke="#EAE9E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    `;
+    btn.innerHTML = `<svg width="43" height="44" viewBox="0 0 43 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.75 14.5017V29.3333C10.75 32.2507 11.8826 35.0486 13.8986 37.1115C15.9146 39.1744 18.6489 40.3333 21.5 40.3333C24.3511 40.3333 27.0854 39.1744 29.1014 37.1115C31.1174 35.0486 32.25 32.2507 32.25 29.3333V11C32.25 9.05508 31.4949 7.18982 30.1509 5.81455C28.8069 4.43928 26.9841 3.66667 25.0833 3.66667C23.1826 3.66667 21.3597 4.43928 20.0157 5.81455C18.6717 7.18982 17.9167 9.05508 17.9167 11V27.8337C17.9167 28.3152 18.0094 28.792 18.1894 29.2368C18.3695 29.6817 18.6335 30.0859 18.9662 30.4264C19.2989 30.7669 19.694 31.037 20.1287 31.2212C20.5635 31.4055 21.0294 31.5003 21.5 31.5003C22.4504 31.5003 23.3618 31.114 24.0338 30.4264C24.7058 29.7388 25.0833 28.8061 25.0833 27.8337V14.6667" stroke="#EAE9E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     btn.addEventListener('click', (ev) => {
       ev.stopPropagation();
       modalImagenes.classList.remove('oculto');
-      modalImagenes.setAttribute('aria-hidden', 'false');
     });
     return btn;
   }
 
+  // --- LÓGICA DE VOZ ---
+  function resetearModalVoz() {
+    const todosLosPasos = vozPasosContainer.querySelectorAll('.paso-voz');
+    todosLosPasos.forEach((paso, index) => {
+      paso.classList.toggle('oculto', index !== 0);
+    });
+  }
+  
+  function iniciarSecuenciaVoz() {
+    const pasos = ['paso-inicial', 'paso-pregunta-tipo', 'paso-respuesta-tipo', 'paso-pregunta-descripcion', 'paso-respuesta-descripcion', 'paso-resumen'];
+    let pasoActual = 0;
+    function mostrarSiguientePaso() {
+      // Si el modal se cerró, detener la secuencia
+      if (modalVoz.classList.contains('oculto')) return;
+
+      if (pasoActual < pasos.length) {
+        // Ocultar todos los pasos primero
+        const todos = vozPasosContainer.querySelectorAll('.paso-voz');
+        todos.forEach(el => el.classList.add('oculto'));
+        
+        // Mostrar el actual
+        const pasoEl = document.getElementById(pasos[pasoActual]);
+        if(pasoEl) pasoEl.classList.remove('oculto');
+        
+        pasoActual++;
+        if (pasoActual < pasos.length) {
+          // Tiempos simulados de conversación
+          let tiempoEspera = 2000;
+          if (pasos[pasoActual-1].includes('pregunta')) tiempoEspera = 2500;
+          setTimeout(mostrarSiguientePaso, tiempoEspera);
+        }
+      }
+    }
+    setTimeout(mostrarSiguientePaso, 500);
+  }
+
+  function cerrarElModalVoz() {
+    modalVoz.classList.add('oculto');
+    modalVoz.setAttribute('aria-hidden', 'true');
+  }
+
+  // --- INICIALIZACIÓN DE ESTADOS ---
+  // Aseguramos que todo empiece oculto excepto el mapa
   modal.classList.add('oculto');
   modalImagenes.classList.add('oculto');
   mapaSeleccionDireccion.classList.add('oculto');
   modalExito.classList.add('oculto');
+  modalVoz.classList.add('oculto');
 
-  // Toggle del menú de usuario desde el botón hamburguesa (vista móvil)
-  if (hamburgerBtn && menuToggle) {
-    hamburgerBtn.setAttribute('aria-expanded', 'false');
-    hamburgerBtn.addEventListener('click', () => {
-      const isOpen = !menuToggle.checked;
-      menuToggle.checked = isOpen;
-      hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    });
-  }
+  // --- EVENT LISTENERS ---
 
+  // 1. Lógica del Botón de Alerta (Abre el formulario)
   botonAlerta.addEventListener('click', () => {
     modal.classList.remove('oculto');
+    // Reiniciar adjuntar imagen
     contenedorAdjunta.innerHTML = '';
     contenedorAdjunta.appendChild(crearBotonClip());
+    if(inputImagenHidden) inputImagenHidden.value = '';
   });
 
+  // Cerrar modal de formulario
   cerrarModal.addEventListener('click', () => {
     modal.classList.add('oculto');
     modalImagenes.classList.add('oculto');
   });
 
-  // Toggle estado activo en filtros generales
-  const chips = document.querySelectorAll('.filter-chip');
-  chips.forEach((chip) => {
-    chip.setAttribute('aria-pressed', 'false');
-    chip.addEventListener('click', () => {
-      const isActive = chip.classList.toggle('active');
-      chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
-  });
-
-  // HU33: Toggle de capas (Mapa de calor / Iconos de incidencias)
-  const heatChip = document.querySelector('.filter-chip[data-layer="heat"]');
-  const iconsChip = document.querySelector('.filter-chip[data-layer="icons"]');
-  const heatLayer = document.querySelector('.map-layer-heat');
-  const iconsLayer = document.querySelector('.map-layer-icons');
-
-  if (heatChip && heatLayer) {
-    heatChip.addEventListener('click', () => {
-      const isActive = heatChip.classList.contains('active') || heatChip.getAttribute('aria-pressed') === 'true';
-      heatLayer.classList.toggle('visible', isActive);
-      heatLayer.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+  // 2. Lógica del Botón de Voz (Abre el asistente)
+  if (botonReporteVoz) {
+    botonReporteVoz.addEventListener('click', (e) => {
+      e.preventDefault(); // Evitar submit si está dentro del form
+      resetearModalVoz();
+      modalVoz.classList.remove('oculto');
+      modalVoz.setAttribute('aria-hidden', 'false');
+      iniciarSecuenciaVoz();
     });
   }
 
-  if (iconsChip && iconsLayer) {
-    iconsChip.addEventListener('click', () => {
-      const isActive = iconsChip.classList.contains('active') || iconsChip.getAttribute('aria-pressed') === 'true';
-      iconsLayer.classList.toggle('visible', isActive);
-      iconsLayer.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-    });
-  }
-
-  // Botón "Quitar filtros": desactiva chips y oculta capas
-  const btnClear = document.querySelector('.btn-clear');
-  const filtersToggle = document.querySelector('#filters-toggle');
-  if (btnClear) {
-    btnClear.addEventListener('click', () => {
-      chips.forEach((chip) => {
-        chip.classList.remove('active');
-        chip.setAttribute('aria-pressed', 'false');
-      });
-      if (heatLayer) { heatLayer.classList.remove('visible'); heatLayer.setAttribute('aria-hidden', 'true'); }
-      if (iconsLayer) { iconsLayer.classList.remove('visible'); iconsLayer.setAttribute('aria-hidden', 'true'); }
-      if (filtersToggle) { filtersToggle.checked = false; }
-    });
-  }
-
-  modalImagenes.addEventListener('click', (ev) => {
-    if (ev.target === modalImagenes) {
-      modalImagenes.classList.add('oculto');
-    }
-  });
+  // Botones dentro del modal de voz
+  if (cerrarModalVoz) cerrarModalVoz.addEventListener('click', cerrarElModalVoz);
+  if (botonVozCancelar) botonVozCancelar.addEventListener('click', cerrarElModalVoz);
   
+  if (botonVozConfirmar) {
+    botonVozConfirmar.addEventListener('click', () => {
+      // AQUÍ ESTÁ EL ARREGLO DEL FLUJO:
+      cerrarElModalVoz();                // 1. Cerrar pantalla de voz
+      modal.classList.add('oculto');     // 2. Cerrar formulario de fondo (IMPORTANTE)
+      
+      // 3. Preparar datos del reporte simulado
+      reporteTitulo.textContent = "Robo a mano armada";
+      reporteImagen.src = "assets/images/robo-icon.png";
+      
+      // 4. Mostrar éxito
+      modalExito.classList.remove('oculto');
+      
+      // 5. Al hacer clic en éxito, ir al mapa
+      modalExito.addEventListener('click', () => {
+        modalExito.classList.add('oculto');
+        reporteEnMapa.classList.remove('oculto');
+      }, { once: true });
+    });
+  }
+
+  // 3. Lógica de Selección de Imágenes
+  // Cerrar modal si click fuera
+  modalImagenes.addEventListener('click', (ev) => { 
+    if (ev.target === modalImagenes) modalImagenes.classList.add('oculto'); 
+  });
+
   imagenOpciones.forEach(img => {
-    img.addEventListener('click', (ev) => {
-      ev.stopPropagation();
+    img.addEventListener('click', () => {
       modalImagenes.classList.add('oculto');
+      
+      // Crear vista previa
       const wrapper = document.createElement('div');
       wrapper.className = 'imagen-seleccionada';
-      const preview = document.createElement('img');
-      preview.src = img.src;
-      preview.alt = 'Imagen seleccionada';
-      const btnQuitar = document.createElement('button');
-      btnQuitar.type = 'button';
-      btnQuitar.className = 'boton-quitar-imagen';
-      btnQuitar.innerText = '✖';
-      btnQuitar.addEventListener('click', (e) => {
+      wrapper.innerHTML = `
+        <img src="${img.src}" alt="Imagen seleccionada">
+        <button type="button" class="boton-quitar-imagen">✖</button>
+      `;
+      
+      // Lógica quitar imagen
+      wrapper.querySelector('.boton-quitar-imagen').addEventListener('click', e => {
         e.stopPropagation();
-        wrapper.remove();
         contenedorAdjunta.innerHTML = '';
         contenedorAdjunta.appendChild(crearBotonClip());
-        inputHidden.value = '';
+        if(inputImagenHidden) inputImagenHidden.value = '';
       });
-      wrapper.appendChild(preview);
-      wrapper.appendChild(btnQuitar);
+      
       contenedorAdjunta.innerHTML = '';
       contenedorAdjunta.appendChild(wrapper);
-      inputHidden.value = img.getAttribute('src') || '';
+      
+      // GUARDAR EN INPUT HIDDEN (Corrección aplicada)
+      if(inputImagenHidden) inputImagenHidden.value = img.src;
     });
   });
 
+  // 4. Lógica de Selección de Dirección en Mapa
   botonSeleccionarMapa.addEventListener('click', () => {
     mapaSection.classList.add('mapa-ocultar');
     mapaSeleccionDireccion.classList.remove('oculto');
     modal.classList.add('oculto');
   });
-  
+
   mapaBg.addEventListener('click', () => {
-    if (!mapaSeleccionDireccion.classList.contains('oculto')) {
-      inputDireccionIncidente.value = "Las Palmeras, Asoc. Juan Carlos 234 Mz F";
-      mapaSection.classList.remove('mapa-ocultar');
-      mapaSeleccionDireccion.classList.add('oculto');
-      modal.classList.remove('oculto'); 
-    }
+    if (mapaSeleccionDireccion.classList.contains('oculto')) return;
+    // Simular dirección capturada
+    inputDireccionIncidente.value = "Las Palmeras, Asoc. Juan Carlos 234 Mz F";
+    mapaSection.classList.remove('mapa-ocultar');
+    mapaSeleccionDireccion.classList.add('oculto');
+    modal.classList.remove('oculto');
   });
 
-  // --- LÓGICA DE VALIDACIÓN Y ENVÍO DEL FORMULARIO ---
+  // 5. Envío del Formulario Manual
   formulario.addEventListener('submit', (event) => {
     event.preventDefault();
-
-    const esTituloValido = inputTituloIncidente.value.trim() !== '';
-    const esDireccionValida = inputDireccionIncidente.value.trim() !== '';
-    let formularioEsValido = true;
-
-    if (esTituloValido) {
-      inputTituloIncidente.classList.remove('error');
-      tituloError.classList.remove('visible');
-    } else {
+    let esValido = true;
+    
+    if (inputTituloIncidente.value.trim() === '') {
       inputTituloIncidente.classList.add('error');
       tituloError.classList.add('visible');
-      formularioEsValido = false;
+      esValido = false;
     }
-    
-    if (esDireccionValida) {
-      inputDireccionIncidente.classList.remove('error');
-      direccionError.classList.remove('visible');
-    } else {
+    if (inputDireccionIncidente.value.trim() === '') {
       inputDireccionIncidente.classList.add('error');
       direccionError.classList.add('visible');
-      formularioEsValido = false;
+      esValido = false;
     }
-
-    if (!formularioEsValido) {
-      return; 
-    }
-
-    const iconoAlertaSvg = "data:image/svg+xml,%3Csvg width='67' height='67' viewBox='0 0 67 67' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M33.3333 66.6667C14.9233 66.6667 0 51.7433 0 33.3333C0 14.9233 14.9233 0 33.3333 0C51.7433 0 66.6667 14.9233 66.6667 33.3333C66.6667 51.7433 51.7433 66.6667 33.3333 66.6667ZM33.3333 60C40.4058 60 47.1885 57.1905 52.1895 52.1895C57.1905 47.1885 60 40.4058 60 33.3333C60 26.2609 57.1905 19.4781 52.1895 14.4772C47.1885 9.47618 40.4058 6.66667 33.3333 6.66667C26.2609 6.66667 19.4781 9.47618 14.4772 14.4772C9.47618 19.4781 6.66667 26.2609 6.66667 33.3333C6.66667 40.4058 9.47618 47.1885 14.4772 52.1895C19.4781 57.1905 26.2609 60 33.3333 60ZM33.3333 16.6667C34.2174 16.6667 35.0652 17.0179 35.6904 17.643C36.3155 18.2681 36.6667 19.1159 36.6667 20V36.6667C36.6667 37.5507 36.3155 38.3986 35.6904 39.0237C35.0652 39.6488 34.2174 40 33.3333 40C32.4493 40 31.6014 39.6488 30.9763 39.0237C30.3512 38.3986 30 37.5507 30 36.6667V20C30 19.1159 30.3512 18.2681 30.9763 17.643C31.6014 17.0179 32.4493 16.6667 33.3333 16.6667ZM33.3333 50C32.4493 50 31.6014 49.6488 30.9763 49.0237C30.3512 48.3986 30 47.5507 30 46.6667C30 45.7826 30.3512 44.9348 30.9763 44.3096C31.6014 43.6845 32.4493 43.3333 33.3333 43.3333C34.2174 43.3333 35.0652 43.6845 35.6904 44.3096C36.3155 44.9348 36.6667 45.7826 36.6667 46.6667C36.6667 47.5507 36.3155 48.3986 35.6904 49.0237C35.0652 49.6488 34.2174 50 33.3333 50Z' fill='%23EAE9E7'/%3E%3C/svg%3E";
-    const titulo = inputTituloIncidente.value;
-    const imagenSrc = inputHidden.value;
     
+    if (!esValido) return;
+
+    // Flujo de éxito manual
     modal.classList.add('oculto');
     modalExito.classList.remove('oculto');
-
-    reporteTitulo.textContent = titulo;
-    if (imagenSrc) {
-      reporteImagen.src = imagenSrc;
-    } else {
-      reporteImagen.src = iconoAlertaSvg;
-    }
-
+    
+    reporteTitulo.textContent = inputTituloIncidente.value;
+    // Usar la imagen seleccionada o un icono por defecto
+    const imgSeleccionada = inputImagenHidden ? inputImagenHidden.value : '';
+    reporteImagen.src = imgSeleccionada || 'assets/images/alerta-icon.png';
+    
     formulario.reset();
-    inputHidden.value = '';
     contenedorAdjunta.innerHTML = '';
     contenedorAdjunta.appendChild(crearBotonClip());
+    if(inputImagenHidden) inputImagenHidden.value = '';
 
     modalExito.addEventListener('click', () => {
       modalExito.classList.add('oculto');
@@ -257,113 +248,108 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { once: true });
   });
 
-  // --- OCULTAR ERRORES AL ESCRIBIR ---
+  // Limpiar errores al escribir
   inputTituloIncidente.addEventListener('input', () => {
-    if (inputTituloIncidente.value.trim() !== '') {
-      inputTituloIncidente.classList.remove('error');
-      tituloError.classList.remove('visible');
-    }
+    inputTituloIncidente.classList.remove('error');
+    tituloError.classList.remove('visible');
   });
-
   inputDireccionIncidente.addEventListener('input', () => {
-    if (inputDireccionIncidente.value.trim() !== '') {
-      inputDireccionIncidente.classList.remove('error');
-      direccionError.classList.remove('visible');
-    }
+    inputDireccionIncidente.classList.remove('error');
+    direccionError.classList.remove('visible');
   });
 
-  // --- Autocompletado en la barra de búsqueda ---
+  // 6. Lógica de Autocompletado (Buscador)
   const inputBusqueda = document.getElementById('input-busqueda');
   const suggestionsList = document.getElementById('suggestions');
-  
   if (inputBusqueda && suggestionsList) {
     const sugerencias = Array.from(suggestionsList.getElementsByTagName('li'));
-
+    
     inputBusqueda.addEventListener('input', () => {
       const texto = inputBusqueda.value.toLowerCase();
       let hayCoincidencias = false;
-
       sugerencias.forEach(item => {
-        const textoItem = item.textContent.toLowerCase();
-        if (textoItem.includes(texto) && texto !== "") {
-          item.style.display = "block";
-          hayCoincidencias = true;
-        } else {
-          item.style.display = "none";
-        }
+        const esVisible = texto && item.textContent.toLowerCase().includes(texto);
+        item.style.display = esVisible ? "block" : "none";
+        if (esVisible) hayCoincidencias = true;
       });
-
       suggestionsList.classList.toggle('oculto', !hayCoincidencias);
     });
-
+    
     sugerencias.forEach(item => {
       item.addEventListener('click', () => {
         inputBusqueda.value = item.textContent;
         suggestionsList.classList.add('oculto');
       });
     });
-
+    
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.busqueda')) {
-        suggestionsList.classList.add('oculto');
-      }
+      if (!e.target.closest('.busqueda')) suggestionsList.classList.add('oculto');
+    });
+  }
+  
+  // 7. Otros (Menús, Filtros, Pánico, Historial)
+  
+  // Filtros
+  const chips = document.querySelectorAll('.filter-chip');
+  chips.forEach(chip => chip.addEventListener('click', () => chip.classList.toggle('active')));
+  
+  const heatChip = document.querySelector('.filter-chip[data-layer="heat"]');
+  const iconsChip = document.querySelector('.filter-chip[data-layer="icons"]');
+  const heatLayer = document.querySelector('.map-layer-heat');
+  const iconsLayer = document.querySelector('.map-layer-icons');
+  
+  if (heatChip && heatLayer) heatChip.addEventListener('click', () => heatLayer.classList.toggle('visible', heatChip.classList.contains('active')));
+  if (iconsChip && iconsLayer) iconsChip.addEventListener('click', () => iconsLayer.classList.toggle('visible', iconsChip.classList.contains('active')));
+  
+  const btnClear = document.querySelector('.btn-clear');
+  if (btnClear) {
+    btnClear.addEventListener('click', () => {
+      chips.forEach(chip => chip.classList.remove('active'));
+      if (heatLayer) heatLayer.classList.remove('visible');
+      if (iconsLayer) iconsLayer.classList.remove('visible');
+      const toggle = document.querySelector('#filters-toggle');
+      if(toggle) toggle.checked = false;
     });
   }
 
-  // Crear un reporte de ejemplo al cargar la página
+  // Menú lateral y Propiedad
+  if (propBackBtn && propiedadInfo) propBackBtn.addEventListener('click', () => propiedadInfo.classList.add('oculto'));
+  if (markerLaura && propiedadInfo) markerLaura.addEventListener('click', () => propiedadInfo.classList.remove('oculto'));
+  if (propiedadInfo) propiedadInfo.addEventListener('click', (e) => { if (e.target === propiedadInfo) propiedadInfo.classList.add('oculto'); });
+  if (hamburgerBtn && menuToggle) hamburgerBtn.addEventListener('click', () => menuToggle.checked = !menuToggle.checked);
+
+  // Crear Reporte Ejemplo
   function crearReporteEjemplo() {
     const mapaContainer = document.querySelector('.mapa-container');
     if (!mapaContainer) return;
-
     const setPosicionEjemplo = (el) => {
-      const isMobile = document.documentElement.classList.contains('is-mobile') || window.innerWidth <= 768;
+      const isMobile = window.innerWidth <= 768;
+      // Añadir clase al body para CSS
+      document.body.classList.toggle('is-mobile', isMobile);
+      
       el.style.top = isMobile ? '160px' : '24px';
       el.style.right = isMobile ? '12px' : '24px';
       el.style.left = 'auto';
       el.style.transform = 'none';
-      el.style.zIndex = '1'; // debajo de los controles de búsqueda/filtros
     };
-
-    // Construir elemento con misma estructura/estética pero indicando que es un ejemplo
     const ejemplo = document.createElement('div');
     ejemplo.className = 'reporte-en-mapa reporte-ejemplo';
-    ejemplo.innerHTML = `
-      <div class="reporte-contenido">
-        <img src="assets/images/Acci_1.png" alt="Imagen de ejemplo" class="reporte-imagen">
-        <h4 class="reporte-titulo">Daño auto</h4>
-        <div class="reporte-meta">Hace 5 minutos</div>
-      </div>
-    `;
-
-    // Posicionar en esquina superior derecha, con ajuste para móvil
+    ejemplo.innerHTML = `<div class="reporte-contenido"><img src="assets/images/Acci_1.png" alt="Imagen de ejemplo" class="reporte-imagen"><h4 class="reporte-titulo">Daño auto</h4><div class="reporte-meta">Hace 5 minutos</div></div>`;
     setPosicionEjemplo(ejemplo);
-
     mapaContainer.appendChild(ejemplo);
-
-    const reubicarEjemplo = () => setPosicionEjemplo(ejemplo);
-    window.addEventListener('resize', reubicarEjemplo);
-    window.addEventListener('orientationchange', reubicarEjemplo);
+    window.addEventListener('resize', () => setPosicionEjemplo(ejemplo));
+    // Trigger inicial
+    setPosicionEjemplo(ejemplo);
   }
-
-  // Ejecutar creación del ejemplo inmediatamente
   crearReporteEjemplo();
 
-  // Historial sidebar functionality
-  const btnVerHistorial = document.getElementById("btn-ver-historial");
-  const sidebarHistorial = document.getElementById("sidebar-historial");
-  const propiedadInfoBox = document.querySelector(".propiedad-info");
-
+  // Historial
   if (btnVerHistorial && sidebarHistorial) {
     btnVerHistorial.addEventListener("click", (e) => {
       e.stopPropagation();
-
-      if (propiedadInfoBox) {
-        propiedadInfoBox.classList.add("oculto");
-        propiedadInfoBox.setAttribute("aria-hidden", "true");
-      }
+      if (propiedadInfo) propiedadInfo.classList.add("oculto");
       sidebarHistorial.classList.remove("oculto");
     });
-
     document.addEventListener("click", (e) => {
       if (!sidebarHistorial.contains(e.target) && !btnVerHistorial.contains(e.target)) {
         sidebarHistorial.classList.add("oculto");
@@ -371,47 +357,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Botón de pánico en la navbar según preferencia en ajustes ---
+  // Botón de Pánico
   try {
     const panicBtn = document.getElementById('panic-navbar-button');
     const modalPanic = document.getElementById('modal-panic');
     const modalPanicClose = document.getElementById('modal-panic-close');
     const enabled = localStorage.getItem('panicEnabled') === 'true';
-    
     if (panicBtn) {
       panicBtn.classList.toggle('oculto', !enabled);
       panicBtn.addEventListener('click', () => {
-        if (modalPanic) {
-          modalPanic.classList.remove('oculto');
-          modalPanic.setAttribute('aria-hidden', 'false');
-        }
-        // cerrar automaticamente despues de 2.2s
-        setTimeout(() => {
-          if (modalPanic) {
-            modalPanic.classList.add('oculto');
-            modalPanic.setAttribute('aria-hidden', 'true');
-          }
-        }, 2200);
+        if (modalPanic) modalPanic.classList.remove('oculto');
+        setTimeout(() => { if (modalPanic) modalPanic.classList.add('oculto'); }, 2200);
       });
     }
-    
-    if (modalPanicClose) {
-      modalPanicClose.addEventListener('click', () => {
-        if (modalPanic) {
-          modalPanic.classList.add('oculto');
-          modalPanic.setAttribute('aria-hidden', 'true');
-        }
-      });
-    }
-    
-    // si se cambia la preferencia en otra pestaña, actualizar visibilidad
+    if (modalPanicClose) modalPanicClose.addEventListener('click', () => { if (modalPanic) modalPanic.classList.add('oculto'); });
     window.addEventListener('storage', (e) => {
-      if (e.key === 'panicEnabled' && panicBtn) {
-        const now = e.newValue === 'true';
-        panicBtn.classList.toggle('oculto', !now);
-      }
+      if (e.key === 'panicEnabled' && panicBtn) panicBtn.classList.toggle('oculto', e.newValue !== 'true');
     });
-  } catch (e) { 
-    console.log('Error en configuración de botón de pánico:', e);
-  }
+  } catch (e) { console.error('Error pánico:', e); }
+  
 });
