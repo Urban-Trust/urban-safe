@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const reporteTitulo = document.querySelector('.reporte-titulo');
   const reporteImagen = document.querySelector('.reporte-imagen');
   const modalExito = document.querySelector('.modal-exito');
+  const menuToggle = document.querySelector('#menu-toggle');
+  const hamburgerBtn = document.querySelector('.hamburger-btn');
   
   // Referencias de menú y paneles
   const menuToggle = document.querySelector('#menu-toggle');
