@@ -356,7 +356,7 @@ body {
 
 .mapa-controles {
   position: absolute;
-  top: 30px;
+  top: 42px;
   left: 20px;
   display: flex;
   align-items: center;
@@ -440,7 +440,9 @@ body {
 .btn-clear:hover { opacity: .92; }
 
 .busqueda {
+  position: relative;
   width: 450px;
+  max-width: calc(100vw - 40px);
   display: flex;
   align-items: center;
   background-color: #EAE9E7;
@@ -457,6 +459,47 @@ body {
   flex: 1;
   background: transparent;
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.icono-busqueda,
+.icono-filtro {
+  flex-shrink: 0;
+}
+
+/* Mensajes de error del formulario */
+.mensaje-error {
+  display: none;
+  color: #E45757;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.mensaje-error.visible { display: block; }
+
+.acciones-mapa {
+  margin: 10px 0 14px;
+}
+.boton-seleccionar-mapa {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #0c132d; /* Color de fondo del botón */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.boton-seleccionar-mapa:hover {
+  background-color: #1a233e; /* Color de fondo al pasar el ratón */
+}
+
+.boton-seleccionar-mapa svg {
+  width: 18px;
+  height: 18px;
 }
 
 .icono-busqueda {
@@ -1024,6 +1067,24 @@ input.error {
 .voz-pregunta { font-size: 1.8em; font-weight: 500; margin: 0; }
 .voz-respuesta { font-size: 1.5em; font-style: italic; color: #d0d0d0; margin: 15px 0; }
 
+/* --- Estilo de la lista de autocompletado --- */
+.suggestions-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  background: #ccc;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
 .voz-resumen-titulo {
   font-size: 1.6em;
   margin-bottom: 20px;
@@ -1063,6 +1124,36 @@ input.error {
 .boton-accion-voz:hover { background-color: rgba(255, 255, 255, 0.2); }
 .boton-accion-voz.confirmar { background-color: #2EB981; border-color: #2EB981; }
 .boton-accion-voz.confirmar:hover { background-color: #25a16d; }
+
+@media (max-width: 768px) {
+  .mapa-controles {
+    top: 28px;
+    left: 12px;
+    right: 12px;
+    width: calc(100% - 24px);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .busqueda {
+    width: 100%;
+    padding: 10px 12px;
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
+  }
+
+  .busqueda input {
+    font-size: 15px;
+  }
+
+  .suggestions-list {
+    max-height: 50vh;
+  }
+}
+
+/* ===================== */
+/* Vista HU015: Propiedad */
+/* ===================== */
 
 /* Propiedad Info y Sidebar */
 .propiedad-info {
