@@ -23,6 +23,136 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastFocusedElement = null;
   let successTimer = null;
   let pendingImageChatId = null;
+  let speechRecognition = null;
+  let speechRecorder = null; // not used here but kept for future
+  let isRecordingVoice = false;
+  let isListeningMessages = false;
+  const playedMessages = new Set();
+  let speechQueue = [];
+  let speechUtterance = null;
+  let mediaRecorder = null;
+  let mediaStream = null;
+  let audioChunks = [];
+  let lastAudioBlob = null;
+
+  // --- NUEVO: Lógica de borrado de mensajes ---
+  const deleteModal = document.getElementById('deleteConfirmationModal');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+  let messageElementToDelete = null;
+
+  const showDeleteModal = (messageEl) => {
+    messageElementToDelete = messageEl;
+    deleteModal.classList.remove('hidden');
+    deleteModal.setAttribute('aria-hidden', 'false');
+  };
+
+  const hideDeleteModal = () => {
+    messageElementToDelete = null;
+    deleteModal.classList.add('hidden');
+    deleteModal.setAttribute('aria-hidden', 'true');
+  };
+
+  confirmDeleteBtn.addEventListener('click', () => {
+    if (messageElementToDelete) {
+      messageElementToDelete.remove();
+      hideDeleteModal();
+    }
+  });
+
+  cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+  deleteModal.addEventListener('click', (e) => {
+    if (e.target === deleteModal) {
+      hideDeleteModal();
+    }
+  });
+  // --- FIN NUEVO ---
+
+  // --- NUEVO: Datos de ejemplo y renderizado de mensajes ---
+  const currentUserId = 'user1'; // Asumimos que este es el usuario actual
+
+  const users = {
+    'user1': { id: 'user1', name: 'Tú', avatarInitial: 'T' },
+    'user2': { id: 'user2', name: 'Lorena', avatarInitial: 'L' },
+    'user3': { id: 'user3', name: 'Carlos', avatarInitial: 'C' },
+  };
+
+  const initialMessages = [
+    { id: 'msg1', text: 'Hola a todos, recuerden la reunión de seguridad de mañana a las 8pm en la plaza.', userId: 'user2', timestamp: '9:40 AM' },
+    { id: 'msg2', text: '¡Claro! Ahí estaré. Gracias por el aviso.', userId: 'user3', timestamp: '9:41 AM' },
+    { id: 'msg3', text: 'Confirmado, gracias por el recordatorio, Lorena.', userId: 'user1', timestamp: '9:42 AM' },
+  ];
+
+  function createMessageElement(message) {
+    const user = users[message.userId];
+    const isSelf = user.id === currentUserId;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `msg ${isSelf ? 'msg-self' : 'msg-other'}`;
+    msgDiv.dataset.messageId = message.id;
+
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = 'msg-avatar';
+    avatarDiv.textContent = user.avatarInitial;
+
+    const bodyDiv = document.createElement('div');
+    bodyDiv.className = 'msg-body';
+
+    const textDiv = document.createElement('div');
+    textDiv.className = 'msg-text';
+    textDiv.textContent = message.text;
+    // Removed: do not display a speaker emoji for voice messages
+
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'msg-meta';
+    metaDiv.textContent = `${isSelf ? '' : user.name + ' - '}${message.timestamp}`;
+    
+    // If message contains an audio recording, show an audio player below the text
+    bodyDiv.appendChild(textDiv);
+    if (message.audioUrl) {
+      const audioEl = document.createElement('audio');
+      audioEl.controls = true;
+      audioEl.src = message.audioUrl;
+      audioEl.className = 'chat-audio';
+      bodyDiv.appendChild(audioEl);
+    }
+    bodyDiv.appendChild(metaDiv);
+
+    // --- NUEVO: Crear y añadir el botón de borrar ---
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-msg-btn';
+    deleteBtn.setAttribute('aria-label', 'Eliminar mensaje');
+    deleteBtn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path>
+      </svg>
+    `;
+    deleteBtn.addEventListener('click', () => {
+      showDeleteModal(msgDiv);
+    });
+    msgDiv.appendChild(deleteBtn);
+    // --- FIN NUEVO ---
+
+    if (isSelf) {
+      msgDiv.appendChild(bodyDiv);
+      msgDiv.appendChild(avatarDiv);
+    } else {
+      msgDiv.appendChild(avatarDiv);
+      msgDiv.appendChild(bodyDiv);
+    }
+
+    return msgDiv;
+  }
+
+  function addMessageToDOM(message) {
+    const msgEl = createMessageElement(message);
+    chatArea.appendChild(msgEl);
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  initialMessages.forEach(addMessageToDOM);
+  // --- FIN NUEVO ---
+
 
   const projectImages = [
     { src: 'assets/images/adjuntar-imagen-4.jpg', label: 'Patrullaje - Plaza' },
@@ -144,11 +274,25 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const text = input.value.trim();
     if (!text) return;
+
+    // --- NUEVO: Crear y renderizar el mensaje localmente ---
+    const newMessage = {
+      id: `msg_${Date.now()}`,
+      text: text,
+      userId: currentUserId,
+      timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
+    };
+    addMessageToDOM(newMessage);
+    // --- FIN NUEVO ---
+
     const chatId = window.chatAPI && window.chatAPI.getCurrentChatId ? window.chatAPI.getCurrentChatId() : null;
-    if (!chatId) return;
-    // use central API to send message
-    window.chatAPI.sendMessageToChat(chatId, text);
+    if (chatId) {
+      // use central API to send message (simulado)
+      window.chatAPI.sendMessageToChat(chatId, text);
+    }
+    
     input.value = '';
+    input.focus();
   });
   // Adjuntar imagen cargando un archivo local
   attachImageBtn.addEventListener('click', () => {
@@ -216,6 +360,286 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // auto-scroll al cargar para ver últimos mensajes
   chatArea.scrollTop = chatArea.scrollHeight;
+
+  // --- NUEVO: Handler para abrir modal de dictado por voz ---
+  const voiceModal = document.getElementById('voiceModal');
+  const attachVoiceBtn = document.getElementById('attachVoiceBtn');
+  const closeVoiceModal = document.getElementById('closeVoiceModal');
+  const startVoiceBtn = document.getElementById('startVoiceBtn');
+  const stopVoiceBtn = document.getElementById('stopVoiceBtn');
+  const sendVoiceBtn = document.getElementById('sendVoiceBtn');
+  const cancelVoiceBtn = document.getElementById('cancelVoiceBtn');
+  const voiceTranscript = document.getElementById('voiceTranscript');
+  const voiceStatus = document.getElementById('voiceStatus');
+
+  function openVoiceModal() {
+    lastFocusedElement = document.activeElement;
+    if (voiceModal) {
+      voiceModal.classList.remove('hidden');
+      voiceModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (voiceTranscript) { voiceTranscript.value = ''; }
+      if (voiceStatus) { voiceStatus.textContent = 'Listo para dictar'; }
+      isRecordingVoice = false;
+      sendVoiceBtn && (sendVoiceBtn.disabled = true);
+    }
+  }
+
+  function closeVoiceModalFn() {
+    if (!voiceModal) return;
+    stopRecognition();
+    voiceModal.classList.add('hidden');
+    voiceModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
+  }
+
+  function ensureSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    if (!SpeechRecognition) {
+      return null;
+    }
+    const recog = new SpeechRecognition();
+    recog.continuous = true;
+    recog.interimResults = true;
+    recog.lang = 'es-PE';
+    return recog;
+  }
+
+  function startRecognition() {
+    if (isRecordingVoice) return;
+    speechRecognition = ensureSpeechRecognition();
+      lastAudioBlob = null;
+      if (speechRecognition) {
+        // Browser supports Web Speech API
+        voiceStatus.textContent = 'Grabando...';
+        isRecordingVoice = true;
+      } else {
+        // Fallback to MediaRecorder (audio) when SpeechRecognition not available
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          alert('Tu navegador no soporta reconocimiento de voz en tiempo real ni grabación de audio. Considera usar Chrome o Edge.');
+          return;
+        }
+        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+          mediaStream = stream;
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          mediaRecorder.ondataavailable = (e) => { if (e.data && e.data.size > 0) audioChunks.push(e.data); };
+          mediaRecorder.onstop = () => {
+            lastAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            if (voiceTranscript) voiceTranscript.value = '[Grabación de audio lista]';
+            sendVoiceBtn && (sendVoiceBtn.disabled = false);
+            voiceStatus.textContent = 'Grabación finalizada';
+            // Stop the tracks so the mic is released
+            try { mediaStream && mediaStream.getTracks().forEach(t => t.stop()); } catch (e) { }
+          };
+          mediaRecorder.start();
+          voiceStatus.textContent = 'Grabando audio...';
+          isRecordingVoice = true;
+          startVoiceBtn && (startVoiceBtn.classList.add('hidden'));
+          stopVoiceBtn && (stopVoiceBtn.classList.remove('hidden'));
+        }).catch((err) => { console.error('getUserMedia error', err); alert('No se pudo iniciar la grabación. Revisa permisos.'); });
+      }
+    let interimText = '';
+    let finalText = '';
+    speechRecognition.onresult = (event) => {
+      interimText = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          finalText += result[0].transcript + ' ';
+        } else {
+          interimText += result[0].transcript;
+        }
+      }
+      if (voiceTranscript) {
+        voiceTranscript.value = (finalText + interimText).trim();
+        sendVoiceBtn && (sendVoiceBtn.disabled = voiceTranscript.value.trim().length === 0);
+      }
+    };
+    speechRecognition.onerror = (e) => {
+      console.error('SpeechRecognition error', e);
+      voiceStatus.textContent = 'Error de reconocimiento';
+      isRecordingVoice = false;
+      stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
+      startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
+    };
+    speechRecognition.onend = () => {
+      isRecordingVoice = false;
+      voiceStatus.textContent = 'Detenido';
+      stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
+      startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
+    };
+    speechRecognition.start();
+    startVoiceBtn && (startVoiceBtn.classList.add('hidden'));
+    stopVoiceBtn && (stopVoiceBtn.classList.remove('hidden'));
+  }
+
+  function stopRecognition() {
+    if (speechRecognition && typeof speechRecognition.stop === 'function') {
+      try { speechRecognition.stop(); } catch (e) { /* ignore */ }
+    }
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      try { mediaRecorder.stop(); } catch (e) { /* ignore */ }
+    }
+    if (mediaStream) {
+      try { mediaStream.getTracks().forEach(t => t.stop()); } catch (e) { }
+      mediaStream = null;
+    }
+    isRecordingVoice = false;
+    stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
+    startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
+    voiceStatus && (voiceStatus.textContent = 'Listo para dictar');
+  }
+
+  if (attachVoiceBtn) {
+    attachVoiceBtn.addEventListener('click', () => {
+      menuOpen = false;
+      attachMenuDropdown.classList.add('hidden');
+      openVoiceModal();
+    });
+  }
+
+  if (closeVoiceModal) closeVoiceModal.addEventListener('click', closeVoiceModalFn);
+  if (cancelVoiceBtn) cancelVoiceBtn.addEventListener('click', () => { stopRecognition(); closeVoiceModalFn(); });
+  if (startVoiceBtn) startVoiceBtn.addEventListener('click', startRecognition);
+  if (stopVoiceBtn) stopVoiceBtn.addEventListener('click', stopRecognition);
+
+  // Send the transcribed voice as message
+  if (sendVoiceBtn) sendVoiceBtn.addEventListener('click', () => {
+    const text = voiceTranscript && voiceTranscript.value.trim();
+    const hasAudio = !!lastAudioBlob;
+    if (!text && !hasAudio) return;
+    const newMessage = {
+      id: `msg_${Date.now()}`,
+      text: text,
+      audioUrl: hasAudio ? URL.createObjectURL(lastAudioBlob) : null,
+      userId: currentUserId,
+      viaVoice: true,
+      timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
+    };
+    addMessageToDOM(newMessage);
+    const chatId = window.chatAPI && window.chatAPI.getCurrentChatId ? window.chatAPI.getCurrentChatId() : null;
+    if (chatId) {
+      if (hasAudio && window.chatAPI?.sendAudioInChat) {
+        window.chatAPI.sendAudioInChat(chatId, lastAudioBlob);
+      } else {
+        window.chatAPI.sendMessageToChat(chatId, text);
+      }
+    }
+    // free the audio blob (it is represented as URL locally in the message)
+    lastAudioBlob = null;
+    audioChunks = [];
+    stopRecognition();
+    closeVoiceModalFn();
+  });
+
+  // Update send button disabled state when transcript changes
+  if (voiceTranscript) {
+    voiceTranscript.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      sendVoiceBtn && (sendVoiceBtn.disabled = val.length === 0);
+    });
+  }
+
+  // --- NUEVO: TTS (Escuchar mensajes) ---
+  const startListenBtn = document.getElementById('startListenBtn');
+  const stopListenBtn = document.getElementById('stopListenBtn');
+  const attachVolumeBtn = document.getElementById('attachVolumeBtn');
+  const volumeIconContainer = document.getElementById('volumeIconContainer');
+
+  function readMessageEl(messageEl) {
+    if (!messageEl || !window.speechSynthesis) return Promise.resolve();
+    const id = messageEl.dataset.messageId;
+    if (!id || playedMessages.has(id)) return Promise.resolve();
+    const textEl = messageEl.querySelector('.msg-text');
+    if (!textEl) return Promise.resolve();
+    const text = textEl.textContent.trim();
+    if (!text) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'es-ES';
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.onend = () => {
+        playedMessages.add(id);
+        resolve();
+      };
+      utterance.onerror = (e) => { console.error('TTS error', e); resolve(); };
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+
+  async function processSpeechQueue() {
+    while (isListeningMessages && speechQueue.length > 0) {
+      const el = speechQueue.shift();
+      await readMessageEl(el);
+      if (!isListeningMessages) break;
+    }
+  }
+
+  function queueAllUnplayedMessages() {
+    const all = Array.from(chatArea.querySelectorAll('.msg'));
+    const unplayed = all.filter(m => m.dataset.messageId && !playedMessages.has(m.dataset.messageId));
+    // ensure chronological order - DOM order is oldest-first as appended
+    speechQueue.push(...unplayed);
+    processSpeechQueue();
+  }
+
+  function startListening() {
+    if (!window.speechSynthesis) { alert('Tu navegador no soporta síntesis de voz'); return; }
+    isListeningMessages = true;
+    startListenBtn && startListenBtn.classList.add('hidden');
+    stopListenBtn && stopListenBtn.classList.remove('hidden');
+    queueAllUnplayedMessages();
+    // show header icon indicator
+    if (volumeIconContainer) volumeIconContainer.classList.remove('hidden');
+    if (attachVolumeBtn) { attachVolumeBtn.classList.add('active'); attachVolumeBtn.setAttribute('aria-pressed','true'); }
+  }
+
+  function stopListening() {
+    isListeningMessages = false;
+    speechQueue = [];
+    window.speechSynthesis.cancel();
+    startListenBtn && startListenBtn.classList.remove('hidden');
+    stopListenBtn && stopListenBtn.classList.add('hidden');
+    // hide header icon indicator
+    if (volumeIconContainer) volumeIconContainer.classList.add('hidden');
+    if (attachVolumeBtn) { attachVolumeBtn.classList.remove('active'); attachVolumeBtn.setAttribute('aria-pressed','false'); }
+  }
+
+  if (startListenBtn) startListenBtn.addEventListener('click', startListening);
+  if (stopListenBtn) stopListenBtn.addEventListener('click', stopListening);
+
+  // Attach dropdown volume button toggles listening as well
+  if (attachVolumeBtn) {
+    attachVolumeBtn.addEventListener('click', () => {
+      // hide the attach menu
+      menuOpen = false;
+      attachMenuDropdown.classList.add('hidden');
+      // toggle
+      if (isListeningMessages) {
+        stopListening();
+      } else {
+        startListening();
+      }
+    });
+  }
+
+  // Ensure newly added messages are queued for reading when listening is active
+  const originalAddMessageToDOM = addMessageToDOM;
+  addMessageToDOM = (message) => {
+    originalAddMessageToDOM(message);
+    // queue for TTS if active and not already played
+    const el = chatArea.querySelector(`[data-message-id="${message.id}"]`);
+    if (isListeningMessages && el) {
+      if (!playedMessages.has(message.id)) {
+        speechQueue.push(el);
+        processSpeechQueue();
+      }
+    }
+  };
   
     // --- Poll creation UI handlers ---
     const pollModal = document.getElementById('pollModal');

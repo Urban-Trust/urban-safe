@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel de Alertas Activas</title>
+  <title>Panel de Recordatorios</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link rel="stylesheet" href="assets/styles/admin.css" />
-  <link rel="stylesheet" href="assets/styles/alertaActi.css" />
+  <link rel="stylesheet" href="assets/styles/recordatorios.css" />
 </head>
 <body>
   <nav class="navbar">
@@ -43,7 +44,7 @@
               </span>
               <span>Panel de control vecinal</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="biblioteca.html" class="menu-item">
               <span class="icon">
                 <svg width="30" height="39" viewBox="0 0 36 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M4.41667 44.1667C3.20208 44.1667 2.16269 43.7346 1.2985 42.8704C0.434305 42.0062 0.00147222 40.9661 0 39.75V4.41667C0 3.20208 0.432833 2.16269 1.2985 1.2985C2.16417 0.434306 3.20356 0.00147222 4.41667 0H30.9167C32.1312 0 33.1714 0.432834 34.037 1.2985C34.9027 2.16417 35.3348 3.20356 35.3333 4.41667V39.75C35.3333 40.9646 34.9012 42.0047 34.037 42.8704C33.1728 43.736 32.1327 44.1681 30.9167 44.1667H4.41667ZM15.4583 19.875L20.9792 16.5625L26.5 19.875V4.41667H15.4583V19.875Z" fill="black" />
@@ -62,7 +63,7 @@
           </div>
           <div class="menu-section">
             <div class="menu-title">Ajustes</div>
-            <a href="confi.html" class="menu-item">
+            <a href="configuracion.html" class="menu-item">
               <span class="icon">
                 <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M19 23.7502C21.6234 23.7502 23.75 21.6235 23.75 19.0002C23.75 16.3768 21.6234 14.2502 19 14.2502C16.3767 14.2502 14.25 16.3768 14.25 19.0002C14.25 21.6235 16.3767 23.7502 19 23.7502Z" stroke="#1E1E1E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
@@ -114,125 +115,37 @@
   </div>
 
   <main>
-    <div class="container">
-      <section class="alert-panel">
-        <div class="panel-header">
-          <div>
-            <h2>Panel de Alertas Activas</h2>
-            <p>Actualizado hace 2 minutos</p>
-          </div>
-          <button class="btn btn-primary" type="button">
-            <span class="material-icons" aria-hidden="true">refresh</span>
-            <span>Actualizar</span>
-          </button>
-        </div>
 
-        <div class="search-bar">
-          <span class="material-icons search-icon" aria-hidden="true">search</span>
-          <input type="text" placeholder="Buscar incidentes por nombre" aria-label="Buscar alertas" />
-        </div>
+<div class="panel-header">
+  <div class="admin-box">
+    Administrador: José Rojas Chavez
+  </div>
 
-        <div class="alert-card">
-          <ul class="alert-list">
-            <li class="alert-row">
-              <div class="alert-info">
-                <span class="alert-icon-wrapper">
-                  <span class="material-icons" aria-hidden="true">local_fire_department</span>
-                </span>
-                <div>
-                  <p class="alert-title">Alarma de Incendio Activada</p>
-                  <p class="alert-location">Calle Picsi 123, Depto 4B</p>
-                  <p class="alert-reporter">Reportado por: L. Rodrígin - Hace 2 minutos</p>
-                </div>
-              </div>
-              <div class="alert-meta">
-                <span class="alert-time">10:42 AM, Hoy</span>
-                <div class="status-control" data-status-control>
-                  <label class="status-label" for="status-alert-1">Estado</label>
-                  <select id="status-alert-1" class="status-select" aria-label="Cambiar estado de Alarma de Incendio" data-status-select>
-                    <option value="nueva" selected>Nueva</option>
-                    <option value="proceso">En Proceso</option>
-                    <option value="resuelta">Resuelta</option>
-                  </select>
-                </div>
-              </div>
-            </li>
+  <div class="panel-right">
+    Panel de Control Vecinal (99+)
+  </div>
+</div>
 
-            <li class="alert-row">
-              <div class="alert-info">
-                <span class="alert-icon-wrapper">
-                  <span class="material-icons" aria-hidden="true">person_search</span>
-                </span>
-                <div>
-                  <p class="alert-title">Actividad Sospechosa</p>
-                  <p class="alert-location">Parque Central, cerca de los juegos</p>
-                  <p class="alert-reporter">Reportado por: J. Pérez - Hace 15 minutos</p>
-                </div>
-              </div>
-              <div class="alert-meta">
-                <span class="alert-time">8:13 AM, Hoy</span>
-                <div class="status-control" data-status-control>
-                  <label class="status-label" for="status-alert-2">Estado</label>
-                  <select id="status-alert-2" class="status-select" aria-label="Cambiar estado de Actividad Sospechosa" data-status-select>
-                    <option value="nueva">Nueva</option>
-                    <option value="proceso" selected>En Proceso</option>
-                    <option value="resuelta">Resuelta</option>
-                  </select>
-                </div>
-              </div>
-            </li>
+<h2 class="titulo-recordatorios">Recordatorios</h2>
 
-            <li class="alert-row">
-              <div class="alert-info">
-                <span class="alert-icon-wrapper">
-                  <span class="material-icons" aria-hidden="true">directions_car</span>
-                </span>
-                <div>
-                  <p class="alert-title">Vehículo Mal Estacionado</p>
-                  <p class="alert-location">Parque Central, cerca de los juegos</p>
-                  <p class="alert-reporter">Reportado por: M. Gonzales - Hace 15 horas</p>
-                </div>
-              </div>
-              <div class="alert-meta">
-                <span class="alert-time">7:04 AM, Hoy</span>
-                <div class="status-control" data-status-control>
-                  <label class="status-label" for="status-alert-3">Estado</label>
-                  <select id="status-alert-3" class="status-select" aria-label="Cambiar estado de Vehículo Mal Estacionado" data-status-select>
-                    <option value="nueva">Nueva</option>
-                    <option value="proceso" selected>En Proceso</option>
-                    <option value="resuelta">Resuelta</option>
-                  </select>
-                </div>
-              </div>
-            </li>
+<div class="recordatorios-container">
 
-            <li class="alert-row">
-              <div class="alert-info">
-                <span class="alert-icon-wrapper">
-                  <span class="material-icons" aria-hidden="true">shield</span>
-                </span>
-                <div>
-                  <p class="alert-title">Robo a mano armada</p>
-                  <p class="alert-location">Residencia de la Familia Picsina</p>
-                  <p class="alert-reporter">Reportado por: M. Escalante - Hace 1 día</p>
-                </div>
-              </div>
-              <div class="alert-meta">
-                <span class="alert-time">18:51 PM, Ayer</span>
-                <div class="status-control" data-status-control>
-                  <label class="status-label" for="status-alert-4">Estado</label>
-                  <select id="status-alert-4" class="status-select" aria-label="Cambiar estado de Robo a mano armada" data-status-select>
-                    <option value="nueva">Nueva</option>
-                    <option value="proceso">En Proceso</option>
-                    <option value="resuelta" selected>Resuelta</option>
-                  </select>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
-    </div>
+  <div class="rectangulo">Programar recordatorio</div>
+  <div class="rectangulo">Modificar recordatorio</div>
+  <div class="rectangulo">Mostrar recordatorios enviados</div>
+
+  <div class="nota-con-icono">
+    <div class="icono-alerta">!</div>
+
+    <p class="nota-admin">
+      Como administrador, recuerda que los recordatorios deben programarse con el propósito de prevenir
+      y orientar a las personas bajo tu cuidado. Evita utilizarlos con demasiada frecuencia, para no
+      restarles valor ni generar desconfianza en su efectividad.
+    </p>
+  </div>
+</div>
+
+
   </main>
 
   <footer class="footer">
@@ -258,6 +171,6 @@
       </div>
     </div>
   </footer>
-  <script src="assets/scripts/alertaActi.js"></script>
+  <script src="assets/scripts/recordatorios.js"></script>
 </body>
 </html>
