@@ -33,122 +33,68 @@
     </nav>
 
     <main class="flex-grow relative">
-        <a href="map.html" class="back-button">
-            <svg width="25" height="30" fill="none">
-                <path d="M22.5 2.5L2.5 15L22.5 27.5" stroke="#EAE9E7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </a>
+    <a href="map.html" class="back-button">
+        <svg width="25" height="30" fill="none">
+        <path d="M22.5 2.5L2.5 15L22.5 27.5" stroke="#EAE9E7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </a>
 
-        <div class="profile-wrapper">
-            <div class="relative py-12 px-4 sm:px-6 lg:px-8">
-                <div class="max-w-3xl mx-auto bg-card-light rounded-3xl shadow-lg p-8 sm:p-12">
-                    <div class="profile-header">
-                        <img src="assets/images/Lorena2.png" alt="Foto de perfil" class="profile-photo" />
-                        <div class="profile-info">
-                            <h1 class="nombre">Maria Fernandez</h1>
-                            <p class="apellido">mariafernandez@gmail.com</p>
-                        </div>
-                    </div>
+    <div class="profile-wrapper">
+        <div class="relative py-12 px-4 sm:px-6 lg:px-8">
+        <div class="profile-card">
+            
+            <div class="profile-header">
+            <img src="assets/images/Lorena2.png" alt="Foto de perfil" class="profile-photo" />
+            <div class="profile-info">
+                <h1 class="nombre">Maria Fernandez</h1>
+                <p class="apellido">mariafernandez@gmail.com</p>
+            </div>
+            </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm mb-10">
-                        <div class="flex gap-4">
-                            <span class="font-semibold text-gray-700">Fecha de registro:</span>
-                            <span class="text-gray-600">13/02/25</span>
-                        </div>
-                        <div class="flex gap-4">
-                            <span class="font-semibold text-gray-700">Grupo vecinal:</span>
-                            <span class="text-gray-600">Grupo V-21C2</span>
-                        </div>
-                    </div>
+            <div class="profile-details">
+            <div class="flex gap-4">
+                <span class="label">Fecha de registro:</span>
+                <span class="value">13/02/25</span>
+            </div>
+            <div class="flex gap-4">
+                <span class="label">Grupo vecinal:</span>
+                <span class="value">Grupo V-21C2</span>
+            </div>
+            </div>
 
-                    <div>
-                        <h2 class="text-lg font-bold mb-4">Últimos reportes:</h2>
-                        <div class="bg-report-bg-light dark:bg-report-bg-dark rounded-2xl" style="padding:20px;">
-                            <div class="mb-4 text-sm" style="display:flex; flex-direction:row; align-items:center; gap:300px;">
-                                <div style="display:flex; flex-direction:row; align-items:baseline; gap:4px;">
-                                    <span class="font-bold text-gray-800 dark:text-gray-200"><strong>ID</strong></span>
-                                    <span class="text-gray-700 dark:text-gray-300">0024</span>
-                                </div>
-                                <div style="display:flex; flex-direction:row; align-items:baseline; gap:4px;">
-                                    <span class="font-bold text-gray-800 dark:text-gray-200"><strong>Titulo</strong></span>
-                                    <span class="text-gray-700 dark:text-gray-300">0024</span>
-                                </div>
-                            </div>
+            <div class="reports">
+            <h2 class="reports-title">Últimos reportes:</h2>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm mb-4">
-                                <div class="flex items-baseline gap-2">
-                                    <span class="font-bold text-gray-800 dark:text-gray-200 w-20 shrink-0"><strong>Tipo:</strong></span>
-                                    <span class="text-gray-700 dark:text-gray-300">0024</span>
-                                </div>
-                                <div class="flex items-baseline gap-2">
-                                    <span class="font-bold text-gray-800 dark:text-gray-200 w-20 shrink-0"><strong>Ubicación:</strong></span>
-                                    <span class="text-gray-700 dark:text-gray-300">0024</span>
-                                </div>
-                            </div>
+                <div class="report-card">
+                <div class="report-header">
+                    <div class="report-title"><strong>Titulo:</strong> 0024</div>
+                    <div class="report-id"><strong>ID:</strong> 0024</div>
+                </div>
 
-                            <div class="flex items-start gap-2 text-sm mb-6">
-                                <p class="text-gray-700 dark:text-gray-300">
-                                    <strong>Descripción:</strong> No se que escribir aca asi que estoy poniendo cualquier cosa literalmente.<br>
-                                    Y no se que mas poner acae.
-                                </p>
-                            </div>
+                <div class="report-type"><strong>Tipo:</strong> 0024</div>
+                <div class="report-location"><strong>Ubicación:</strong> 0024</div>
 
-                            <div 
-                                style="
-                                    width: 100%;
-                                    margin-top: 20px;
-                                    border-top: 1px solid #d1d1d1;
-                                    padding-top: 10px;
-                                    display: flex;
-                                    flex-direction: row;
-                                    justify-content: space-between;
-                                    gap: 0;
-                                "
-                            >
-                                <button 
-                                    style="
-                                        width: 50%;
-                                        background: #e2e2e2;
-                                        padding: 12px;
-                                        border: none;
-                                        border-right: 1px solid #ccc;
-                                        display: flex;
-                                        justify-content: center;
-                                        cursor: pointer;
-                                        border-bottom-left-radius: 12px;
-                                        font-size: 1.5rem;
-                                        font-weight: bold;
-                                        align-items: center;
-                                    "
-                                    class="dark:bg-gray-500 dark:hover:bg-gray-600 dark:text-gray-200 hover:bg-gray-300"
-                                >
-                                    &lt;
-                                </button>
+                <div class="report-description">
+                    <p>
+                    <strong>Descripción:</strong> No se que escribir aca asi que estoy poniendo cualquier cosa literalmente.<br>
+                    Y no se que mas poner acae.
+                    </p>
+                </div>
 
-                                <button 
-                                    style="
-                                        width: 50%;
-                                        background: #ffffff;
-                                        padding: 12px;
-                                        border: none;
-                                        display: flex;
-                                        justify-content: center;
-                                        cursor: pointer;
-                                        border-bottom-right-radius: 12px;
-                                        font-size: 1.5rem;
-                                        font-weight: bold;
-                                        align-items: center;
-                                    "
-                                    class="dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800 hover:bg-gray-100"
-                                >
-                                    &gt;
-                                </button>
-                            </div>
+                <div class="report-footer">
+                    <button class="btn-left">&lt;</button>
+                    <button class="btn-right">&gt;</button>
+                </div>
+                </div>
 
-                        </div>
-                    </div>
+            </div>
 
-                </div> </div> </div> </main>
+        </div>
+        </div>
+    </div>
+
+    </main>
+
 
     <!-- FOOTER -->
     <footer class="footer">
