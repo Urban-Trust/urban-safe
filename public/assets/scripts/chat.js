@@ -101,15 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDiv = document.createElement('div');
     textDiv.className = 'msg-text';
     textDiv.textContent = message.text;
-    // Show a small voice icon if this message was sent via voice
-    if (message.viaVoice) {
-      const voiceMarker = document.createElement('span');
-      voiceMarker.className = 'msg-voice-marker';
-      voiceMarker.setAttribute('aria-hidden', 'true');
-      voiceMarker.style.marginLeft = '8px';
-      voiceMarker.textContent = '🔊';
-      textDiv.appendChild(voiceMarker);
-    }
+    // Removed: do not display a speaker emoji for voice messages
 
     const metaDiv = document.createElement('div');
     metaDiv.className = 'msg-meta';
@@ -288,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
       id: `msg_${Date.now()}`,
       text: text,
       userId: currentUserId,
-      viaVoice: true,
       timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
     };
     addMessageToDOM(newMessage);
@@ -554,6 +545,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- NUEVO: TTS (Escuchar mensajes) ---
   const startListenBtn = document.getElementById('startListenBtn');
   const stopListenBtn = document.getElementById('stopListenBtn');
+  const attachVolumeBtn = document.getElementById('attachVolumeBtn');
+  const volumeIconContainer = document.getElementById('volumeIconContainer');
 
   function readMessageEl(messageEl) {
     if (!messageEl || !window.speechSynthesis) return Promise.resolve();
@@ -600,6 +593,9 @@ document.addEventListener('DOMContentLoaded', () => {
     startListenBtn && startListenBtn.classList.add('hidden');
     stopListenBtn && stopListenBtn.classList.remove('hidden');
     queueAllUnplayedMessages();
+    // show header icon indicator
+    if (volumeIconContainer) volumeIconContainer.classList.remove('hidden');
+    if (attachVolumeBtn) { attachVolumeBtn.classList.add('active'); attachVolumeBtn.setAttribute('aria-pressed','true'); }
   }
 
   function stopListening() {
@@ -608,10 +604,28 @@ document.addEventListener('DOMContentLoaded', () => {
     window.speechSynthesis.cancel();
     startListenBtn && startListenBtn.classList.remove('hidden');
     stopListenBtn && stopListenBtn.classList.add('hidden');
+    // hide header icon indicator
+    if (volumeIconContainer) volumeIconContainer.classList.add('hidden');
+    if (attachVolumeBtn) { attachVolumeBtn.classList.remove('active'); attachVolumeBtn.setAttribute('aria-pressed','false'); }
   }
 
   if (startListenBtn) startListenBtn.addEventListener('click', startListening);
   if (stopListenBtn) stopListenBtn.addEventListener('click', stopListening);
+
+  // Attach dropdown volume button toggles listening as well
+  if (attachVolumeBtn) {
+    attachVolumeBtn.addEventListener('click', () => {
+      // hide the attach menu
+      menuOpen = false;
+      attachMenuDropdown.classList.add('hidden');
+      // toggle
+      if (isListeningMessages) {
+        stopListening();
+      } else {
+        startListening();
+      }
+    });
+  }
 
   // Ensure newly added messages are queued for reading when listening is active
   const originalAddMessageToDOM = addMessageToDOM;

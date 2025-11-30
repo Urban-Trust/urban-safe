@@ -182,10 +182,11 @@
       </h1>
       <p class="chat-zone">Zona: Los Álamos — Lima</p>
     </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-      <div id="voiceListenControls">
-        <button id="startListenBtn" class="btn-primary" title="Escuchar mensajes">🔊 Escuchar</button>
-        <button id="stopListenBtn" class="btn-secondary hidden" title="Detener lectura">⏹ Detener</button>
+    <div style="display:flex; gap:8px; align-items:center; position:relative;">
+      <!-- Removed header listen buttons: control handled by attach menu volume button -->
+      <!-- Small active volume icon (shown when listening is active) -->
+      <div id="volumeIconContainer" class="volume-icon-container hidden" title="Escuchando mensajes">
+        <img id="volumeActiveIcon" src="assets/images/volume.png" alt="Escuchando" />
       </div>
     </div>
   </div>
@@ -374,6 +375,9 @@
             <path d="M19 11v1a7 7 0 01-14 0v-1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M12 19v3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
+        </button>
+        <button type="button" id="attachVolumeBtn" class="attach-menu-option" aria-label="Escuchar mensajes" title="Escuchar mensajes" aria-pressed="false">
+          <img src="assets/images/volume.png" alt="Escuchar" />
         </button>
       </div>
 
