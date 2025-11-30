@@ -1282,10 +1282,12 @@ input.error {
 
   /* 2. AJUSTE DEL MODAL DE REPORTE (FORMULARIO + BOTÓN VOZ) */
   .modal-layout-flex {
-    flex-direction: column; /* Pone el botón ARRIBA y el form ABAJO */
-    align-items: center;
-    gap: 15px;
+    flex-direction: column; /* Elementos uno debajo del otro */
+    align-items: center;    /* Centrados horizontalmente */
+    gap: 15px;              /* Espacio entre el botón y el formulario */
     width: 95%;
+    margin-bottom: 40px;    /* Espacio extra al final para poder scrollear */
+    padding-bottom: 150px;
   }
 
   .boton-voz-lateral {
@@ -1293,7 +1295,8 @@ input.error {
     width: 60px;
     height: 60px;
     margin-top: 0;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
   }
   
   .boton-voz-lateral svg {
@@ -1303,15 +1306,19 @@ input.error {
 
   .modal-contenido {
     width: 100%;
-    padding: 20px; /* Menos relleno interno */
-    max-height: 70vh; /* Evita que sea más alto que la pantalla */
-    overflow-y: auto; /* Permite scrollear dentro del form si es muy largo */
+    max-width: 100%;     /* Asegura que no se salga del ancho */
+    padding: 20px; 
+    max-height: none;    /* Quitamos límite de altura para que crezca según contenido */
+    overflow-y: visible; /* El scroll lo maneja el padre (.modal-alerta) */
   }
 
   .modal-alerta {
-    padding-top: 2rem; /* Subimos un poco el modal */
+    /* Antes tenía 2rem, lo subimos a 100px para bajar todo el contenido */
+    padding-top: 100px !important; 
     align-items: flex-start;
+    overflow-y: auto; /* Asegura que se pueda hacer scroll si el cel es pequeño */
   }
+
 
   /* 3. AJUSTE DE MARCADORES EN EL MAPA (REPORTES) */
   .reporte-en-mapa,
