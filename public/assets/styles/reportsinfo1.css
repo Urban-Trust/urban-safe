@@ -513,7 +513,7 @@ body {
     background-color: #1f4e4d;
 }
 
-/* Alerta verde de descarga exitosa */
+
 .alerta-exitosa {
     position: fixed;
     top: 50%;
@@ -529,13 +529,13 @@ body {
     z-index: 3000;
 }
 
-/* POPUP VERDE DE DESCARGA EXITOSA */
+
 .alerta-popup {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: #1A7569; /* verde igual al mockup */
+    background: #1A7569; 
     padding: 40px 60px;
     border-radius: 10px;
     text-align: center;
@@ -560,4 +560,150 @@ body {
 
 .oculto {
     display: none !important;
+}
+
+.mobile-footer-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0C132D;
+  border-top: 1px solid #1F2C4F;
+  padding: 10px 16px 14px;
+  z-index: 1002;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.mobile-footer-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #EAE9E7;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.mobile-footer-icon svg {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+
+.hamburger-btn {
+  display: none; /* Oculto en desktop */
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #1C2542;
+  color: #EAE9E7;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.hamburger-lines {
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  position: relative;
+}
+
+.hamburger-lines::before, .hamburger-lines::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+}
+.hamburger-lines::before { top: -6px; }
+.hamburger-lines::after { top: 6px; }
+
+@media (max-width: 768px) {
+  
+  
+  body {
+    padding-top: 70px;
+    padding-bottom: 100px;
+    overflow: auto;
+    height: auto;
+  }
+
+  
+  .arrow-icon, 
+  .navbar .menu, 
+  .login-link { 
+    display: none; 
+  }
+
+  
+  .hamburger-btn, 
+  .mobile-footer-nav { 
+    display: flex; 
+  }
+
+
+  .user-menu {
+    display: none;
+    position: fixed;
+    top: 70px;
+    right: 0;
+    left: auto;
+    width: 85vw;
+    max-width: 300px;
+    height: calc(100vh - 70px);
+    background: #EAE9E7;
+    border-left: 1px solid #ccc;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 20px;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+
+  #menu-toggle:checked ~ .user-menu {
+    display: flex;
+    animation: slideIn 0.3s ease forwards;
+  }
+
+
+  .page-container {
+    padding: 20px 10px 40px 10px;
+  }
+
+  .incidente-detalle-card {
+    padding: 20px;
+  }
+
+  .detalle-titulo {
+    font-size: 1.3em;
+  }
+
+  .etiquetas-container {
+    gap: 5px;
+  }
+
+  .boton-descargar {
+    top: 5px;
+    right: 5px;
+  }
+  
+  .boton-cambiar-imagen {
+    top: 5px;
+    right: 5px;
+  }
+
+
+  .acciones-flotantes-detalle {
+    bottom: 90px; 
+    right: 20px;
+  }
 }

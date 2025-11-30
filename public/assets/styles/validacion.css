@@ -400,3 +400,234 @@ body {
 .boton-voto .texto-voto {
   color: #000000;
 }
+
+/* --- ESTILOS RESPONSIVE (MÓVIL) --- */
+
+.mobile-footer-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0C132D;
+  border-top: 1px solid #1F2C4F;
+  padding: 10px 16px 14px;
+  z-index: 1002;
+  justify-content: space-around;
+  align-items: center;
+}
+.mobile-footer-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #EAE9E7;
+  font-weight: 600;
+  font-size: 12px;
+}
+.mobile-footer-icon svg { width: 32px; height: 32px; display: block; }
+
+.hamburger-btn {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #1C2542;
+  color: #EAE9E7;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+.hamburger-lines {
+  width: 20px; height: 2px; background: currentColor; position: relative;
+}
+.hamburger-lines::before, .hamburger-lines::after {
+  content: ""; position: absolute; left: 0; width: 20px; height: 2px; background: currentColor;
+}
+.hamburger-lines::before { top: -6px; }
+.hamburger-lines::after { top: 6px; }
+
+
+/* --- MEDIA QUERY PARA MÓVILES (max-width: 768px) --- */
+@media (max-width: 768px) {
+  
+  /* 1. AJUSTES GENERALES Y NAVEGACIÓN */
+  body {
+    padding-top: 70px;
+    padding-bottom: 80px; 
+    overflow: auto;
+    height: auto;
+  }
+
+  
+  .arrow-icon, .navbar .menu, .login-link { display: none; }
+  
+  .hamburger-btn, .mobile-footer-nav { 
+    display: flex;
+    z-index: 1002;
+    cursor: pointer; 
+  }
+
+  .user-menu {
+    display: none; 
+    position: fixed;
+    top: 70px;
+    right: 0;
+    left: auto;
+    width: 85vw; 
+    max-width: 300px;
+    height: calc(100vh - 70px);
+    background: #EAE9E7;
+    border-left: 1px solid #ccc;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  
+  .container-validacion {
+    flex-direction: row; 
+    gap: 10px;
+    padding: 10px;
+    height: calc(100vh - 150px);
+  }
+
+  .panel-pendientes {
+    flex: 0 0 110px;
+    padding: 10px 5px;
+    align-items: center;
+    background-color: #738B8B;
+  }
+
+  .panel-header h2, 
+  .busqueda-pendientes,
+  .divisor {
+    display: none;
+  }
+
+  .panel-header { margin-bottom: 10px; justify-content: center; }
+  .boton-retorno { padding: 5px; border-radius: 8px; }
+  .boton-retorno svg { width: 15px; }
+
+  .incidente-pendiente-card {
+    flex-direction: column;
+    padding: 8px;
+    gap: 5px;
+    text-align: center;
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  .incidente-pendiente-card .imagen-contenedor {
+    width: 70px; 
+    height: 70px;
+    margin: 0 auto;
+  }
+  
+  .incidente-pendiente-card .incidente-imagen {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .incidente-titulo {
+    font-size: 0.75em; 
+    line-height: 1.1;
+    max-height: 2.2em;
+    overflow: hidden;
+    display: block; 
+    margin-bottom: 2px;
+  }
+
+
+  .incidente-fecha, 
+  .incidente-descripcion {
+    display: none; 
+  }
+
+  .incidente-pendiente-card .reporter-info {
+    display: flex;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  
+  .incidente-pendiente-card .reporter-name {
+    display: none;
+  }
+
+  .incidente-pendiente-card .reporter-avatar {
+    width: 25px;
+    height: 25px;
+    font-size: 0.7em;
+    line-height: 25px;
+  }
+
+  .panel-detalle {
+    flex: 1;
+    padding-right: 0;
+    overflow-y: auto;
+  }
+
+  .titulo-principal {
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .validadores-info {
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .icono-validadores-wrapper { width: 50px; height: 50px; }
+  .icono-validadores { width: 30px; }
+  .validadores-info span { font-size: 0.9em; }
+
+  .media-y-acciones {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .imagen-principal-wrapper {
+    width: 100%;
+  }
+  .imagen-principal-incidente {
+    max-height: 200px;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .acciones-votacion {
+    flex: none;
+    width: 100%;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .boton-voto {
+    flex: 1;
+    padding: 8px;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .boton-voto .icono-voto {
+    margin-right: 0;
+    margin-bottom: 5px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .texto-voto {
+    font-size: 0.8em;
+  }
+}
