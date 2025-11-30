@@ -256,7 +256,7 @@ body {
 }
 
 /* Voice marker beside text */
-.msg-voice-marker { font-size: 14px; margin-left: 6px; opacity: 0.92; }
+/* Removed speaker indicator styles (icon not shown) */
 
 .chat-audio { display:block; margin-top:8px; width:100%; max-width:320px; }
 
@@ -432,6 +432,9 @@ body {
   opacity: 0.8;
 }
 
+/* active state for attach option (like pressed) */
+.attach-menu-option.active { filter: brightness(0.9); transform: translateY(-2px); box-shadow: 0 6px 10px rgba(0,0,0,0.12); }
+
 .attach-menu-option img {
   width: 32px;
   height: 32px;
@@ -449,6 +452,11 @@ body {
 #voiceListenControls { display:flex; gap:8px; align-items:center; }
 #voiceListenControls button { background: #fff; border-radius:8px; padding:6px 8px; border: none; cursor:pointer; }
 #voiceListenControls button:hover { filter: brightness(0.95); }
+
+/* Volume icon shown while automatic reading is active, positioned in header */
+.volume-icon-container { display:flex; align-items:center; margin-left:8px; }
+.volume-icon-container img { width:28px; height:28px; object-fit:contain; opacity:0.95; }
+.volume-icon-container.hidden { display:none !important; }
 
 /* compact/hidden state for initial load */
 .role-modal.hidden { display:none !important; }
