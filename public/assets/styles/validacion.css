@@ -451,10 +451,10 @@ body {
 .hamburger-lines::after { top: 6px; }
 
 
-/* --- MEDIA QUERY PARA MÓVILES (max-width: 768px) --- */
+
 @media (max-width: 768px) {
   
-  /* 1. AJUSTES GENERALES Y NAVEGACIÓN */
+  
   body {
     padding-top: 70px;
     padding-bottom: 80px; 
