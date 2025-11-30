@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const markerLaura = document.querySelector('.marker-laura');
   const btnVerHistorial = document.getElementById("btn-ver-historial");
   const sidebarHistorial = document.getElementById("sidebar-historial");
+  const sidebarClose = document.getElementById("sidebar-close");
   
   // REFERENCIAS PARA EL MODAL DE REPORTE POR VOZ
   const botonReporteVoz = document.getElementById('boton-reporte-voz');
@@ -350,6 +351,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (propiedadInfo) propiedadInfo.classList.add("oculto");
       sidebarHistorial.classList.remove("oculto");
     });
+    if (sidebarClose) {
+      sidebarClose.addEventListener("click", () => {
+        sidebarHistorial.classList.add("oculto");
+      });
+    }
     document.addEventListener("click", (e) => {
       if (!sidebarHistorial.contains(e.target) && !btnVerHistorial.contains(e.target)) {
         sidebarHistorial.classList.add("oculto");

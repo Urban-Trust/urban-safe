@@ -1222,6 +1222,19 @@ input.error {
   background: #EAE9E7; border-radius: 14px; padding: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.25); z-index: 3000; overflow-y: auto;
 }
+
+.sidebar-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #0C132D;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+}
 .sidebar-item { margin-bottom: 20px; }
 .sidebar-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
 .btn-vermas {
@@ -1369,6 +1382,41 @@ input.error {
     width: 40px;
     height: 40px;
   }
+
+  /* Sidebar de historial en m�vil */
+  #sidebar-historial {
+    top: 82px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    height: auto;
+    max-height: calc(100vh - 170px);
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  #sidebar-historial .sidebar-item {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 10px;
+    align-items: start;
+  }
+
+  #sidebar-historial .sidebar-img {
+    width: 100%;
+    height: 96px;
+  }
+
+  #sidebar-historial .btn-vermas {
+    float: none;
+    margin-top: 8px;
+  }
+
+  #sidebar-historial .sidebar-close {
+    top: 8px;
+    right: 8px;
+    font-size: 22px;
+  }
 }
 
 /* --- CELULARES PEQUEÑOS (Pantallas menores a 480px) --- */
@@ -1392,5 +1440,28 @@ input.error {
   .filters-panel {
     width: calc(100vw - 20px);
     right: -10px; /* Ajuste manual para centrar relativo al botón */
+  }
+}
+
+/* Historial sidebar mobile tweaks */
+@media (max-width: 480px) {
+  #sidebar-historial {
+    top: 70px;
+    max-height: calc(100vh - 150px);
+    padding: 12px;
+  }
+
+  #sidebar-historial .sidebar-item {
+    grid-template-columns: 1fr;
+  }
+
+  #sidebar-historial .sidebar-img {
+    height: 140px;
+  }
+
+  #sidebar-historial .sidebar-close {
+    font-size: 24px;
+    top: 6px;
+    right: 6px;
   }
 }
