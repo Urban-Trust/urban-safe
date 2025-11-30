@@ -17,14 +17,18 @@
         <div class="container nav-inner">
             <div class="brand-wrap">
                 <input type="checkbox" id="menu-toggle" class="menu-toggle" />
-                <label for="menu-toggle" class="brand" aria-label="Urban Safe">
-                    <img class="brand-logo" src="assets/images/UrbanSafe-Logo-Horizontal-Sin Fondo.png" alt="Urban Safe" />
-                    <span class="arrow-icon" aria-hidden="true">
-                        <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.7086 37.9588C30.2554 38.4119 29.6408 38.6664 29 38.6664C28.3592 38.6664 27.7446 38.4119 27.2914 37.9588L13.6203 24.2878C13.3895 24.0648 13.2054 23.7982 13.0788 23.5033C12.9521 23.2085 12.8854 22.8914 12.8827 22.5705C12.8799 22.2496 12.941 21.9314 13.0625 21.6344C13.184 21.3374 13.3635 21.0675 13.5904 20.8406C13.8173 20.6137 14.0871 20.4343 14.3841 20.3128C14.6811 20.1913 14.9994 20.1301 15.3202 20.1329C15.6411 20.1357 15.9582 20.2024 16.2531 20.329C16.5479 20.4557 16.8146 20.6398 17.0375 20.8706L29 32.8331L40.9625 20.8706C41.4183 20.4304 42.0288 20.1868 42.6624 20.1923C43.296 20.1978 43.9022 20.452 44.3502 20.9C44.7983 21.3481 45.0525 21.9542 45.058 22.5879C45.0635 23.2215 44.8199 23.832 44.3797 24.2878L30.7086 37.9588Z" fill="black"/>
-                        </svg>
-                    </span>
-                </label>
+                <div class="brand">
+                    <a href="index.html" class="brand-logo-link" aria-label="Urban Safe inicio">
+                        <img class="brand-logo" src="assets/images/UrbanSafe-Logo-Horizontal-Sin Fondo.png" alt="Urban Safe" />
+                    </a>
+                    <label for="menu-toggle" class="brand-toggle" aria-label="Abrir menú">
+                        <span class="arrow-icon" aria-hidden="true">
+                            <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M30.7086 37.9588C30.2554 38.4119 29.6408 38.6664 29 38.6664C28.3592 38.6664 27.7446 38.4119 27.2914 37.9588L13.6203 24.2878C13.3895 24.0648 13.2054 23.7982 13.0788 23.5033C12.9521 23.2085 12.8854 22.8914 12.8827 22.5705C12.8799 22.2496 12.941 21.9314 13.0625 21.6344C13.184 21.3374 13.3635 21.0675 13.5904 20.8406C13.8173 20.6137 14.0871 20.4343 14.3841 20.3128C14.6811 20.1913 14.9994 20.1301 15.3202 20.1329C15.6411 20.1357 15.9582 20.2024 16.2531 20.329C16.5479 20.4557 16.8146 20.6398 17.0375 20.8706L29 32.8331L40.9625 20.8706C41.4183 20.4304 42.0288 20.1868 42.6624 20.1923C43.296 20.1978 43.9022 20.452 44.3502 20.9C44.7983 21.3481 45.0525 21.9542 45.058 22.5879C45.0635 23.2215 44.8199 23.832 44.3797 24.2878L30.7086 37.9588Z" fill="black"/>
+                            </svg>
+                        </span>
+                    </label>
+                </div>
                 <div class="user-menu">
                     <div class="menu-section">
               <div class="menu-title">Menu</div>
@@ -495,14 +499,6 @@
     </div>
 
     <nav class="mobile-footer-nav" aria-label="Navegación principal móvil">
-      <a href="index.html" class="mobile-footer-link">
-        <span class="mobile-footer-icon" aria-hidden="true">
-          <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M26.472 4.77709L45.222 23.5271C46.5345 24.8396 45.6053 27.0833 43.7491 27.0833H41.6658V39.5833C41.6658 41.2409 41.0073 42.8307 39.8352 44.0028C38.6631 45.1749 37.0734 45.8333 35.4158 45.8333H33.3324V31.25C33.3325 29.6558 32.7234 28.1218 31.6297 26.962C30.5361 25.8021 29.0405 25.1039 27.4491 25.0104L27.0824 25H22.9158C21.2581 25 19.6684 25.6585 18.4963 26.8306C17.3242 28.0027 16.6658 29.5924 16.6658 31.25V45.8333H14.5824C12.9248 45.8333 11.3351 45.1749 10.163 44.0028C8.9909 42.8307 8.33242 41.2409 8.33242 39.5833V27.0833H6.24908C4.39492 27.0833 3.46367 24.8396 4.77617 23.5271L23.5262 4.77709C23.9169 4.38652 24.4467 4.16711 24.9991 4.16711C25.5515 4.16711 26.0813 4.38652 26.472 4.77709ZM27.0824 29.1667C27.635 29.1667 28.1649 29.3862 28.5556 29.7769C28.9463 30.1676 29.1658 30.6975 29.1658 31.25V45.8333H20.8324V31.25C20.8325 30.7397 21.0198 30.2472 21.3589 29.8659C21.698 29.4846 22.1652 29.241 22.672 29.1813L22.9158 29.1667H27.0824Z" fill="#EAE9E7"/>
-          </svg>
-        </span>
-        <span class="mobile-footer-label">Inicio</span>
-      </a>
       <a href="map.html" class="mobile-footer-link">
         <span class="mobile-footer-icon" aria-hidden="true">
           <svg viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
