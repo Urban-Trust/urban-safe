@@ -8,12 +8,12 @@ body {
   background-color: #ccd1d1;
   color: #2D3748;
   line-height: 1.5;
-  padding-top: 64px;
+  padding-top: 88px;
 }
 
 .container {
   width: 95%;
-  max-width: auto;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -33,6 +33,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 0;
+  max-width: 95%;
+  margin: 0 auto;
 }
 
 .brand-wrap {
@@ -49,6 +51,23 @@ body {
   color: #2D3748;
   font-weight: 700;
   cursor: pointer;
+  gap: 8px;
+}
+
+.brand-logo-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
 }
 
 .brand-logo {
@@ -235,7 +254,7 @@ body {
 .mapa {
   position: relative;
   width: 100%;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 88px);
   overflow: hidden;
 }
 
@@ -356,7 +375,7 @@ body {
 
 .mapa-controles {
   position: absolute;
-  top: 42px;
+  top: 25px;
   left: 20px;
   display: flex;
   align-items: center;
@@ -539,6 +558,35 @@ body {
 .icono-filtro svg{
   width: 20px;                 
   height: 20px;
+}
+
+/* --- Estilo de la lista de autocompletado --- */
+.suggestions-list {
+  position: absolute;
+  top: 55px; /* ajusta si está muy abajo o arriba */
+  left: 0;
+  width: 100%;
+  background: #ccc;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.suggestions-list li {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.suggestions-list li:hover {
+  background-color: #f0f0f0;
 }
 
 /* BOTÓN DE ALERTA (Flotante en el mapa) */
@@ -1127,7 +1175,7 @@ input.error {
 
 @media (max-width: 768px) {
   .mapa-controles {
-    top: 28px;
+    top: 30px;
     left: 12px;
     right: 12px;
     width: calc(100% - 24px);
@@ -1259,12 +1307,20 @@ input.error {
 
 /* Media Queries para Móvil */
 @media (max-width: 768px) {
-  body { padding-top: 60px; }
-  .arrow-icon, .menu, .footer-inner { display: none; }
-  .hamburger-btn, .mobile-footer-nav { display: flex; }
-  .user-menu { left: auto; right: 0; width: 88vw; max-width: 380px; height: calc(100vh - 86px); padding: 16px 16px 96px; }
+  body { padding-top: 60px; padding-bottom: 90px; }
+  .container { padding: 0 16px; width: 100%; box-sizing: border-box; }
+  .nav-inner { padding: 12px 0; max-width: 95%; }
+  .arrow-icon { display: none; }
+  .menu { display: none; position: fixed; top: 64px; right: 12px; flex-direction: column; gap: 10px; background: #EAE9E7; padding: 12px; border-radius: 12px; box-shadow: 0 12px 20px rgba(0,0,0,0.18); z-index: 1001; }
+  .menu.menu-open { display: flex; }
+  .login-link { padding: 8px 12px; background: #0C132D; color: #EAE9E7; border-radius: 18px; font-weight: 600; font-size: 13px; }
+  .hamburger-btn { display: inline-flex; }
+  .user-menu { left: auto; right: 8px; width: 88vw; max-width: 380px; height: calc(100vh - 86px); padding: 16px 16px 96px; overflow-y: auto; }
+  .user-menu > .menu-item:last-child { align-self: stretch; margin-bottom: 8px; }
+  .footer-inner { display: none; }
+  .mobile-footer-nav { display: flex; }
   
-  .mapa-controles { top: 18px; left: 12px; right: 12px; flex-direction: column; align-items: stretch; gap: 8px; }
+  .mapa-controles { top: 30px; left: 12px; right: 12px; flex-direction: column; align-items: stretch; gap: 8px; }
   .busqueda { width: 100%; max-width: none; padding: 10px 12px; }
   .filters-panel { width: calc(100vw - 32px); left: 0; right: 0; margin: 0 auto; }
   
@@ -1277,16 +1333,6 @@ input.error {
 }
 
 @media (max-width: 768px) {
-
-  /* 1. AJUSTE DE CONTROLES DEL MAPA (BUSCADOR) */
-  .mapa-controles {
-    top: 15px;
-    left: 10px;
-    right: 10px;
-    width: auto;
-    flex-direction: row; /* Mantiene buscador y filtro en línea */
-  }
-
   .busqueda {
     width: 100%; /* Ocupa todo el espacio disponible */
     max-width: none;
@@ -1465,3 +1511,16 @@ input.error {
     right: 6px;
   }
 }
+/* Forzar estado móvil vía clase (coincide con reports) */
+.is-mobile body { padding-top: 60px; padding-bottom: 90px; margin: 0; }
+.is-mobile .container { padding: 0 16px; width: 100%; box-sizing: border-box; }
+.is-mobile .nav-inner { padding: 12px 0; max-width: 95%; }
+.is-mobile .arrow-icon { display: none; }
+.is-mobile .menu { display: none; position: fixed; top: 64px; right: 12px; flex-direction: column; gap: 10px; background: #EAE9E7; padding: 12px; border-radius: 12px; box-shadow: 0 12px 20px rgba(0,0,0,0.18); z-index: 1001; }
+.is-mobile .menu.menu-open { display: flex; }
+.is-mobile .login-link { padding: 8px 12px; background: #0C132D; color: #EAE9E7; border-radius: 18px; font-weight: 600; font-size: 13px; }
+.is-mobile .hamburger-btn { display: inline-flex; }
+.is-mobile .user-menu { left: auto; right: 8px; width: 88vw; max-width: 380px; height: calc(100vh - 86px); padding: 16px 16px 96px; overflow-y: auto; }
+.is-mobile .user-menu > .menu-item:last-child { align-self: stretch; margin-bottom: 8px; }
+.is-mobile .footer-inner { display: none; }
+.is-mobile .mobile-footer-nav { display: flex; }
