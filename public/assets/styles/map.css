@@ -338,7 +338,7 @@ body {
 /* Contenedor de controles arriba a la izquierda */
 .mapa-controles {
   position: absolute;
-  top: 30px;
+  top: 42px;
   left: 20px;
   display: flex;
   align-items: center;
@@ -426,7 +426,9 @@ body {
 
 /* Cuadro de búsqueda */
 .busqueda {
+  position: relative;
   width: 450px;
+  max-width: calc(100vw - 40px);
   display: flex;
   align-items: center;
   background-color: #EAE9E7;
@@ -443,6 +445,11 @@ body {
   flex: 1;
   background: transparent;
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.icono-busqueda,
+.icono-filtro {
+  flex-shrink: 0;
 }
 
 /* Mensajes de error del formulario */
@@ -1033,7 +1040,7 @@ input.error {
 /* --- Estilo de la lista de autocompletado --- */
 .suggestions-list {
   position: absolute;
-  top: 55px; /* ajusta si está muy abajo o arriba */
+  top: calc(100% + 6px);
   left: 0;
   width: 100%;
   background: #ccc;
@@ -1061,6 +1068,32 @@ input.error {
 
 .oculto {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .mapa-controles {
+    top: 28px;
+    left: 12px;
+    right: 12px;
+    width: calc(100% - 24px);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .busqueda {
+    width: 100%;
+    padding: 10px 12px;
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
+  }
+
+  .busqueda input {
+    font-size: 15px;
+  }
+
+  .suggestions-list {
+    max-height: 50vh;
+  }
 }
 
 /* ===================== */
