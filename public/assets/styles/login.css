@@ -339,3 +339,45 @@
   max-width: 420px;
   margin: 0 auto;
 }
+
+/* Ajustes responsive para conservar el look del desktop en mobile */
+@media (max-width: 768px) {
+  /* Cancelar el padding extra que agrega styles.css en la vista móvil */
+  .login-page,
+  .is-mobile .login-page {
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: 100vh;
+  }
+
+  .login-main {
+    padding: 0 16px 32px;
+  }
+
+  .login-top-image {
+    height: 240px;
+    background-image:
+      linear-gradient(to bottom, rgba(25, 36, 53, 0) 0%, rgba(25, 36, 53, 0.6) 60%, rgba(25, 36, 53, 1) 100%),
+      url("../images/login-background.png");
+  }
+
+  .login-logo-badge {
+    margin-top: -64px;
+  }
+
+  /* Ocultar footer en la vista de login móvil */
+  .login-page .footer,
+  .login-page .mobile-footer-nav {
+    display: none;
+  }
+
+  .social-buttons {
+    margin: 80px 0;
+  }
+}
+
+.reset-section {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
