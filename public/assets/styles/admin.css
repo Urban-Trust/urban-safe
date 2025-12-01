@@ -852,6 +852,4 @@ body {
     body {
         padding-bottom: 90px;
     }
-    .footer-inner { display: none; }
-    .mobile-footer-nav { display: flex; }
 }
