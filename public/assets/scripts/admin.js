@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const openButtons = document.querySelectorAll('.trend-more-btn');
   const trendCard = document.querySelector('.trend-card');
   const backBtn = document.querySelector('.btn-back-trend');
+  const filterPanel = document.querySelector('#trend-filters-panel');
+  const filterBackdrop = document.querySelector('.trend-filters-backdrop');
+  const filterToggleBtn = document.querySelector('.btn-filters-toggle');
+  const mobileFiltersMq = window.matchMedia
+    ? window.matchMedia('(max-width: 900px)')
+    : { matches: false };
 
   function openTrend(ev) {
     if (ev) ev.preventDefault();
@@ -17,6 +23,82 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof trendView.scrollIntoView === 'function') {
       trendView.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    closeMobileFilters();
+  }
+
+  function closeMobileFilters() {
+    if (filterPanel) {
+      filterPanel.classList.remove('is-open');
+      filterPanel.setAttribute('aria-hidden', mobileFiltersMq.matches ? 'true' : 'false');
+    }
+    if (filterToggleBtn) {
+      filterToggleBtn.setAttribute('aria-expanded', 'false');
+    }
+    if (filterBackdrop) {
+      filterBackdrop.classList.remove('is-active');
+    }
+    document.body.classList.remove('filters-open');
+  }
+
+  function openMobileFilters() {
+    if (!filterPanel || !mobileFiltersMq.matches) return;
+    filterPanel.classList.add('is-open');
+    filterPanel.setAttribute('aria-hidden', 'false');
+    if (filterToggleBtn) {
+      filterToggleBtn.setAttribute('aria-expanded', 'true');
+    }
+    if (filterBackdrop) {
+      filterBackdrop.classList.add('is-active');
+    }
+    document.body.classList.add('filters-open');
+  }
+
+  function toggleMobileFilters() {
+    if (!filterPanel) return;
+    if (!mobileFiltersMq.matches) {
+      closeMobileFilters();
+      return;
+    }
+    if (filterPanel.classList.contains('is-open')) {
+      closeMobileFilters();
+    } else {
+      openMobileFilters();
+    }
+  }
+
+  function syncFiltersForViewport() {
+    if (!filterPanel) return;
+    if (mobileFiltersMq.matches) {
+      if (!filterPanel.classList.contains('is-open')) {
+        filterPanel.setAttribute('aria-hidden', 'true');
+      }
+    } else {
+      filterPanel.classList.remove('is-open');
+      filterPanel.setAttribute('aria-hidden', 'false');
+      if (filterBackdrop) {
+        filterBackdrop.classList.remove('is-active');
+      }
+      if (filterToggleBtn) {
+        filterToggleBtn.setAttribute('aria-expanded', 'false');
+      }
+      document.body.classList.remove('filters-open');
+    }
+  }
+
+  syncFiltersForViewport();
+  if (mobileFiltersMq && mobileFiltersMq.addEventListener) {
+    mobileFiltersMq.addEventListener('change', syncFiltersForViewport);
+  } else if (mobileFiltersMq && mobileFiltersMq.addListener) {
+    mobileFiltersMq.addListener(syncFiltersForViewport);
+  }
+  if (filterToggleBtn) {
+    filterToggleBtn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      toggleMobileFilters();
+    });
+  }
+  if (filterBackdrop) {
+    filterBackdrop.addEventListener('click', closeMobileFilters);
   }
 
   // Aseguramos compatibilidad aunque NodeList no tenga forEach
@@ -39,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (backBtn) {
     backBtn.addEventListener('click', () => {
       if (!trendView || !dashboard) return;
+      closeMobileFilters();
       trendView.classList.add('oculto');
       trendView.setAttribute('aria-hidden', 'true');
       dashboard.classList.remove('oculto');
