@@ -111,6 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = users.find(u => u.id === id);
     if (!user) return;
     showRolePanel(user);
+    // On small screens bring the panel into view so the user can interact quickly
+    if (window.innerWidth <= 820) {
+      setTimeout(() => { rolePanel.scrollIntoView({behavior:'smooth'}); }, 120);
+    }
   }
 
   function showRolePanel(user){
