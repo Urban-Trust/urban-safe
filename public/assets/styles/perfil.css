@@ -421,7 +421,23 @@ main {
   }
 }
 
-
+.navbar {
+  background: #EAE9E7;
+  border-bottom: 1px solid #e2e8f0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  max-width: 95%;
+  margin: 0 auto;
+}
 
 
 @media (max-width: 640px) {
@@ -437,17 +453,17 @@ main {
     background: #EAE9E7;
     border-radius: 18px;
     padding: 30px;
-    max-width: 80%;
-    top: 100px;
+    max-width: 95%;
+    top: 40px;
     left: 20px;
-    margin: 100px auto 40px auto;
+    margin: 10px auto 40px auto;
     position: relative; /* IMPORTANTE */
   }
 
   .back-button {
     position: absolute;
     top: 160px;
-    left: 580px;
+    left: 95%;
   }
 
 
@@ -456,6 +472,70 @@ main {
 
 
 
+
+/* Forzar modo móvil cuando JS añade .is-mobile */
+.is-mobile body {
+  padding-top: 60px;
+  padding-bottom: 90px;
+}
+.is-mobile .arrow-icon { display: none; }
+.is-mobile .menu {
+  display: none;
+  position: fixed;
+  top: 64px;
+  right: 12px;
+  flex-direction: column;
+  gap: 10px;
+  background: #EAE9E7;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 12px 20px rgba(0,0,0,0.18);
+  z-index: 1001;
+}
+.is-mobile .menu.menu-open { display: flex; }
+.is-mobile .login-link {
+  padding: 8px 12px;
+  background: #0C132D;
+  color: #EAE9E7;
+  border-radius: 18px;
+  font-weight: 600;
+  font-size: 13px;
+}
+.is-mobile .hamburger-btn { display: inline-flex; }
+.is-mobile .user-menu {
+  left: auto;
+  right: 0;
+  width: 88vw;
+  max-width: 380px;
+  height: calc(100vh - 86px);
+  padding: 16px 16px 96px;
+  overflow-y: auto;
+}
+.is-mobile .user-menu > .menu-item:last-child {
+  align-self: stretch;
+  margin-bottom: 8px;
+}
+.is-mobile .incidente-card { flex-direction: column; }
+.is-mobile .incidente-imagen {
+  width: 100%;
+  max-width: 100%;
+  height: 200px;
+}
+.is-mobile .acciones-flotantes {
+  left: 12px;
+  right: 12px;
+  bottom: 96px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+.is-mobile .grupo-agrupar { align-items: stretch; }
+.is-mobile .boton-accion {
+  width: 100%;
+  text-align: center;
+}
+.is-mobile .footer-inner { display: none; }
+.is-mobile .mobile-footer-nav { display: flex; }
 
 
 
