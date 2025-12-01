@@ -1207,7 +1207,7 @@ input.error {
 .propiedad-info {
   position: fixed;
   inset: 0;
-  background: rgba(12, 19, 45, 0.9);
+  background: rgba(8, 14, 34, 0.9);
   color: #EAE9E7;
   z-index: 2000;
   display: flex;
@@ -1257,11 +1257,13 @@ input.error {
 .prop-badge { position: absolute; left: 12px; bottom: 12px; background: rgba(0,0,0,0.6); color: #fff; font-size: 12px; padding: 4px 8px; border-radius: 6px; }
 .prop-card-body { flex: 2 1 360px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
 .prop-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.prop-mini-user { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #0C132D; white-space: nowrap; }
+.prop-mini-user span { display: inline-block; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .prop-mini-avatar { width: 36px; height: 36px; background: #cbd5e1; border-radius: 50%; }
 .prop-mini-avatar--green { background: #16a34a; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 .prop-more { background: #2F7372; color: #fff; padding: 8px 12px; border-radius: 6px; font-weight: 600; text-decoration: none;}
 .boton-historial-prop {
-    background: #2F7372; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600;
+    background: #2F7372; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 .sidebar {
@@ -1286,7 +1288,7 @@ input.error {
 .sidebar-item { margin-bottom: 20px; }
 .sidebar-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
 .btn-vermas {
-    background-color: #2F7372; color: white; padding: 6px 14px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; float: right;
+    background-color: #2F7372; color: white; padding: 6px 14px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; float: right; font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 /* Footer */
@@ -1438,21 +1440,24 @@ input.error {
 
   /* Sidebar de historial en m�vil */
   #sidebar-historial {
-    top: 82px;
+    top: 78px;
     left: 12px;
     right: 12px;
+    bottom: 90px;
     width: auto;
     height: auto;
-    max-height: calc(100vh - 170px);
-    padding: 14px;
+    max-height: none;
+    padding: 14px 14px 18px;
     border-radius: 12px;
+    overflow-y: auto;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.22);
   }
 
   #sidebar-historial .sidebar-item {
     display: grid;
     grid-template-columns: 96px 1fr;
     gap: 10px;
-    align-items: start;
+    align-items: center;
   }
 
   #sidebar-historial .sidebar-img {
@@ -1500,8 +1505,9 @@ input.error {
 @media (max-width: 480px) {
   #sidebar-historial {
     top: 70px;
-    max-height: calc(100vh - 150px);
-    padding: 12px;
+    bottom: 84px;
+    max-height: none;
+    padding: 12px 12px 16px;
   }
 
   #sidebar-historial .sidebar-item {
@@ -1527,7 +1533,7 @@ input.error {
 .is-mobile .menu.menu-open { display: flex; }
 .is-mobile .login-link { padding: 8px 12px; background: #0C132D; color: #EAE9E7; border-radius: 18px; font-weight: 600; font-size: 13px; }
 .is-mobile .hamburger-btn { display: inline-flex; }
-.is-mobile .user-menu { left: auto; right: 8px; width: 88vw; max-width: 380px; height: calc(100vh - 86px); padding: 16px 16px 96px; overflow-y: auto; }
+.is-mobile .user-menu { left: auto; right: 0; width: 88vw; max-width: 380px; height: calc(100vh - 86px); padding: 16px 16px 96px; overflow-y: auto; }
 .is-mobile .user-menu > .menu-item:last-child { align-self: stretch; margin-bottom: 8px; }
 .is-mobile .footer-inner { display: none; }
 .is-mobile .mobile-footer-nav { display: flex; }
