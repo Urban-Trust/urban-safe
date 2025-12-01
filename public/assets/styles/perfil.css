@@ -206,6 +206,8 @@ main {
 
 
 
+
+
 /*PLANTILLA HEADER*/
 .navbar {
   background: #EAE9E7;
@@ -368,6 +370,11 @@ main {
   opacity: 0.8;
 }
 
+
+
+
+
+/* FOOTER MÓVIL (oculto por defecto en desktop) */
 .mobile-footer-nav {
   display: none;
   position: fixed;
@@ -382,6 +389,7 @@ main {
   align-items: center;
 }
 
+/* ENLACES DEL FOOTER MÓVIL */
 .mobile-footer-link {
   display: flex;
   flex-direction: column;
@@ -402,3 +410,63 @@ main {
   height: 32px;
   display: block;
 }
+
+
+
+
+@media (min-width: 640px) and (max-width: 1574px) {
+  .back-button {
+    left: auto;
+    right: 80px;
+  }
+}
+
+
+
+
+@media (max-width: 640px) {
+  .mobile-footer-nav {
+    display: flex;
+  }
+
+  .footer .footer-inner {
+    display: none;
+  }
+
+  .profile-wrapper {
+    background: #EAE9E7;
+    border-radius: 18px;
+    padding: 30px;
+    max-width: 80%;
+    top: 100px;
+    left: 20px;
+    margin: 100px auto 40px auto;
+    position: relative; /* IMPORTANTE */
+  }
+
+  .back-button {
+    position: absolute;
+    top: 160px;
+    left: 580px;
+  }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
