@@ -599,7 +599,7 @@ body {
 .btn-simple:hover { opacity: .9; }
 .trend-more-content { margin-top: 10px; font-size: 14px; color: #1E293B; }
 
-@media (max-width: 900px) { .trend-layout { grid-template-columns: 1fr; } }
+/*@media (max-width: 900px) { .trend-layout { grid-template-columns: 1fr; } }
 
 
 /* Responsive */

@@ -111,9 +111,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = users.find(u => u.id === id);
     if (!user) return;
     showRolePanel(user);
+
     // On small screens bring the panel into view so the user can interact quickly
     if (window.innerWidth <= 820) {
-      setTimeout(() => { rolePanel.scrollIntoView({behavior:'smooth'}); }, 120);
+      setTimeout(() => {
+        rolePanel.scrollIntoView({ behavior: 'smooth' });
+      }, 120);
+
+      // Extra scroll to bottom in case it's stuck
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      }, 300);
     }
   }
 
@@ -250,10 +258,144 @@ document.addEventListener('DOMContentLoaded', () => {
   hideRolePanel();
 
   // OPTIONAL: show message on addBtn click (you can hook adding logic later)
-  document.getElementById('showAddNeighborsBtn').addEventListener('click', () => {
-    addMsg.textContent = 'Función agregar pendiente (implementa tu flujo).';
-    setTimeout(()=> addMsg.textContent = '', 2200);
+  // -----------------------------
+  // AGREGAR VECINO
+  // -----------------------------
+  const addNeighborModal = document.getElementById("addNeighborModal");
+  const newNeighborName = document.getElementById("newNeighborName");
+  const newNeighborAvatarType = document.getElementById("newNeighborAvatarType");
+
+  const avatarInitialForm = document.getElementById("avatarInitialForm");
+  const avatarImageForm = document.getElementById("avatarImageForm");
+
+  const newNeighborInitial = document.getElementById("newNeighborInitial");
+  const newNeighborColor = document.getElementById("newNeighborColor");
+  const newNeighborImageUrl = document.getElementById("newNeighborImageUrl");
+
+  const cancelAddNeighborBtn = document.getElementById("cancelAddNeighborBtn");
+  const confirmAddNeighborBtn = document.getElementById("confirmAddNeighborBtn");
+
+  const newNeighborImageFile = document.getElementById("newNeighborImageFile");
+  const newNeighborImagePreview = document.getElementById("newNeighborImagePreview");
+
+  newNeighborImageFile.addEventListener("change", () => {
+    const file = newNeighborImageFile.files[0];
+    if (!file) {
+      newNeighborImagePreview.innerHTML = '<span style="color:#666;">Sin imagen</span>';
+      newNeighborImagePreview.style.backgroundImage = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      newNeighborImagePreview.innerHTML = "";
+      newNeighborImagePreview.style.backgroundImage = `url('${reader.result}')`;
+      newNeighborImagePreview.style.backgroundSize = "cover";
+      newNeighborImagePreview.style.backgroundPosition = "center";
+    };
+    reader.readAsDataURL(file);
   });
+
+
+  // Abrir modal
+  document.getElementById("showAddNeighborsBtn").addEventListener("click", () => {
+    addNeighborModal.classList.remove("hidden");
+    addNeighborModal.setAttribute("aria-hidden", "false");
+  });
+
+  // Cambiar formulario según avatar seleccionado
+  newNeighborAvatarType.addEventListener("change", () => {
+    if (newNeighborAvatarType.value === "initial") {
+      avatarInitialForm.classList.remove("hidden");
+      avatarImageForm.classList.add("hidden");
+    } else {
+      avatarInitialForm.classList.add("hidden");
+      avatarImageForm.classList.remove("hidden");
+    }
+  });
+
+  // Cerrar modal
+  cancelAddNeighborBtn.addEventListener("click", () => {
+    addNeighborModal.classList.add("hidden");
+    addNeighborModal.setAttribute("aria-hidden", "true");
+  });
+
+  // Confirmar agregar vecino
+  confirmAddNeighborBtn.addEventListener("click", () => {
+    const name = newNeighborName.value.trim();
+    if (!name) {
+      alert("Ingresa un nombre.");
+      return;
+    }
+
+    // Crear nuevo objeto
+    const newUser = {
+      id: users.length ? users[users.length - 1].id + 1 : 1,
+      name,
+      roles: ["Vecino"],
+    };
+
+    if (newNeighborAvatarType.value === "initial") {
+      newUser.avatarType = "initial";
+      newUser.initial = newNeighborInitial.value.trim().toUpperCase() || name[0].toUpperCase();
+      newUser.color = newNeighborColor.value;
+    } else {
+      newUser.avatarType = "img";
+
+      // Si el usuario subió un archivo, lo convertimos a base64
+      const file = newNeighborImageFile.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          newUser.avatar = reader.result; // base64 final
+          renderMembers();
+        };
+        reader.readAsDataURL(file);
+      } else {
+        newUser.avatar = "assets/images/default.png";
+        renderMembers();
+      }
+
+      // Mostrar mensaje y cerrar modal aunque la lectura continúe
+    }
+
+
+    // Añadir al array
+    users.push(newUser);
+
+    // Render UI
+    renderMembers();
+
+    addMsg.textContent = "Vecino agregado.";
+    setTimeout(() => (addMsg.textContent = ""), 2200);
+
+    // Cerrar modal
+    addNeighborModal.classList.add("hidden");
+    addNeighborModal.setAttribute("aria-hidden", "true");
+
+    // Limpiar formulario
+    newNeighborName.value = "";
+    newNeighborInitial.value = "";
+    newNeighborImageUrl.value = "";
+  });
+
+  // Cerrar modal clicando fuera
+  addNeighborModal.addEventListener("click", (e) => {
+    if (e.target === addNeighborModal) {
+      addNeighborModal.classList.add("hidden");
+      addNeighborModal.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  // Cerrar modal con ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !addNeighborModal.classList.contains("hidden")) {
+      addNeighborModal.classList.add("hidden");
+      addNeighborModal.setAttribute("aria-hidden", "true");
+    }
+  });
+
 
   // Accessibility: close modal on ESC
   document.addEventListener('keydown', (e) => {
