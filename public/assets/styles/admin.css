@@ -1,4 +1,9 @@
 /* General Body Styles */
+:root {
+    --nav-height: 88px;
+    --drawer-margin: 12px;
+}
+
 body {
     margin: 0;
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
@@ -87,6 +92,7 @@ body {
 /* Brand / dropdown (copiado de reports.css) */
 .brand-logo { height: 56px; width: auto; display: block; }
 .brand-wrap { position: relative; }
+.brand-logo-link { display: inline-flex; align-items: center; }
 .menu-toggle { display: none; }
 .brand { cursor: pointer; display: flex; align-items: center; text-decoration: none; color: #2D3748; font-weight: 700;}
 .arrow-icon { display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; transition: transform 0.2s ease;}
@@ -123,6 +129,40 @@ body {
   mask-position: center;
   mask-size: contain;
 }
+.hamburger-btn {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: #1C2542;
+    color: #EAE9E7;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-left: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+.hamburger-lines {
+    position: relative;
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 3px;
+}
+.hamburger-lines::before,
+.hamburger-lines::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 3px;
+}
+.hamburger-lines::before { top: -6px; }
+.hamburger-lines::after { top: 6px; }
 /* Main Content */
 .main-content {
     padding: 48px 0;
@@ -582,6 +622,8 @@ body {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
+
+    .trend-head-left { text-align: center; }
 }
 /* Normaliza box-sizing para evitar descuadres */
 * { box-sizing: border-box; }
@@ -601,3 +643,213 @@ body {
 
 /* Asegura que el panel de filtros de tendencia no se estire verticalmente con el contenido de la derecha */
 .trend-layout .trend-filters { align-self: flex-start; }
+.trend-head { position: relative; }
+.trend-head-left { display: flex; flex-direction: column; gap: 2px; }
+.trend-head-actions { display: flex; align-items: center; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.trend-head-actions .btn-simple { white-space: nowrap; }
+.btn-filters-toggle { display: none; }
+.trend-filters-backdrop { display: none; }
+
+/* Footer móvil */
+.mobile-footer-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0C132D;
+    border-top: 1px solid #1F2C4F;
+    padding: 10px 16px 14px;
+    z-index: 1002;
+    justify-content: space-around;
+    align-items: center;
+}
+.mobile-footer-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: #EAE9E7;
+    font-weight: 600;
+    font-size: 12px;
+}
+.mobile-footer-link:hover { opacity: 0.92; }
+.mobile-footer-icon svg {
+    width: 32px;
+    height: 32px;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+        padding-bottom: 90px;
+    }
+    .arrow-icon { display: none; }
+    .menu {
+        display: none;
+        position: fixed;
+        top: 64px;
+        right: 12px;
+        flex-direction: column;
+        gap: 10px;
+        background: #EAE9E7;
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 12px 20px rgba(0,0,0,0.18);
+        z-index: 1001;
+    }
+    .menu.menu-open { display: flex; }
+    .menu-toggle:checked ~ .menu { display: flex; }
+    .login-link {
+        padding: 8px 12px;
+        background: #0C132D;
+        color: #EAE9E7;
+        border-radius: 18px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+    .hamburger-btn { display: inline-flex; }
+    .user-menu {
+        left: auto;
+        right: 0;
+        width: 88vw;
+        max-width: 380px;
+        height: calc(100vh - 86px);
+        padding: 16px 16px 96px;
+        overflow-y: auto;
+    }
+    .user-menu > .menu-item:last-child {
+        align-self: stretch;
+        margin-bottom: 8px;
+    }
+    .footer-inner { display: none; }
+    .mobile-footer-nav { display: flex; }
+}
+
+@media (min-width: 901px) {
+    .trend-head { padding-top: 0; text-align: left; }
+    .trend-head-row { display: flex; align-items: center; justify-content: space-between; }
+    .trend-head-left { text-align: left; }
+    .trend-head-actions { display: flex; align-items: center; gap: 10px; justify-content: flex-end; margin-left: auto; }
+    .btn-back-trend { position: absolute; margin-left: 8px; height: auto; right: 0; }
+}
+
+@media (max-width: 900px) {
+    .trend-head { 
+        position: relative; 
+        text-align: center; 
+        padding-top: 60px; 
+        margin-bottom: 24px;
+    }
+
+    .trend-head-row { 
+        flex-direction: column; 
+        align-items: center; 
+        gap: 8px; 
+    }
+
+    .trend-head-left { 
+        padding-right: 0; 
+        text-align: center; 
+        width: 100%;
+    }
+
+    /* Ajuste para que el título no sea demasiado ancho en móviles muy pequeños */
+    .trend-head-left h2 {
+        font-size: 20px;
+        padding: 0 10px;
+    }
+
+    .trend-head-actions {
+        width: 100%;
+        display: block;
+        position: static;
+    }
+
+    /* --- Botón Volver (Derecha) --- */
+    .btn-back-trend {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 2;
+        font-size: 13px;
+        padding: 8px 12px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    /* --- Botón Filtros (Izquierda) --- */
+    .btn-filters-toggle {
+        display: inline-flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        margin: 0;
+        font-size: 13px;
+        padding: 8px 12px;
+        height: 38px;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+    }
+
+    /* Panel de filtros lateral (sin cambios mayores, solo asegurar el top) */
+    .trend-layout .trend-filters {
+        position: fixed;
+        top: 88px; 
+        left: 0;
+        right: auto;
+        bottom: 0;
+        width: 85%; /* Un poco más ancho para mejor lectura */
+        max-width: 320px;
+        height: calc(100vh - 88px);
+        overflow-y: auto;
+        box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+        transform: translateX(-110%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1), opacity .3s ease;
+        z-index: 1002; /* Superior al contenido, inferior al header si es necesario */
+        background: #738B8B;
+        border-radius: 0 12px 12px 0; /* Bordes redondeados solo a la derecha */
+        margin: 0;
+        border: none;
+    }
+
+    .trend-layout .trend-filters.is-open {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Backdrop oscuro */
+    .trend-filters-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        top: 88px; /* Empezar debajo del navbar */
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .3s ease;
+        z-index: 1001;
+        backdrop-filter: blur(2px); /* Efecto moderno */
+    }
+
+    .trend-filters-backdrop.is-active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    body.filters-open { overflow: hidden; }
+
+    /* Ajustes footer/header en móvil */
+    body {
+        padding-bottom: 90px;
+    }
+}

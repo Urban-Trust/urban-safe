@@ -142,8 +142,8 @@
 }
 
 .modal-footer button img {
-  width: 20px;
-  height: 20px;
+  width: var(--icon-size);
+  height: var(--icon-size);
   display: inline-block;
   object-fit: contain;
 }
@@ -308,8 +308,8 @@
 }
 
 .avatar-badge {
-  width: 44px;
-  height: 44px;
+  width: clamp(40px, 6vw, 44px);
+  height: clamp(40px, 6vw, 44px);
   border-radius: 50%;
   background: white;
   border: 2px solid #2F7372;

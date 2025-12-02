@@ -1,21 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const incidentItems = Array.from(document.querySelectorAll('.incident-item'));
-  const placeholder = document.getElementById('incidentDetailPlaceholder');
-  const detailPanelWrapper = document.getElementById('incidentDetailPanelWrapper');
-  const detailPanel = document.getElementById('incidentDetailPanel');
-  const detailBody = document.getElementById('incidentDetailBody');
-  const detailTitle = document.getElementById('detailTitle');
-  const detailId = document.getElementById('detailId');
-  const detailStatus = document.getElementById('detailStatus');
-  const detailDatetime = document.getElementById('detailDatetime');
-  const detailLocation = document.getElementById('detailLocation');
-  const detailReporter = document.getElementById('detailReporter');
-  const detailContact = document.getElementById('detailContact');
-  const detailDescription = document.getElementById('detailDescription');
-  const detailMap = document.getElementById('detailMap');
-  const detailIcon = document.getElementById('detailIcon');
-  const statusDot = document.getElementById('detailStatusDot');
-  const closeBtn = document.getElementById('closeIncidentBtn');
+  const detailTemplate = document.getElementById('incidentDetailTemplate');
   const searchInput = document.getElementById('incidentSearch');
   const noResultsMsg = document.getElementById('incidentNoResults');
   const suggestionBox = document.getElementById('incidentSuggestions');
@@ -36,11 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const reportModal = document.getElementById('reportModal');
   const reportAuthoritiesBtn = document.getElementById('reportAuthoritiesBtn');
   const reportModalClose = document.getElementById('reportModalClose');
+  const reportConfirm = document.getElementById('reportConfirm');
+  const reportConfirmMessage = document.getElementById('reportConfirmMessage');
+  const reportConfirmClose = document.getElementById('reportConfirmClose');
 
-  let currentSuggestions = [];
-  let highlightedSuggestion = -1;
-
-  if (!incidentItems.length || !detailBody || !detailPanel) return;
+  if (!incidentItems.length) return;
 
   const statusSlug = (value = '') =>
     value
@@ -50,23 +35,42 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
 
-  const updateIcon = (item) => {
-    detailIcon.innerHTML = '';
+  let currentSuggestions = [];
+  let highlightedSuggestion = -1;
+  let openItem = null;
+
+  const incidentMeta = incidentItems.map(item => {
+    const title = item.dataset.title || item.querySelector('.incident-title')?.textContent || '';
+    const location = item.dataset.location || item.querySelector('.incident-location')?.textContent || '';
+    const time = item.dataset.datetime || item.querySelector('.incident-time')?.textContent || '';
+    const searchText = `${title} ${location} ${time}`.toLowerCase();
+    item.dataset.searchText = searchText;
+    return { element: item, title, location, time, searchText };
+  });
+
+  const buildDetailIcon = (wrapper, item) => {
+    if (!wrapper) return;
+    wrapper.innerHTML = '';
     const type = item.dataset.iconType || 'material';
     if (type === 'image') {
       const img = document.createElement('img');
       img.src = item.dataset.icon || 'assets/images/armafuego.png';
       img.alt = 'Icono del incidente';
-      detailIcon.appendChild(img);
+      wrapper.appendChild(img);
     } else {
       const span = document.createElement('span');
       span.className = 'material-icons';
       span.textContent = item.dataset.icon || 'report';
-      detailIcon.appendChild(span);
+      wrapper.appendChild(span);
     }
   };
 
-  const updatePanel = (item) => {
+  const buildDetail = (item) => {
+    if (!detailTemplate?.content) return null;
+    const fragment = detailTemplate.content.cloneNode(true);
+    const detail = fragment.querySelector('.incident-detail-inline');
+    if (!detail) return null;
+
     const title = item.dataset.title || item.querySelector('.incident-title')?.textContent?.trim() || '';
     const incidentId = item.dataset.incidentId || 'N/A';
     const statusText = item.dataset.status || 'Sin estado';
@@ -78,56 +82,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const mapSrc = item.dataset.map || 'assets/images/mapabg.png';
     const slug = item.dataset.statusKey || statusSlug(statusText);
 
-    updateIcon(item);
-    detailTitle.textContent = title;
-    detailId.textContent = `ID del incidente: ${incidentId}`;
-    detailStatus.textContent = statusText;
-    detailDatetime.textContent = datetime;
-    detailLocation.textContent = location;
-    detailReporter.textContent = reporter;
-    detailContact.textContent = contact;
-    detailDescription.textContent = description;
-    detailMap.src = mapSrc;
-    detailMap.alt = `Mapa del incidente ${title}`;
+    buildDetailIcon(detail.querySelector('.detail-icon'), item);
 
+    const titleEl = detail.querySelector('.detail-title');
+    if (titleEl) titleEl.textContent = title;
+
+    const idEl = detail.querySelector('.detail-id');
+    if (idEl) idEl.textContent = `ID del incidente: ${incidentId}`;
+
+    const statusLabel = detail.querySelector('.detail-status-label');
+    if (statusLabel) statusLabel.textContent = statusText;
+
+    const datetimeEl = detail.querySelector('.detail-datetime');
+    if (datetimeEl) datetimeEl.textContent = datetime;
+
+    const locationEl = detail.querySelector('.detail-location');
+    if (locationEl) locationEl.textContent = location;
+
+    const reporterEl = detail.querySelector('.detail-reporter');
+    if (reporterEl) reporterEl.textContent = reporter;
+
+    const contactEl = detail.querySelector('.detail-contact');
+    if (contactEl) contactEl.textContent = contact;
+
+    const descriptionEl = detail.querySelector('.detail-description');
+    if (descriptionEl) descriptionEl.textContent = description;
+
+    const mapImage = detail.querySelector('.detail-map-image');
+    if (mapImage) {
+      mapImage.src = mapSrc;
+      mapImage.alt = `Mapa del incidente ${title}`;
+    }
+
+    const statusDot = detail.querySelector('.status-dot');
     if (statusDot) {
       statusDot.className = 'status-dot';
       if (slug) statusDot.classList.add(`status-${slug}`);
     }
 
-    placeholder?.classList.add('hidden');
-    detailBody.classList.remove('hidden');
-    detailPanelWrapper?.classList.add('visible');
-    detailPanel.classList.add('visible');
-    detailPanel.setAttribute('aria-hidden', 'false');
+    detail.addEventListener('click', (event) => event.stopPropagation());
+
+    detail.querySelectorAll('.detail-close-btn, .detail-close-secondary').forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        closeDetail(item);
+      });
+    });
+
+    const reportBtn = detail.querySelector('.detail-report-btn');
+    reportBtn?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      reportAuthoritiesBtn?.click();
+    });
+
+    return detail;
   };
 
-  const resetDetailPanel = () => {
-    detailPanelWrapper?.classList.remove('visible');
-    detailPanel.classList.remove('visible');
-    detailPanel.setAttribute('aria-hidden', 'true');
-    placeholder?.classList.remove('hidden');
-    detailBody.classList.add('hidden');
-    incidentItems.forEach(el => el.classList.remove('active'));
+  const closeDetail = (item = openItem) => {
+    if (!item) return;
+    const detail = item.querySelector('.incident-detail-inline');
+    if (detail) detail.remove();
+    item.classList.remove('active', 'has-detail');
+    item.removeAttribute('aria-expanded');
+    if (openItem === item) openItem = null;
   };
 
-  const selectIncident = (item) => {
+  const openDetail = (item) => {
     if (!item || item.style.display === 'none') return;
-    incidentItems.forEach(el => el.classList.remove('active'));
-    item.classList.add('active');
-    updatePanel(item);
+    if (openItem === item) {
+      closeDetail(item);
+      return;
+    }
+    closeDetail();
+    const detail = buildDetail(item);
+    if (!detail) return;
+    item.appendChild(detail);
+    item.classList.add('active', 'has-detail');
+    item.setAttribute('aria-expanded', 'true');
+    openItem = item;
   };
-
-  closeBtn?.addEventListener('click', resetDetailPanel);
-
-  const incidentMeta = incidentItems.map(item => {
-    const title = item.dataset.title || item.querySelector('.incident-title')?.textContent || '';
-    const location = item.dataset.location || item.querySelector('.incident-location')?.textContent || '';
-    const time = item.dataset.datetime || item.querySelector('.incident-time')?.textContent || '';
-    const searchText = `${title} ${location} ${time}`.toLowerCase();
-    item.dataset.searchText = searchText;
-    return { element: item, title, location, time, searchText };
-  });
 
   const hideSuggestions = () => {
     if (!suggestionBox) return;
@@ -152,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.value = meta.title;
     hideSuggestions();
     applyFilters();
-    selectIncident(meta.element);
+    openDetail(meta.element);
   };
 
   const updateSuggestions = (termRaw) => {
@@ -189,42 +222,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedType = filterType?.value || '';
     const selectedDate = filterDate?.value || '';
     const locationTerm = filterLocation?.value.trim().toLowerCase() || '';
-    let firstVisible = null;
     let visibleCount = 0;
 
     incidentItems.forEach(item => {
       const dataText = item.dataset.searchText || '';
-      let match =
+      const match =
         (!term || dataText.includes(term)) &&
         (!selectedType || (item.dataset.type || '').includes(selectedType)) &&
         (!selectedDate || (item.dataset.date || '').startsWith(selectedDate)) &&
         (!locationTerm || (item.dataset.location || '').toLowerCase().includes(locationTerm));
+
       item.style.display = match ? '' : 'none';
 
       if (match) {
         visibleCount += 1;
-        if (!firstVisible) firstVisible = item;
-      } else if (item.classList.contains('active')) {
-        item.classList.remove('active');
+      } else if (item === openItem) {
+        closeDetail(item);
       }
     });
 
     if (visibleCount === 0) {
       noResultsMsg?.classList.remove('hidden');
-      resetDetailPanel();
     } else {
       noResultsMsg?.classList.add('hidden');
-      const active = incidentItems.find(el => el.classList.contains('active') && el.style.display !== 'none');
-      if (!active && firstVisible) selectIncident(firstVisible);
     }
   };
 
   incidentItems.forEach((item) => {
-    item.addEventListener('click', () => selectIncident(item));
+    item.addEventListener('click', () => openDetail(item));
     item.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        selectIncident(item);
+        openDetail(item);
       }
     });
   });
@@ -289,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       const name = btn.dataset.authority || 'Autoridad local';
       closeReportModal();
-      reportConfirmMessage && (reportConfirmMessage.textContent = `Reporte enviado a ${name}`);
+      if (reportConfirmMessage) reportConfirmMessage.textContent = `Reporte enviado a ${name}`;
       reportConfirm?.classList.remove('hidden');
     });
   });
@@ -338,6 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyFilters();
     updateChartSummary();
   });
+
   filterReset?.addEventListener('click', () => {
     if (filterType) filterType.value = '';
     if (filterDate) filterDate.value = '';
@@ -345,10 +375,4 @@ document.addEventListener('DOMContentLoaded', () => {
     applyFilters();
     chartPanel?.classList.add('hidden');
   });
-
-  // auto select first item by default
-  selectIncident(incidentItems[0]);
 });
-  const reportConfirm = document.getElementById('reportConfirm');
-  const reportConfirmMessage = document.getElementById('reportConfirmMessage');
-  const reportConfirmClose = document.getElementById('reportConfirmClose');

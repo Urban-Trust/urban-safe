@@ -90,6 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
       currentChatId = id;
       renderMessagesForChat(id);
       clearUnread(id);
+      // On small screens, hide the sidebar after selecting a chat to focus the chat view
+      if (window.innerWidth <= 820 && sidebar) {
+        sidebar.classList.add('minimized');
+        const maximizeBtnLocal = document.querySelector('.sidebar-maximize');
+        if (maximizeBtnLocal) maximizeBtnLocal.classList.remove('hidden');
+      }
       saveState();
     });
     // click on image: open inline manager only for 'alamos', otherwise navigate to full gestion page
@@ -219,6 +225,22 @@ document.addEventListener('DOMContentLoaded', () => {
       maximizeBtn.classList.add('hidden');
     });
   }
+
+  // Adjust the initial state based on window size and react to resize events
+  function adjustSidebarForViewport() {
+    const isMobile = window.innerWidth <= 820;
+    if (isMobile) {
+      sidebar.classList.add('minimized');
+      const mBtn = document.querySelector('.sidebar-maximize');
+      if (mBtn) mBtn.classList.remove('hidden');
+    } else {
+      sidebar.classList.remove('minimized');
+      const mBtn = document.querySelector('.sidebar-maximize');
+      if (mBtn) mBtn.classList.add('hidden');
+    }
+  }
+  adjustSidebarForViewport();
+  window.addEventListener('resize', adjustSidebarForViewport);
 
   // --------- helper functions for unread badges & messages ---------
   function updateBadge(chatEl, count) {
