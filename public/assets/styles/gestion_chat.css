@@ -16,7 +16,7 @@
 
 /* general layout for sticky footer */
 html,body{height:100%;margin:0;font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
-body{display:flex;flex-direction:column;min-height:100vh;}
+body{display:flex;flex-direction:column;min-height:105vh;}
 main.page-content{flex:1;}
 
 /* panel container */
@@ -339,4 +339,38 @@ main.page-content{flex:1;}
   padding:10px 14px;
   border-radius:8px;
   cursor:pointer;
+}
+
+
+@media (max-width: 820px) {
+  .panel-container {
+    display: flex;
+    flex-direction: column;
+    height: auto;        /* <-- IMPORTANTE */
+    overflow: visible;   /* <-- IMPORTANTE */
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    height: auto;
+  }
+
+  .members-list {
+    max-height: 250px;      /* para que no ocupe toda la pantalla */
+    overflow-y: auto;
+  }
+
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .mapa {
+  background:#B9C2C5;
+  padding:32px;
+  display:block;     /* <- el más seguro y natural */
+}
+
+
 }
