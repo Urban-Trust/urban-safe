@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatTitle = document.getElementById('chatTitle');
   const chatArea = document.getElementById('chatArea');
   const sidebar = document.querySelector('.chat-sidebar');
-  const toggleBtn = document.querySelector('.sidebar-toggle');
+  const toggleBtns = document.querySelectorAll('.sidebar-toggle');
+  const backdrop = document.getElementById('chatSidebarBackdrop');
+  const sidebarBackBtn = document.getElementById('sidebarBackBtn');
 
   // Helper: scroll an element into view inside the chatArea, accounting for the chat container
   function scrollElementIntoViewInChat(el, center) {
@@ -91,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderMessagesForChat(id);
       clearUnread(id);
       // On small screens, hide the sidebar after selecting a chat to focus the chat view
-      if (window.innerWidth <= 820 && sidebar) {
+      if (window.innerWidth <= 1024 && sidebar) {
         sidebar.classList.add('minimized');
         const maximizeBtnLocal = document.querySelector('.sidebar-maximize');
         if (maximizeBtnLocal) maximizeBtnLocal.classList.remove('hidden');
@@ -208,39 +210,175 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Minimizar / restaurar sidebar
-  toggleBtn.addEventListener('click', () => {
-    sidebar.classList.add('minimized');
-    const maximizeBtn = document.querySelector('.sidebar-maximize');
-    if (maximizeBtn) {
-      maximizeBtn.classList.remove('hidden');
-    }
+  // Helper UI functions for consistent behavior
+  const maximizeBtnEl = document.querySelector('.sidebar-maximize');
+  function showMaximize() { if (maximizeBtnEl) maximizeBtnEl.classList.remove('hidden'); }
+  function hideMaximize() { if (maximizeBtnEl) maximizeBtnEl.classList.add('hidden'); }
+  function showBackdrop() { if (backdrop) backdrop.classList.remove('hidden'); }
+  function hideBackdrop() { if (backdrop) backdrop.classList.add('hidden'); }
+  function showBackBtn() { if (sidebarBackBtn) sidebarBackBtn.classList.remove('hidden'); }
+  function hideBackBtn() { if (sidebarBackBtn) sidebarBackBtn.classList.add('hidden'); }
+
+  // Minimizar / restaurar sidebar (support multiple toggle buttons: sidebar and header)
+  toggleBtns.forEach(toggleBtn => {
+    toggleBtn.addEventListener('click', (ev) => {
+      const clickedBtn = ev.currentTarget;
+      const isHeaderToggle = clickedBtn.classList && clickedBtn.classList.contains('header-toggle');
+      const isMinimized = sidebar.classList.contains('minimized');
+      const width = window.innerWidth;
+      // Desktop behavior: only allow the internal sidebar toggle to collapse/expand (no overlay/backdrop)
+      if (width > 1024) {
+        // If header toggle was clicked on desktop, ignore (it's not intended for desktop)
+        if (isHeaderToggle) return;
+        // Toggle minimized state for desktop without overlay
+        if (isMinimized) {
+          sidebar.classList.remove('minimized');
+          hideMaximize();
+          hideBackdrop();
+          hideBackBtn();
+        } else {
+          sidebar.classList.add('minimized');
+          showMaximize();
+          hideBackdrop();
+          hideBackBtn();
+        }
+        return;
+      }
+      // Mobile/Tablet behavior: overlay that uses backdrop and close/back buttons
+      if (isMinimized) {
+        // open the sidebar (overlay)
+        sidebar.classList.remove('minimized');
+        hideMaximize();
+        showBackdrop();
+        showBackBtn();
+      } else {
+        // minimize
+        sidebar.classList.add('minimized');
+        showMaximize();
+        hideBackdrop();
+        hideBackBtn();
+      }
+    });
   });
 
   // Botón para maximizar sidebar
   const maximizeBtn = document.querySelector('.sidebar-maximize');
   if (maximizeBtn) {
     maximizeBtn.addEventListener('click', () => {
+      const width = window.innerWidth;
+      if (width > 1024) {
+        // On desktop, simply restore the sidebar without overlay
+        sidebar.classList.remove('minimized');
+        hideMaximize();
+        hideBackdrop();
+        hideBackBtn();
+        return;
+      }
+      // Mobile/tablet: show overlay
       sidebar.classList.remove('minimized');
       maximizeBtn.classList.add('hidden');
+      showBackdrop();
+      showBackBtn();
+    });
+  }
+
+  // Clicking on the backdrop hides the sidebar
+  if (backdrop) {
+    backdrop.addEventListener('click', () => {
+      sidebar.classList.add('minimized');
+      if (maximizeBtn) maximizeBtn.classList.remove('hidden');
+      hideBackdrop();
+      hideBackBtn();
+    });
+  }
+
+  // Back button closes overlay (used in mobile overlay centered view)
+  if (sidebarBackBtn) {
+    sidebarBackBtn.addEventListener('click', () => {
+      sidebar.classList.add('minimized');
+      if (maximizeBtn) maximizeBtn.classList.remove('hidden');
+      if (backdrop) backdrop.classList.add('hidden');
+      sidebarBackBtn.classList.add('hidden');
     });
   }
 
   // Adjust the initial state based on window size and react to resize events
   function adjustSidebarForViewport() {
-    const isMobile = window.innerWidth <= 820;
-    if (isMobile) {
-      sidebar.classList.add('minimized');
-      const mBtn = document.querySelector('.sidebar-maximize');
-      if (mBtn) mBtn.classList.remove('hidden');
-    } else {
+    const width = window.innerWidth;
+    const isDesktop = width > 1024;
+    const isTablet = width <= 1024 && width > 820;
+    const isMobile = width <= 820;
+    const mBtn = document.querySelector('.sidebar-maximize');
+    if (isDesktop) {
+      // desktop: keep sidebar visible, hide maximize and backdrop
       sidebar.classList.remove('minimized');
-      const mBtn = document.querySelector('.sidebar-maximize');
       if (mBtn) mBtn.classList.add('hidden');
+      if (backdrop) backdrop.classList.add('hidden');
+    } else if (isTablet) {
+      // tablet: use overlay but hide floating maximize (header toggle used)
+      sidebar.classList.add('minimized');
+      if (mBtn) mBtn.classList.add('hidden');
+      if (backdrop) backdrop.classList.add('hidden');
+    } else if (isMobile) {
+      // mobile: overlay with floating maximize visible
+      sidebar.classList.add('minimized');
+      if (mBtn) mBtn.classList.remove('hidden');
+      if (backdrop) backdrop.classList.add('hidden');
     }
   }
   adjustSidebarForViewport();
   window.addEventListener('resize', adjustSidebarForViewport);
+
+  // Update chat overlay offsets so it doesn't touch header/footer
+  function updateChatOverlayOffsets() {
+    const chatWrap = document.querySelector('.chat-wrap');
+    if (!chatWrap) return;
+    const header = document.querySelector('.navbar');
+    const footer = document.querySelector('.footer');
+    const chatInput = chatWrap.querySelector('.chat-input');
+    const headerHeight = header ? header.offsetHeight : 64;
+    const footerHeight = footer ? footer.offsetHeight : 56;
+    // add breathing room
+    let extraGap = 12; // px (matches --chat-overlay-gap) - default
+    try {
+      if (chatWrap) {
+        const cssGap = getComputedStyle(chatWrap).getPropertyValue('--chat-overlay-gap');
+        if (cssGap) {
+          const parsed = parseInt(cssGap, 10);
+          if (!Number.isNaN(parsed)) extraGap = parsed;
+        }
+      }
+    } catch (e) { /* ignore */ }
+    const topOffset = headerHeight + 18; // px
+    // detect on-screen keyboard height (mobile) via visualViewport difference
+    let keyboardHeight = 0;
+    try {
+      if (window.visualViewport && window.innerHeight > window.visualViewport.height) {
+        keyboardHeight = Math.max(0, window.innerHeight - window.visualViewport.height);
+      }
+    } catch(e) { keyboardHeight = 0; }
+    const bottomOffset = footerHeight + 18 + keyboardHeight + extraGap; // px
+    chatWrap.style.top = topOffset + 'px';
+    chatWrap.style.bottom = `calc(${bottomOffset}px + env(safe-area-inset-bottom, 0px))`;
+    // ensure chatArea bottom padding is at least the input height + some
+    try {
+      const inputHeight = chatInput ? chatInput.offsetHeight : 64;
+      const chatArea = chatWrap.querySelector('.chat-area');
+      // in case CSS variables are not supported by the browser, ensure input bottom via JS
+      if (chatInput) chatInput.style.bottom = (extraGap) + 'px';
+      if (chatArea) {
+        // 24px extra for breathing room + overlay gap
+        // account for keyboard too so messages won't be hidden
+        chatArea.style.paddingBottom = (inputHeight + 24 + keyboardHeight + extraGap) + 'px';
+      }
+    } catch (e) { /* ignore */ }
+  }
+  // call on load & resize
+  updateChatOverlayOffsets();
+  window.addEventListener('resize', updateChatOverlayOffsets);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateChatOverlayOffsets);
+  }
 
   // --------- helper functions for unread badges & messages ---------
   function updateBadge(chatEl, count) {
