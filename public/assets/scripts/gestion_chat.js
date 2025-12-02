@@ -275,6 +275,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelAddNeighborBtn = document.getElementById("cancelAddNeighborBtn");
   const confirmAddNeighborBtn = document.getElementById("confirmAddNeighborBtn");
 
+  const newNeighborImageFile = document.getElementById("newNeighborImageFile");
+  const newNeighborImagePreview = document.getElementById("newNeighborImagePreview");
+
+  newNeighborImageFile.addEventListener("change", () => {
+    const file = newNeighborImageFile.files[0];
+    if (!file) {
+      newNeighborImagePreview.innerHTML = '<span style="color:#666;">Sin imagen</span>';
+      newNeighborImagePreview.style.backgroundImage = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      newNeighborImagePreview.innerHTML = "";
+      newNeighborImagePreview.style.backgroundImage = `url('${reader.result}')`;
+      newNeighborImagePreview.style.backgroundSize = "cover";
+      newNeighborImagePreview.style.backgroundPosition = "center";
+    };
+    reader.readAsDataURL(file);
+  });
+
+
   // Abrir modal
   document.getElementById("showAddNeighborsBtn").addEventListener("click", () => {
     addNeighborModal.classList.remove("hidden");
@@ -319,8 +341,25 @@ document.addEventListener('DOMContentLoaded', () => {
       newUser.color = newNeighborColor.value;
     } else {
       newUser.avatarType = "img";
-      newUser.avatar = newNeighborImageUrl.value || "assets/images/default.png";
+
+      // Si el usuario subió un archivo, lo convertimos a base64
+      const file = newNeighborImageFile.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          newUser.avatar = reader.result; // base64 final
+          renderMembers();
+        };
+        reader.readAsDataURL(file);
+      } else {
+        newUser.avatar = "assets/images/default.png";
+        renderMembers();
+      }
+
+      // Mostrar mensaje y cerrar modal aunque la lectura continúe
     }
+
 
     // Añadir al array
     users.push(newUser);

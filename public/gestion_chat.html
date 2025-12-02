@@ -228,9 +228,17 @@
     </div>
 
     <div id="avatarImageForm" class="hidden">
-      <label>URL de imagen</label>
-      <input type="text" id="newNeighborImageUrl" placeholder="assets/images/user.png">
+      <label>Seleccionar imagen</label>
+      <input type="file" id="newNeighborImageFile" accept="image/*">
+
+      <div id="newNeighborImagePreview" 
+          style="margin-top: 10px; width: 70px; height: 70px; border-radius: 50%; 
+                  background: #ddd; display: flex; justify-content: center; 
+                  align-items: center; overflow: hidden;">
+        <span style="color: #666;">Sin imagen</span>
+      </div>
     </div>
+
 
     <div class="modal-buttons">
       <button id="cancelAddNeighborBtn">Cancelar</button>
