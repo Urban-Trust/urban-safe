@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
       currentChatId = id;
       renderMessagesForChat(id);
       clearUnread(id);
-      // On small screens, hide the sidebar after selecting a chat to focus the chat view
-      if (window.innerWidth <= 1024 && sidebar) {
+      // On small screens (mobile), hide the sidebar after selecting a chat to focus the chat view
+      if (window.innerWidth <= 820 && sidebar) {
         sidebar.classList.add('minimized');
         const maximizeBtnLocal = document.querySelector('.sidebar-maximize');
         if (maximizeBtnLocal) maximizeBtnLocal.classList.remove('hidden');
@@ -226,8 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const isHeaderToggle = clickedBtn.classList && clickedBtn.classList.contains('header-toggle');
       const isMinimized = sidebar.classList.contains('minimized');
       const width = window.innerWidth;
-      // Desktop behavior: only allow the internal sidebar toggle to collapse/expand (no overlay/backdrop)
-      if (width > 1024) {
+      // Non-mobile behaviour (desktop + tablet): only allow the internal sidebar toggle to collapse/expand (no overlay/backdrop)
+      if (width > 820) {
         // If header toggle was clicked on desktop, ignore (it's not intended for desktop)
         if (isHeaderToggle) return;
         // Toggle minimized state for desktop without overlay
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (maximizeBtn) {
     maximizeBtn.addEventListener('click', () => {
       const width = window.innerWidth;
-      if (width > 1024) {
+      if (width > 820) {
         // On desktop, simply restore the sidebar without overlay
         sidebar.classList.remove('minimized');
         hideMaximize();
@@ -305,19 +305,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Adjust the initial state based on window size and react to resize events
   function adjustSidebarForViewport() {
     const width = window.innerWidth;
-    const isDesktop = width > 1024;
-    const isTablet = width <= 1024 && width > 820;
+    const isDesktop = width > 820;
     const isMobile = width <= 820;
     const mBtn = document.querySelector('.sidebar-maximize');
     if (isDesktop) {
       // desktop: keep sidebar visible, hide maximize and backdrop
       sidebar.classList.remove('minimized');
-      if (mBtn) mBtn.classList.add('hidden');
-      if (backdrop) backdrop.classList.add('hidden');
-    } else if (isTablet) {
-      // tablet: use overlay but hide floating maximize (header toggle used)
-      sidebar.classList.add('minimized');
-      if (mBtn) mBtn.classList.add('hidden');
+      // if user has minimized explicitly, show maximize, otherwise hide
+      if (mBtn) {
+        if (sidebar.classList.contains('minimized')) mBtn.classList.remove('hidden'); else mBtn.classList.add('hidden');
+      }
       if (backdrop) backdrop.classList.add('hidden');
     } else if (isMobile) {
       // mobile: overlay with floating maximize visible
@@ -628,9 +625,11 @@ document.addEventListener('DOMContentLoaded', () => {
         msgPin.src = 'assets/images/Anclar_li.png';
         msgPin.alt = 'Anclado';
         msgPin.className = 'pinned-pin-icon-msg';
-        // ensure it doesn't intercept clicks on the message body
+        // ensure it doesn't intercept clicks on the message body and is decorative
         msgPin.setAttribute('aria-hidden', 'true');
-        msg.appendChild(msgPin);
+        // Append to the message BODY so the icon can be positioned relative to the bubble
+        // (this allows us to center it above the bubble no matter bubble width or avatar placement)
+        body.appendChild(msgPin);
       } catch (e) { /* if asset missing, ignore */ }
     }
 
