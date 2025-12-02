@@ -88,18 +88,59 @@ main.page-content{flex:1;}
 }
 
 /* small fade at bottom */
-.members-list::after{
-  content:"";
-  position:absolute;
-  left:0;right:0;
-  bottom:0;
-  height:38px;
-  pointer-events:none;
-  background: linear-gradient(180deg, rgba(224,226,229,0) 0%, rgba(185,194,197,0.9) 80%, rgba(185,194,197,1) 100%);
-  border-bottom-left-radius:22px;
-  border-bottom-right-radius:22px;
+/* Elimina el ::after actual del members-list */
+.members-list::after {
+  display: none;
 }
 
+/* Agrega un nuevo pseudo-elemento al left-panel */
+.left-panel {
+  position: relative; /* Necesario para posicionar el pseudo-elemento */
+  flex: 1;
+  background: var(--bg-left);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  border: 8px solid rgba(115,139,139,0.95);
+}
+
+/*  fade-out fijo */
+.left-panel::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 70px; /* Ajusta esta posición para que quede justo encima del botón */
+  height: 80px;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    180deg, 
+    rgba(185, 194, 197, 0) 0%, 
+    rgba(185, 194, 197, 1) 100%
+  );
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Ajusta la posición según sea necesario */
+.add-neighbor-container {
+  position: relative;
+  z-index: 3; /* Asegura que el botón esté sobre el fade */
+  margin-top: auto; /* Empuja el botón hacia abajo */
+  padding-top: 10px;
+}
+
+/* Ajusta el margen del mensaje para que no quede cubierto */
+#addMsg {
+  position: relative;
+  z-index: 3;
+}
+
+/* Si necesitas que el fade se vea más pronunciado, ajusta los colores */
 /* member item */
 .member-item{
   height:var(--item-h);
