@@ -163,7 +163,7 @@ body {
 /* Pinned area */
 .pinned-area { margin-bottom: 12px; }
 /* single thin banner across top for pinned message (sticky & visible) */
-.pinned-banner { width: 100%; background: #2F7372; color: white; padding: 8px 12px; border-radius: 8px; display:flex; align-items:center; gap:12px; cursor:pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.12); height:52px; box-sizing:border-box; position: sticky; top: 8px; z-index: 1200; }
+.pinned-banner { width: 100%; background: #2F7372; color: white; padding: 8px 12px; border-radius: 8px; display:flex; align-items:center; gap:12px; cursor:pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.12); height:52px; box-sizing:border-box; position: sticky; top: 8px; z-index: 100 !important; }
 .pinned-banner .pinned-preview { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .pinned-banner .pinned-avatar { width:40px; height:40px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.08); }
 
@@ -217,20 +217,20 @@ body {
 }
 
 /* allow positioning a pin icon outside the message bubble without cutting text */
-.msg.pinned-msg { padding-right: 64px; /* leave space for the pin icon */ }
+.msg.pinned-msg { /* keep outer container spacing minimal, reserve inner spacing on bubble instead */ }
 
 .pinned-pin-icon-msg {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   position: absolute;
-  right: 12px; /* sits inside the message area but near the right edge */
-  top: 50%;
+  right: -6px; /* tighter, flush to the bubble */
+  top: 50%; /* centered vertically with the message body */
   transform: translateY(-50%);
   object-fit: contain;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   background: transparent;
   cursor: default;
-  z-index: 1300;
+  z-index: 101 !important;
 }
 
 .pinned-pin-icon-msg { pointer-events: none; }
@@ -254,6 +254,12 @@ body {
 
 .msg-body {
   max-width: 78%;
+  position: relative; /* allow the pinned icon to position relative to the message bubble */
+}
+
+/* Reserve space inside the message bubble for pin when it is pinned */
+.msg.pinned-msg .msg-body {
+  padding-right: 46px; /* leave room for the pin icon on the right */
 }
 
 .msg-text {
@@ -479,30 +485,29 @@ body {
   :root { --icon-size: clamp(20px, 4vw, 36px); }
 }
 
-/* For tablet (iPad) sizes, make the chat overlay rule similar to mobile so the chat appears above footer */
+/* Tablet / iPad: prefer desktop layout (sidebar left, chat right) rather than mobile overlay */
 @media (max-width: 1024px) and (min-width: 821px) {
+  .chat-sidebar { width: 240px; }
   .chat-wrap {
-  /* increase gap slightly on tablet */
-  --chat-overlay-gap: 24px; /* increased to move input further up from footer */
-    position: fixed;
-    top: calc(var(--app-header-height) + 24px);
-    left: 12px;
-    right: 12px;
-    bottom: calc(var(--app-footer-height) + var(--chat-overlay-gap) + env(safe-area-inset-bottom, 0px));
-    z-index: 1000;
+    position: static; /* behave like desktop */
+    flex: 1; /* occupy remaining space */
+    min-width: 0;
+    left: auto; right: auto; top: auto; bottom: auto;
+    z-index: auto;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    height: auto;
+    height: 100%;
     overflow: hidden;
+    margin-left: 0;
   }
-  .chat-wrap .chat-input { position: absolute; left: 0; right: 0; bottom: var(--chat-overlay-gap); }
-  .chat-wrap .chat-area { padding-bottom: calc(var(--chat-input-height) + var(--chat-overlay-gap) + 24px); }
-  .header-toggle { display: flex !important; }
-  .chat-sidebar .sidebar-toggle { display: none; }
-  /* Hide the floating maximize control on tablet - only header toggle should be used */
-  .sidebar-maximize { display: none !important; }
-  .chat-top h1 { padding-left: 48px; }
+  .chat-wrap .chat-input { position: static; }
+  .chat-wrap .chat-area { padding-bottom: 0; }
+  .header-toggle { display: none !important; }
+  .chat-sidebar .sidebar-toggle { display: flex; }
+  /* Keep the floating maximize control visible on tablet (user can restore the sidebar when minimized) */
+  .sidebar-maximize { display: flex !important; left: 12px; top: calc(var(--app-header-height) + 16px); }
+  .chat-top h1 { padding-left: 12px; }
 }
 
 @media (max-width: 820px) {
@@ -675,6 +680,8 @@ body {
   overflow: hidden;
 }
 
+/* When the sidebar shows the minimize/maximize/back button, avoid overlap with search input by adding padding-left (only on smaller screens) */
+
 /* On small screens use transform to slide the sidebar off-canvas */
 @media (max-width: 820px) {
   /* make sidebar behave as a center overlay when visible; hide above the viewport when minimized */
@@ -691,12 +698,18 @@ body {
     transition: transform 300ms cubic-bezier(.2,.9,.2,1), opacity 200ms ease;
     transform-origin: top center;
   }
+  /* When the sidebar shows the minimize/maximize/back button, avoid overlap with search input by adding padding-left */
+  .chat-sidebar .sidebar-maximize:not(.hidden) ~ .chat-search,
+  .chat-sidebar .sidebar-back-btn:not(.hidden) ~ .chat-search,
+  .chat-sidebar .sidebar-toggle:not(.hidden) ~ .chat-search {
+    padding-left: 56px; /* enough to leave room for the button */
+  }
   /* Mobile overlay: show back button inside header on top-right */
   .sidebar-back-btn {
     display: none; /* default hidden; JS toggles visibility also */
     position: absolute;
     top: 12px;
-    right: 12px;
+    left: 12px; /* moved closer to the left edge of the chat overlay */
     z-index: 1700;
     background: var(--panel);
     border: none;
@@ -715,7 +728,21 @@ body {
     opacity: 0;
     pointer-events: none;
   }
-  .sidebar-maximize { left: 12px; top: 70px; }
+  /* Position the maximize button closer to the left edge of the chat overlay
+     when on mobile: calculate overlay left based on centered container width. */
+  .sidebar-maximize {
+    left: calc(50% - (min(420px, 94%) / 2) + 8px);
+    top: 70px;
+    transform: translateX(0);
+  }
+  /* When the sidebar is minimized on tablet, expand chat-wrap to cover entire area (including where sidebar was) */
+  .chat-sidebar.minimized + .chat-wrap {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    flex: 1 1 100% !important;
+  }
+  /* Make maximize button visible on tablet too so the user can restore the sidebar */
+  .sidebar-maximize { display: flex !important; left: 12px; top: calc(var(--app-header-height) + 16px); }
 }
 
 /* Botón para maximizar sidebar (cuando está minimizado) */
@@ -734,6 +761,13 @@ body {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transition: all 0.2s ease;
+}
+
+/* Desktop/Tablet: When not overlay, expanding chat-wrap when sidebar is minimized to cover the area */
+.chat-sidebar.minimized + .chat-wrap {
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
+  margin-left: 0 !important;
 }
 
 .sidebar-maximize:hover {
