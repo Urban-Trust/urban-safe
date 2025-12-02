@@ -108,7 +108,7 @@ body {
   background: #EAE9E7;
   padding: 16px;
   overflow-y: auto;
-  z-index: 999;
+  z-index: 99999 !important;
   color: #1E1E1E;
   flex-direction: column;
   box-shadow: 0 12px 6px rgba(0,0,0,0.3);
