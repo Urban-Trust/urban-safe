@@ -205,6 +205,41 @@
     </div>
   </div>
 
+  <!-- Modal AGREGAR VECINO -->
+<div id="addNeighborModal" class="modal hidden" aria-hidden="true">
+  <div class="modal-content add-modal">
+    <h2>Agregar vecino</h2>
+
+    <label>Nombre</label>
+    <input type="text" id="newNeighborName" placeholder="Ej: Juan Pérez">
+
+    <label>Avatar</label>
+    <select id="newNeighborAvatarType">
+      <option value="initial">Inicial</option>
+      <option value="img">Imagen URL</option>
+    </select>
+
+    <div id="avatarInitialForm">
+      <label>Inicial</label>
+      <input type="text" id="newNeighborInitial" maxlength="1" placeholder="J">
+
+      <label>Color</label>
+      <input type="color" id="newNeighborColor" value="#4FC3F7">
+    </div>
+
+    <div id="avatarImageForm" class="hidden">
+      <label>URL de imagen</label>
+      <input type="text" id="newNeighborImageUrl" placeholder="assets/images/user.png">
+    </div>
+
+    <div class="modal-buttons">
+      <button id="cancelAddNeighborBtn">Cancelar</button>
+      <button id="confirmAddNeighborBtn" class="confirm">Agregar</button>
+    </div>
+  </div>
+</div>
+
+
   <script src="assets/scripts/mobile-nav.js"></script>
   <script src="assets/scripts/gestion_chat.js"></script>
 </body>
