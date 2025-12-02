@@ -96,33 +96,36 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------------------------------------
-     UI: Crear plantilla (modal con formulario)
-     ------------------------------------------------------------------------ */
+   UI: Crear plantilla (modal con formulario)
+------------------------------------------------------------------------ */
   function openCreateTemplateModal(prefill = null) {
     const modal = createModal({ title: prefill ? 'Editar plantilla' : 'Crear plantilla' });
 
     const form = document.createElement('form');
-    form.style = 'display:flex;flex-direction:column;gap:10px;';
+    form.className = 'modal-form';
 
     const inputTitle = document.createElement('input');
     inputTitle.type = 'text';
     inputTitle.placeholder = 'Título de la plantilla';
     inputTitle.required = true;
-    inputTitle.value = prefill ? prefill.title : '';
+    inputTitle.value = prefill?.title ?? '';
 
     const textarea = document.createElement('textarea');
     textarea.placeholder = 'Mensaje del recordatorio...';
     textarea.rows = 4;
     textarea.required = true;
-    textarea.value = prefill ? prefill.message : '';
+    textarea.value = prefill?.message ?? '';
+
+    const labelDate = document.createElement('label');
+    labelDate.className = 'modal-label';
+    labelDate.textContent = 'Fecha y hora (programado):';
 
     const datetime = document.createElement('input');
     datetime.type = 'datetime-local';
     datetime.required = true;
-    if (prefill && prefill.scheduledAt) {
-      // convert ISO to input-local value
+
+    if (prefill?.scheduledAt) {
       const d = new Date(prefill.scheduledAt);
-      // local ISO without seconds and timezone
       const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
         .toISOString()
         .slice(0, 16);
@@ -130,47 +133,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const btns = document.createElement('div');
-    btns.style = 'display:flex;gap:10px;justify-content:flex-end;';
+    btns.className = 'modal-buttons';
 
     const saveBtn = document.createElement('button');
     saveBtn.type = 'submit';
+    saveBtn.className = 'btn-primary';
     saveBtn.textContent = prefill ? 'Guardar cambios' : 'Crear plantilla';
-    saveBtn.style = 'background:#1C2542;color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;';
 
     const cancelBtn = document.createElement('button');
     cancelBtn.type = 'button';
+    cancelBtn.className = 'btn-secondary';
     cancelBtn.textContent = 'Cancelar';
-    cancelBtn.style = 'background:#eee;color:#222;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;';
     cancelBtn.addEventListener('click', () => modal.close());
 
-    btns.appendChild(cancelBtn);
-    btns.appendChild(saveBtn);
+    btns.append(cancelBtn, saveBtn);
 
-    form.appendChild(inputTitle);
-    form.appendChild(textarea);
-
-    const labelDate = document.createElement('label');
-    labelDate.style = 'font-size:13px;color:#444';
-    labelDate.textContent = 'Fecha y hora (programado):';
-    form.appendChild(labelDate);
-    form.appendChild(datetime);
-    form.appendChild(btns);
+    form.append(
+      inputTitle,
+      textarea,
+      labelDate,
+      datetime,
+      btns
+    );
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
       const title = inputTitle.value.trim();
       const message = textarea.value.trim();
       const schedVal = datetime.value;
+
       if (!title || !message || !schedVal) {
         alert('Completa todos los campos.');
         return;
       }
-      // convert local datetime to ISO
-      const scheduledAt = new Date(schedVal).toISOString();
 
+      const scheduledAt = new Date(schedVal).toISOString();
       const templates = loadTemplates();
+
       if (prefill) {
-        // edit existing
         const idx = templates.findIndex(t => t.id === prefill.id);
         if (idx !== -1) {
           templates[idx] = {
@@ -182,29 +183,28 @@ document.addEventListener('DOMContentLoaded', () => {
           };
         }
       } else {
-        // new template
-        const newTpl = {
+        templates.push({
           id: uid(),
           title,
           message,
           scheduledAt,
-          status: 'active', // active | paused
+          status: 'active',
           createdAt: nowISO(),
           updatedAt: nowISO(),
           sent: false
-        };
-        templates.push(newTpl);
+        });
       }
+
       saveTemplates(templates);
       modal.close();
       renderToast('Plantilla guardada');
-      // if modify modal is open, refresh its content
       refreshModifyModalIfOpen();
     });
 
     modal.content.appendChild(form);
     modal.open();
   }
+
 
   /* ------------------------------------------------------------------------
      UI: Modificar plantillas (lista + acciones: editar, eliminar, pausar/reactivar, enviar ahora)
