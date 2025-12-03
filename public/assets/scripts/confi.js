@@ -15,28 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const notificationsBtn = document.getElementById('notificationsBtn');
-  const notificationsModal = document.getElementById('notificationsModal');
-  const notifClose = document.getElementById('notifModalClose');
   const backButton = document.querySelector('.back-button');
-
-  const openModal = () => {
-    if (!notificationsModal) return;
-    notificationsModal.classList.remove('hidden');
-    notificationsModal.setAttribute('aria-hidden', 'false');
-  };
-
-  const closeModal = () => {
-    if (!notificationsModal) return;
-    notificationsModal.classList.add('hidden');
-    notificationsModal.setAttribute('aria-hidden', 'true');
-  };
-
-  notificationsBtn?.addEventListener('click', openModal);
-  notifClose?.addEventListener('click', closeModal);
-  notificationsModal?.addEventListener('click', (e) => {
-    if (e.target === notificationsModal) closeModal();
-  });
 
   backButton?.addEventListener('click', () => {
     if (window.history.length > 1) {
