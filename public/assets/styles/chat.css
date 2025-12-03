@@ -7,6 +7,10 @@
   --muted: #B8BBC5;
   --icon-size: clamp(20px, 4.5vw, 40px);
   --avatar-size: clamp(32px, 7vw, 56px);
+  --app-header-height: 64px;
+  --app-footer-height: 56px;
+  --chat-overlay-gap: 12px; /* gap between overlay bottom and footer */
+  --chat-input-height: 64px; /* default input height used for padding fallback */
 }
 
 body {
@@ -203,7 +207,7 @@ body {
 /* Pinned area */
 .pinned-area { margin-bottom: 12px; }
 /* single thin banner across top for pinned message (sticky & visible) */
-.pinned-banner { width: 100%; background: #2F7372; color: white; padding: 8px 12px; border-radius: 8px; display:flex; align-items:center; gap:12px; cursor:pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.12); height:52px; box-sizing:border-box; position: sticky; top: 8px; z-index: 1200; }
+.pinned-banner { width: 100%; background: #2F7372; color: white; padding: 8px 12px; border-radius: 8px; display:flex; align-items:center; gap:12px; cursor:pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.12); height:52px; box-sizing:border-box; position: sticky; top: 8px; z-index: 100 !important; }
 .pinned-banner .pinned-preview { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .pinned-banner .pinned-avatar { width:40px; height:40px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.08); }
 
@@ -257,20 +261,20 @@ body {
 }
 
 /* allow positioning a pin icon outside the message bubble without cutting text */
-.msg.pinned-msg { padding-right: 64px; /* leave space for the pin icon */ }
+.msg.pinned-msg { /* keep outer container spacing minimal, reserve inner spacing on bubble instead */ }
 
 .pinned-pin-icon-msg {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   position: absolute;
-  right: 12px; /* sits inside the message area but near the right edge */
-  top: 50%;
+  right: -6px; /* tighter, flush to the bubble */
+  top: 50%; /* centered vertically with the message body */
   transform: translateY(-50%);
   object-fit: contain;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   background: transparent;
   cursor: default;
-  z-index: 1300;
+  z-index: 101 !important;
 }
 
 .pinned-pin-icon-msg { pointer-events: none; }
@@ -294,6 +298,12 @@ body {
 
 .msg-body {
   max-width: 78%;
+  position: relative; /* allow the pinned icon to position relative to the message bubble */
+}
+
+/* Reserve space inside the message bubble for pin when it is pinned */
+.msg.pinned-msg .msg-body {
+  padding-right: 46px; /* leave room for the pin icon on the right */
 }
 
 .msg-text {
@@ -604,8 +614,58 @@ body {
   }
 }
 
+/* Make the chat wrap overlay above the footer on small screens (mobile/tablet), and keep the input pinned */
+@media (max-width: 820px) {
+    .chat-wrap {
+      /* larger gap on mobile to avoid overlaying the footer */
+      --chat-overlay-gap: 32px; /* increased so input sits further above footer */
+    position: fixed;
+    top: calc(var(--app-header-height) + 12px); /* header height + offset */
+    left: 12px;
+    right: 12px;
+    bottom: calc(var(--app-footer-height) + var(--chat-overlay-gap) + env(safe-area-inset-bottom, 0px)); /* footer height + gap */
+    z-index: 1000;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    height: auto; /* use top/bottom positioning instead */
+    overflow: hidden;
+  }
+  /* Keep chat input fixed inside the chat-wrap so it doesn't push the content under the footer */
+  .chat-wrap .chat-input {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: var(--chat-overlay-gap); /* add gap from overlay bottom */
+    padding: 10px 14px;
+    background: rgb(46,56,89);
+    z-index: 1001; /* below footer which is 1002 */
+    transition: bottom 220ms cubic-bezier(.2,.9,.2,1);
+  }
+  /* Make sure chat area has enough bottom padding so last messages are visible above the input */
+  .chat-wrap .chat-area {
+    padding-bottom: calc(var(--chat-input-height) + var(--chat-overlay-gap) + 24px); /* should be >= chat-input height */
+  }
+
+  /* Header toggle - visible on small screens */
+  .header-toggle { display: flex !important; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); z-index: 1500; padding: 6px; background: none; border: none; }
+  .chat-top h1 { padding-left: 48px; }
+  /* Hide the sidebar's built-in toggle when the header one is used */
+  .chat-sidebar .sidebar-toggle { display: none; }
+  /* When the sidebar is visible on mobile, make it full width and overlay (existing rule keeps min height) */
+  .chat-sidebar {
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 36vh; /* cap height */
+  }
+  /* Center maximize button at bottom to make it easier to reach on mobile */
+  .sidebar-maximize { left: 50%; transform: translateX(-50%); bottom: calc(var(--chat-overlay-gap) + 12px + env(safe-area-inset-bottom, 0px)); top: auto; z-index: 1700; }
+}
+
 @media (max-width: 480px) {
   .chat-top h1 { font-size: 16px; }
+  .chat-top h1 { padding-left: 56px; }
   .chat-zone { font-size: 12px; }
   .chat-input input { padding: 10px 12px; font-size: 14px; }
   .pinned-banner { height:44px; }
@@ -624,6 +684,13 @@ body {
   align-items: center;
   justify-content: flex-start;
 }
+
+/* Hide header toggle by default - only show in mobile/tablet via media queries */
+.header-toggle { display: none; }
+
+/* Backdrop for centered mobile/tablet sidebar */
+.chat-sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000; }
+.chat-sidebar-backdrop.hidden { display: none !important; }
 
 .sidebar-toggle img {
   width: var(--avatar-size);
@@ -691,6 +758,8 @@ body {
   overflow: hidden;
 }
 
+/* When the sidebar shows the minimize/maximize/back button, avoid overlap with search input by adding padding-left (only on smaller screens) */
+
 /* On small screens use transform to slide the sidebar off-canvas */
 @media (max-width: 820px) {
   .chat-sidebar.minimized {
@@ -716,7 +785,7 @@ body {
   position: fixed;
   left: 12px;
   top: 80px;
-  z-index: 1000;
+  z-index: 1700; /* ensure it's above chat overlay */
   background: var(--panel);
   border: none;
   padding: 8px;
@@ -727,6 +796,13 @@ body {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transition: all 0.2s ease;
+}
+
+/* Desktop/Tablet: When not overlay, expanding chat-wrap when sidebar is minimized to cover the area */
+.chat-sidebar.minimized + .chat-wrap {
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
+  margin-left: 0 !important;
 }
 
 .sidebar-maximize:hover {
@@ -1487,6 +1563,25 @@ body {
   .chat-event-card {
     grid-template-columns: 1fr;
   }
+  /* Centered overlay sidebar for iPad/tablet devices */
+  .chat-sidebar {
+    position: fixed;
+    top: calc(64px + 8px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: min(420px, 94%);
+    max-height: 68vh;
+    z-index: 1600;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+    transition: transform 300ms ease, opacity 200ms ease;
+  }
+  .chat-sidebar.minimized {
+    transform: translate(-50%, -120%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sidebar-maximize { left: 50%; transform: translateX(-50%); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); top:auto; }
 }
 
 @media (max-width: 640px) {
