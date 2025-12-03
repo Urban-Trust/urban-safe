@@ -464,6 +464,40 @@ body {
   display: block;
 }
 
+/* FOOTER (alineado al estilo global azul) */
+.footer {
+  background: #1A284D;
+  color: #FFFFFF;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 18px 0;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.footer-inner > div:first-child {
+  text-align: left;
+}
+
+.footer-inner .muted {
+  text-align: center;
+  color: #CBD5E0;
+}
+
+.footer-inner .social {
+  justify-self: end;
+}
+
+.social a {
+  color: #FFFFFF;
+  margin-left: 10px;
+  display: inline-block;
+}
+
 
 .hamburger-btn {
   display: none;
