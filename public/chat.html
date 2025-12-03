@@ -8,10 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/styles/nav.css">
     <link rel="stylesheet" href="assets/styles/map.css"/>
     <link rel="stylesheet" href="assets/styles/chat.css"/>
     <link rel="stylesheet" href="assets/styles/chat-groups.css"/>
-    <!-- (H-52) Se reutilizan los estilos del overlay de ayuda -->
     <link rel="stylesheet" href="assets/styles/ayuda.css"/>
 </head>
 <body>
@@ -177,24 +177,31 @@
 
   <!-- Columna derecha: Chat actual -->
   <div class="chat-wrap" role="main" aria-label="Chat Vecinal">
-   <header class="chat-top">
-  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-    <div>
-      <h1 id="chatTitle">
-        <img src="assets/images/img_group.png" alt="Grupo" class="group-icon-chat" />
-        Grupo Vecinal
-      </h1>
-      <p class="chat-zone">Zona: Los Álamos — Lima</p>
-    </div>
-    <div style="display:flex; gap:8px; align-items:center; position:relative;">
-      <!-- Removed header listen buttons: control handled by attach menu volume button -->
-      <!-- Small active volume icon (shown when listening is active) -->
-      <div id="volumeIconContainer" class="volume-icon-container hidden" title="Escuchando mensajes">
-        <img id="volumeActiveIcon" src="assets/images/volume.png" alt="Escuchando" />
+      <header class="chat-top">
+    <button class="sidebar-toggle header-toggle" aria-label="Mostrar lista de chats">
+      <span class="header-toggle-icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>
+    <div class="chat-top-main">
+      <div>
+        <h1 id="chatTitle">
+          <img src="assets/images/img_group.png" alt="Grupo" class="group-icon-chat" />
+          Grupo Vecinal
+        </h1>
+        <p class="chat-zone">Zona: Los Alamos - Lima</p>
+      </div>
+      <div class="chat-top-actions">
+        <!-- Removed header listen buttons: control handled by attach menu volume button -->
+        <!-- Small active volume icon (shown when listening is active) -->
+        <div id="volumeIconContainer" class="volume-icon-container hidden" title="Escuchando mensajes">
+          <img id="volumeActiveIcon" src="assets/images/volume.png" alt="Escuchando" />
+        </div>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
 <!-- Modal / panel para crear encuestas -->
 <div id="pollModal" class="hidden" role="dialog" aria-modal="true" aria-hidden="true">
@@ -777,4 +784,5 @@
 
 </body>
 </html>
+
 
