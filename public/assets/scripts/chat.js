@@ -32,6 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let mediaStream = null;
   let audioChunks = [];
   let lastAudioBlob = null;
+  const deleteModal = document.getElementById('deleteConfirmationModal');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+  let messagePendingDelete = null;
+
+  const normalizeId = (id) => String(id || '').trim().toLowerCase();
 
   // --- Datos de ejemplo y renderizado de mensajes ---
   const currentUserId = 'user1'; // Asumimos que este es el usuario actual
@@ -63,6 +69,89 @@ document.addEventListener('DOMContentLoaded', () => {
     return text === 'Gracias por el aviso — lo revisamos.';
   }
 
+  function closeAllContextMenus() {
+    document.querySelectorAll('.msg-context-menu').forEach(menu => menu.classList.remove('show'));
+  }
+
+  function markMessageAsDeleted(msgEl) {
+    if (!msgEl) return;
+    const textDiv = msgEl.querySelector('.msg-text');
+    if (textDiv) {
+      const originalText = textDiv.getAttribute('data-original-text') || textDiv.textContent || '';
+      textDiv.setAttribute('data-original-text', originalText);
+      textDiv.textContent = 'este mensaje ha sido eliminado';
+    }
+    msgEl.classList.add('msg-deleted');
+    msgEl.classList.remove('msg-blocked');
+    msgEl.querySelectorAll('.msg-options-btn, .delete-msg-btn').forEach(btn => btn.classList.add('hidden'));
+    closeAllContextMenus();
+  }
+
+  function closeDeleteModal() {
+    if (deleteModal) {
+      deleteModal.classList.add('hidden');
+      deleteModal.setAttribute('aria-hidden', 'true');
+    }
+    document.body.style.overflow = '';
+    messagePendingDelete = null;
+  }
+
+  function showDeleteModal(msgEl) {
+    if (!msgEl) return;
+    if (msgEl.classList.contains('msg-deleted')) return;
+    if (!deleteModal) {
+      markMessageAsDeleted(msgEl);
+      return;
+    }
+    messagePendingDelete = msgEl;
+    deleteModal.classList.remove('hidden');
+    deleteModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    closeAllContextMenus();
+  }
+
+  function applyBlockedStateToMessage(msg, normalizedTarget, { triggerNotice = false } = {}) {
+    if (!msg) return false;
+    if (msg.classList.contains('msg-self')) return false;
+    if (msg.classList.contains('msg-deleted')) return false;
+    const ds = normalizeId(msg.dataset.senderId);
+    if (!normalizedTarget || ds !== normalizedTarget) return false;
+
+    const textDiv = msg.querySelector('.msg-text');
+    if (!textDiv) return false;
+
+    const originalText = textDiv.getAttribute('data-original-text') || textDiv.textContent || '';
+    textDiv.setAttribute('data-original-text', originalText);
+    const isSpecial = isSpecialThanksMessage(originalText);
+
+    textDiv.textContent = 'Usuario Bloqueado';
+    msg.classList.add('msg-blocked');
+    msg.classList.remove('msg-deleted');
+    textDiv.classList.remove('thanks-text');
+
+    msg.querySelectorAll('.msg-options-btn, .delete-msg-btn').forEach(btn => btn.classList.add('hidden'));
+    const contextMenu = msg.querySelector('.msg-context-menu');
+    if (contextMenu) contextMenu.classList.remove('show');
+
+    if (isSpecial && msg.dataset.messageId) {
+      blockedThanksMessages.add(msg.dataset.messageId);
+    }
+    return isSpecial && triggerNotice;
+  }
+
+  function reapplyBlockedUsers() {
+    blockedUsers.forEach((id) => {
+      const normalized = normalizeId(id);
+      const allMsgs = Array.from(document.querySelectorAll('.msg'));
+      let notify = false;
+      allMsgs.forEach(msg => {
+        const triggered = applyBlockedStateToMessage(msg, normalized, { triggerNotice: false });
+        if (triggered) notify = true;
+      });
+      if (notify) showSpecialBlockNotification();
+    });
+  }
+
   // Función para crear el círculo y menú contextual
   function addMessageOptions(msgDiv, isSelf, senderId, messageId) {
     // Crear contenedor para posicionamiento relativo
@@ -72,11 +161,10 @@ document.addEventListener('DOMContentLoaded', () => {
     msgContainer.style.display = 'inline-block';
     msgContainer.style.width = '100%';
 
-    // Mover el contenido del mensaje al contenedor
-    const bodyDiv = msgDiv.querySelector('.msg-body');
-    if (bodyDiv) {
-      msgContainer.appendChild(bodyDiv);
-    }
+    const avatarDiv = msgDiv.querySelector('.msg-avatar');
+    // Mover el contenido del mensaje al contenedor (respetando el orden original, excepto el avatar)
+    const contentNodes = Array.from(msgDiv.children).filter(node => node !== avatarDiv);
+    contentNodes.forEach(node => msgContainer.appendChild(node));
 
     // Solo agregar opciones si no es mensaje propio
     if (!isSelf) {
@@ -133,19 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
           const action = item.dataset.action;
           
           if (action === 'delete') {
-            // Eliminar mensaje
-            const textDiv = msgDiv.querySelector('.msg-text');
-            if (textDiv) {
-              textDiv.textContent = 'este mensaje ha sido eliminado';
-              msgDiv.classList.add('msg-deleted');
-            }
-            contextMenu.classList.remove('show');
+            showDeleteModal(msgDiv);
           } else if (action === 'block') {
             // Bloquear usuario - con la funcionalidad especial
             const senderId = optionsBtn.dataset.senderId;
             blockUserMessages(senderId);
-            contextMenu.classList.remove('show');
           }
+          contextMenu.classList.remove('show');
         });
       });
 
@@ -171,14 +253,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Reemplazar el contenido del mensaje con el contenedor
-    const avatarDiv = msgDiv.querySelector('.msg-avatar');
     if (isSelf) {
       msgDiv.innerHTML = '';
       msgDiv.appendChild(msgContainer);
-      msgDiv.appendChild(avatarDiv);
+      avatarDiv && msgDiv.appendChild(avatarDiv);
     } else {
       msgDiv.innerHTML = '';
-      msgDiv.appendChild(avatarDiv);
+      avatarDiv && msgDiv.appendChild(avatarDiv);
       msgDiv.appendChild(msgContainer);
     }
   }
@@ -188,36 +269,42 @@ document.addEventListener('DOMContentLoaded', () => {
     function blockUserMessages(senderId) {
       if (!senderId && senderId !== 0) return;
 
-      const normalizedTarget = String(senderId).trim().toLowerCase();
+      const normalizedTarget = normalizeId(senderId);
+      if (!normalizedTarget) return;
       blockedUsers.add(normalizedTarget);
 
       const allMsgs = Array.from(document.querySelectorAll('.msg'));
+      let triggeredSpecialNotice = false;
 
       allMsgs.forEach(msg => {
-        const ds = (msg.dataset.senderId || '').trim().toLowerCase();
-        if (ds !== normalizedTarget) return;
-
-        // Buscar .msg-text en cualquier lugar del mensaje
-        const textDiv = msg.querySelector('.msg-text');
-        if (!textDiv) return;
-
-        // Tomar texto original si existe
-        const originalText = textDiv.getAttribute('data-original-text') || textDiv.textContent || '';
-
-        // Caso especial (Tu lógica personalizada)
-        if (originalText === 'Gracias por el aviso — lo revisamos.') {
-          textDiv.textContent = 'Usuario bloqueado';
-        } else {
-          textDiv.textContent = 'Mensaje bloqueado';
-        }
-
-        msg.classList.add('msg-blocked');
-
-        // Ocultar opciones del menú contextual
-        const btn = msg.querySelector('.msg-options-btn');
-        if (btn) btn.style.display = 'none';
+        const triggered = applyBlockedStateToMessage(msg, normalizedTarget, { triggerNotice: true });
+        if (triggered) triggeredSpecialNotice = true;
       });
+
+      closeAllContextMenus();
+    if (triggeredSpecialNotice) {
+      showSpecialBlockNotification();
     }
+  }
+
+  confirmDeleteBtn && confirmDeleteBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (messagePendingDelete) {
+      markMessageAsDeleted(messagePendingDelete);
+    }
+    closeDeleteModal();
+  });
+
+  cancelDeleteBtn && cancelDeleteBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeDeleteModal();
+  });
+
+  deleteModal && deleteModal.addEventListener('click', (e) => {
+    if (e.target === deleteModal) {
+      closeDeleteModal();
+    }
+  });
 
 
 
@@ -242,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         animation: slideIn 0.3s ease-out;
       ">
         <strong>¡Bloqueo especial activado!</strong><br>
-        <small>Los mensajes de "Gracias por el aviso" ahora dicen "Usuario bloqueado" 😄</small>
+        <small>Los mensajes de "Gracias por el aviso" ahora dicen "Usuario Bloqueado" 😄</small>
       </div>
     `;
     
@@ -258,6 +345,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function createMessageElement(message) {
     const user = users[message.userId];
     const isSelf = user.id === currentUserId;
+    const senderIdNormalized = normalizeId(message.userId);
+    const isUserBlocked = blockedUsers.has(senderIdNormalized) && !isSelf;
 
 
     
@@ -265,6 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
     msgDiv.className = `msg ${isSelf ? 'msg-self' : 'msg-other'}`;
     msgDiv.dataset.messageId = message.id;
     msgDiv.dataset.senderId = String(message.userId).trim();
+    msgDiv.dataset.senderNormalized = senderIdNormalized;
 
     const avatarDiv = document.createElement('div');
     avatarDiv.className = 'msg-avatar';
@@ -276,20 +366,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDiv = document.createElement('div');
     textDiv.classList.add('msg-text');
 
-    textDiv.setAttribute('data-original-text', message.text); // ← ***CLAVE***
+    textDiv.setAttribute('data-original-text', message.text);
     textDiv.textContent = message.text;
 
-    // GUARDA EL TEXTO ORIGINAL EN UN ATRIBUTO
-    textDiv.setAttribute('data-original-text', message.text);
-    
-    
     // Verificar si es el texto específico para darle estilo especial
-    if (isSpecialThanksMessage(message.text) && !blockedThanksMessages.has(message.id)) {
-      textDiv.textContent = message.text;
-      textDiv.classList.add('thanks-text');
+    if (isUserBlocked) {
+      textDiv.textContent = 'Usuario Bloqueado';
+      textDiv.classList.remove('thanks-text');
     } else if (blockedThanksMessages.has(message.id)) {
-      textDiv.textContent = 'Usuario bloqueado';
-      textDiv.classList.add('blocked');
+      textDiv.textContent = 'Usuario Bloqueado';
+    } else if (isSpecialThanksMessage(message.text) && !blockedThanksMessages.has(message.id)) {
+      textDiv.classList.add('thanks-text');
     } else {
       textDiv.textContent = message.text;
     }
@@ -309,16 +396,10 @@ document.addEventListener('DOMContentLoaded', () => {
     bodyDiv.appendChild(metaDiv);
 
     // Verificar si el usuario está bloqueado
-    if (blockedUsers.has(message.userId) && !isSelf) {
-      const originalText = message.text;
-
-      if (originalText === 'Gracias por el aviso — lo revisamos.') {
-        textDiv.textContent = 'Usuario bloqueado';
-      } else {
-        textDiv.textContent = 'Mensaje bloqueado';
-      }
-
+    if (isUserBlocked) {
+      textDiv.textContent = 'Usuario Bloqueado';
       msgDiv.classList.add('msg-blocked');
+      textDiv.classList.remove('thanks-text');
     }
 
 
@@ -331,7 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Agregar opciones de mensaje
-    addMessageOptions(msgDiv, isSelf, message.userId, message.id);
+    if (!isUserBlocked || isSelf) {
+      addMessageOptions(msgDiv, isSelf, message.userId, message.id);
+    }
 
     return msgDiv;
   }
@@ -347,17 +430,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // También agregar opciones a los mensajes que ya están en el DOM por defecto
   function addOptionsToExistingMessages() {
+    if (!chatArea) return;
     const existingMessages = chatArea.querySelectorAll('.msg');
     existingMessages.forEach(msg => {
       const isSelf = msg.classList.contains('msg-self');
       const senderId = msg.dataset.senderId;
       const messageId = msg.dataset.messageId;
+      const isBlocked = msg.classList.contains('msg-blocked');
       
-      if (!msg.querySelector('.msg-options-btn') && !isSelf) {
+      if (!msg.querySelector('.msg-options-btn') && !isSelf && !isBlocked) {
         addMessageOptions(msg, isSelf, senderId, messageId);
       }
     });
   }
+
+  document.addEventListener('chatMessagesRendered', () => {
+    addOptionsToExistingMessages();
+    reapplyBlockedUsers();
+  });
 
   // Ejecutar después de un pequeño delay para asegurar que el DOM esté listo
   setTimeout(addOptionsToExistingMessages, 100);
