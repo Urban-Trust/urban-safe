@@ -24,64 +24,244 @@ document.addEventListener('DOMContentLoaded', () => {
   let successTimer = null;
   let pendingImageChatId = null;
   let speechRecognition = null;
-  let speechRecorder = null; // not used here but kept for future
   let isRecordingVoice = false;
   let isListeningMessages = false;
   const playedMessages = new Set();
   let speechQueue = [];
-  let speechUtterance = null;
   let mediaRecorder = null;
   let mediaStream = null;
   let audioChunks = [];
   let lastAudioBlob = null;
 
-  // --- NUEVO: Lógica de borrado de mensajes ---
-  const deleteModal = document.getElementById('deleteConfirmationModal');
-  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-  let messageElementToDelete = null;
-
-  const showDeleteModal = (messageEl) => {
-    messageElementToDelete = messageEl;
-    deleteModal.classList.remove('hidden');
-    deleteModal.setAttribute('aria-hidden', 'false');
-  };
-
-  const hideDeleteModal = () => {
-    messageElementToDelete = null;
-    deleteModal.classList.add('hidden');
-    deleteModal.setAttribute('aria-hidden', 'true');
-  };
-
-  confirmDeleteBtn.addEventListener('click', () => {
-    if (messageElementToDelete) {
-      messageElementToDelete.remove();
-      hideDeleteModal();
-    }
-  });
-
-  cancelDeleteBtn.addEventListener('click', hideDeleteModal);
-  deleteModal.addEventListener('click', (e) => {
-    if (e.target === deleteModal) {
-      hideDeleteModal();
-    }
-  });
-  // --- FIN NUEVO ---
-
-  // --- NUEVO: Datos de ejemplo y renderizado de mensajes ---
+  // --- Datos de ejemplo y renderizado de mensajes ---
   const currentUserId = 'user1'; // Asumimos que este es el usuario actual
+  const blockedUsers = new Set(); // Para almacenar usuarios bloqueados
+  const blockedThanksMessages = new Set(); // Para rastrear mensajes específicos bloqueados
 
   const users = {
     'user1': { id: 'user1', name: 'Tú', avatarInitial: 'T' },
     'user2': { id: 'user2', name: 'Lorena', avatarInitial: 'L' },
     'user3': { id: 'user3', name: 'Carlos', avatarInitial: 'C' },
+    'user4': { id: 'user4', name: 'Ana', avatarInitial: 'A' },
+    'user5': { id: 'user5', name: 'Pedro', avatarInitial: 'P' },
   };
 
+  // Agregamos más mensajes de ejemplo con el texto específico
   const initialMessages = [
     { id: 'msg1', text: 'Hola a todos, recuerden la reunión de seguridad de mañana a las 8pm en la plaza.', userId: 'user2', timestamp: '9:40 AM' },
     { id: 'msg2', text: '¡Claro! Ahí estaré. Gracias por el aviso.', userId: 'user3', timestamp: '9:41 AM' },
     { id: 'msg3', text: 'Confirmado, gracias por el recordatorio, Lorena.', userId: 'user1', timestamp: '9:42 AM' },
+    { id: 'msg4', text: 'Gracias por el aviso — lo revisamos.', userId: 'user4', timestamp: '9:43 AM' },
+    { id: 'msg5', text: 'Excelente noticia, estaré pendiente.', userId: 'user5', timestamp: '9:44 AM' },
+    { id: 'msg6', text: 'Gracias por el aviso — lo revisamos.', userId: 'user3', timestamp: '9:45 AM' },
+    { id: 'msg7', text: 'Yo también revisaré la información, gracias.', userId: 'user2', timestamp: '9:46 AM' },
+    { id: 'msg8', text: 'Gracias por el aviso — lo revisamos.', userId: 'user4', timestamp: '9:47 AM' },
   ];
+
+  // Función especial para manejar el texto específico
+  function isSpecialThanksMessage(text) {
+    return text === 'Gracias por el aviso — lo revisamos.';
+  }
+
+  // Función para crear el círculo y menú contextual
+  function addMessageOptions(msgDiv, isSelf, senderId, messageId) {
+    // Crear contenedor para posicionamiento relativo
+    const msgContainer = document.createElement('div');
+    msgContainer.className = 'msg-container';
+    msgContainer.style.position = 'relative';
+    msgContainer.style.display = 'inline-block';
+    msgContainer.style.width = '100%';
+
+    // Mover el contenido del mensaje al contenedor
+    const bodyDiv = msgDiv.querySelector('.msg-body');
+    if (bodyDiv) {
+      msgContainer.appendChild(bodyDiv);
+    }
+
+    // Solo agregar opciones si no es mensaje propio
+    if (!isSelf) {
+      // Crear el círculo/botón de opciones
+      const optionsBtn = document.createElement('button');
+      optionsBtn.className = 'msg-options-btn';
+      optionsBtn.setAttribute('aria-label', 'Opciones del mensaje');
+      optionsBtn.innerHTML = '⋯'; // Tres puntos verticales
+      optionsBtn.dataset.senderId = senderId;
+      optionsBtn.dataset.messageId = messageId;
+      
+      // Crear el menú contextual
+      const contextMenu = document.createElement('div');
+      contextMenu.className = 'msg-context-menu';
+      contextMenu.innerHTML = `
+        <div class="context-menu-item delete" data-action="delete">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"/>
+          </svg>
+          Eliminar mensaje
+        </div>
+        <div class="context-menu-item block" data-action="block">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>
+          </svg>
+          Bloquear usuario
+        </div>
+      `;
+
+      // Agregar eventos
+      optionsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        // Cerrar otros menús abiertos
+        document.querySelectorAll('.msg-context-menu').forEach(menu => {
+          if (menu !== contextMenu) menu.classList.remove('show');
+        });
+        
+        // Mostrar este menú
+        contextMenu.classList.toggle('show');
+      });
+
+      // Cerrar menú al hacer clic fuera
+      document.addEventListener('click', (e) => {
+        if (!contextMenu.contains(e.target) && !optionsBtn.contains(e.target)) {
+          contextMenu.classList.remove('show');
+        }
+      });
+
+      // Manejar acciones del menú
+      contextMenu.querySelectorAll('.context-menu-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const action = item.dataset.action;
+          
+          if (action === 'delete') {
+            // Eliminar mensaje
+            const textDiv = msgDiv.querySelector('.msg-text');
+            if (textDiv) {
+              textDiv.textContent = 'este mensaje ha sido eliminado';
+              msgDiv.classList.add('msg-deleted');
+            }
+            contextMenu.classList.remove('show');
+          } else if (action === 'block') {
+            // Bloquear usuario - con la funcionalidad especial
+            const senderId = optionsBtn.dataset.senderId;
+            blockUserMessages(senderId);
+            contextMenu.classList.remove('show');
+          }
+        });
+      });
+
+      // Agregar elementos al contenedor
+      msgContainer.appendChild(optionsBtn);
+      msgContainer.appendChild(contextMenu);
+    } else {
+      // Para mensajes propios, mantener el botón de eliminar original
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-msg-btn';
+      deleteBtn.setAttribute('aria-label', 'Eliminar mensaje');
+      deleteBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path>
+        </svg>
+      `;
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showDeleteModal(msgDiv);
+      });
+      
+      msgContainer.appendChild(deleteBtn);
+    }
+
+    // Reemplazar el contenido del mensaje con el contenedor
+    const avatarDiv = msgDiv.querySelector('.msg-avatar');
+    if (isSelf) {
+      msgDiv.innerHTML = '';
+      msgDiv.appendChild(msgContainer);
+      msgDiv.appendChild(avatarDiv);
+    } else {
+      msgDiv.innerHTML = '';
+      msgDiv.appendChild(avatarDiv);
+      msgDiv.appendChild(msgContainer);
+    }
+  }
+
+  // Función para bloquear todos los mensajes de un usuario CON LA FUNCIONALIDAD ESPECIAL
+  function blockUserMessages(senderId) {
+    blockedUsers.add(senderId);
+    
+    const allMessages = document.querySelectorAll(`[data-sender-id="${senderId}"]`);
+    
+    allMessages.forEach(msg => {
+      const textDiv = msg.querySelector('.msg-text');
+      const messageId = msg.dataset.messageId;
+      
+      if (textDiv) {
+        // Verificar si es el texto específico
+        if (isSpecialThanksMessage(textDiv.textContent.trim())) {
+          textDiv.textContent = 'Usuario bloqueado';
+          textDiv.classList.add('blocked');
+          blockedThanksMessages.add(messageId);
+          
+          // Efecto visual especial
+          textDiv.style.transition = 'all 0.3s ease';
+          setTimeout(() => {
+            textDiv.style.backgroundColor = '#ffebee';
+            textDiv.style.padding = '8px 12px';
+            textDiv.style.borderRadius = '12px';
+            textDiv.style.display = 'inline-block';
+          }, 100);
+        } else {
+          textDiv.textContent = 'Mensaje bloqueado';
+        }
+        msg.classList.add('msg-blocked');
+      }
+      
+      // Ocultar el botón de opciones si existe
+      const optionsBtn = msg.querySelector('.msg-options-btn');
+      if (optionsBtn) {
+        optionsBtn.style.display = 'none';
+      }
+    });
+    
+    // Mostrar notificación especial si se bloqueó algún mensaje con el texto específico
+    const specialMessagesBlocked = Array.from(allMessages).some(msg => {
+      const textDiv = msg.querySelector('.msg-text');
+      return textDiv && isSpecialThanksMessage(textDiv.textContent.trim());
+    });
+    
+    if (specialMessagesBlocked) {
+      showSpecialBlockNotification();
+    }
+  }
+
+  // Función para mostrar notificación especial
+  function showSpecialBlockNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'special-block-notification';
+    notification.innerHTML = `
+      <div style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        z-index: 9999;
+        animation: slideIn 0.3s ease-out;
+      ">
+        <strong>¡Bloqueo especial activado!</strong><br>
+        <small>Los mensajes de "Gracias por el aviso" ahora dicen "Usuario bloqueado" 😄</small>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.opacity = '0';
+      notification.style.transform = 'translateX(100px)';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
 
   function createMessageElement(message) {
     const user = users[message.userId];
@@ -90,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const msgDiv = document.createElement('div');
     msgDiv.className = `msg ${isSelf ? 'msg-self' : 'msg-other'}`;
     msgDiv.dataset.messageId = message.id;
+    msgDiv.dataset.senderId = message.userId;
 
     const avatarDiv = document.createElement('div');
     avatarDiv.className = 'msg-avatar';
@@ -100,14 +281,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const textDiv = document.createElement('div');
     textDiv.className = 'msg-text';
-    textDiv.textContent = message.text;
-    // Removed: do not display a speaker emoji for voice messages
+    
+    // Verificar si es el texto específico para darle estilo especial
+    if (isSpecialThanksMessage(message.text) && !blockedThanksMessages.has(message.id)) {
+      textDiv.textContent = message.text;
+      textDiv.classList.add('thanks-text');
+    } else if (blockedThanksMessages.has(message.id)) {
+      textDiv.textContent = 'Usuario bloqueado';
+      textDiv.classList.add('blocked');
+    } else {
+      textDiv.textContent = message.text;
+    }
 
     const metaDiv = document.createElement('div');
     metaDiv.className = 'msg-meta';
     metaDiv.textContent = `${isSelf ? '' : user.name + ' - '}${message.timestamp}`;
     
-    // If message contains an audio recording, show an audio player below the text
     bodyDiv.appendChild(textDiv);
     if (message.audioUrl) {
       const audioEl = document.createElement('audio');
@@ -118,20 +307,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     bodyDiv.appendChild(metaDiv);
 
-    // --- NUEVO: Crear y añadir el botón de borrar ---
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-msg-btn';
-    deleteBtn.setAttribute('aria-label', 'Eliminar mensaje');
-    deleteBtn.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path>
-      </svg>
-    `;
-    deleteBtn.addEventListener('click', () => {
-      showDeleteModal(msgDiv);
-    });
-    msgDiv.appendChild(deleteBtn);
-    // --- FIN NUEVO ---
+    // Verificar si el usuario está bloqueado
+    if (blockedUsers.has(message.userId) && !isSelf) {
+      if (isSpecialThanksMessage(message.text)) {
+        textDiv.textContent = 'Usuario bloqueado';
+        textDiv.classList.add('blocked');
+      } else {
+        textDiv.textContent = 'Mensaje bloqueado';
+      }
+      msgDiv.classList.add('msg-blocked');
+    }
 
     if (isSelf) {
       msgDiv.appendChild(bodyDiv);
@@ -140,6 +325,9 @@ document.addEventListener('DOMContentLoaded', () => {
       msgDiv.appendChild(avatarDiv);
       msgDiv.appendChild(bodyDiv);
     }
+
+    // Agregar opciones de mensaje
+    addMessageOptions(msgDiv, isSelf, message.userId, message.id);
 
     return msgDiv;
   }
@@ -150,9 +338,27 @@ document.addEventListener('DOMContentLoaded', () => {
     chatArea.scrollTop = chatArea.scrollHeight;
   }
 
+  // Procesar mensajes iniciales
   initialMessages.forEach(addMessageToDOM);
-  // --- FIN NUEVO ---
 
+  // También agregar opciones a los mensajes que ya están en el DOM por defecto
+  function addOptionsToExistingMessages() {
+    const existingMessages = chatArea.querySelectorAll('.msg');
+    existingMessages.forEach(msg => {
+      const isSelf = msg.classList.contains('msg-self');
+      const senderId = msg.dataset.senderId;
+      const messageId = msg.dataset.messageId;
+      
+      if (!msg.querySelector('.msg-options-btn') && !isSelf) {
+        addMessageOptions(msg, isSelf, senderId, messageId);
+      }
+    });
+  }
+
+  // Ejecutar después de un pequeño delay para asegurar que el DOM esté listo
+  setTimeout(addOptionsToExistingMessages, 100);
+
+  // --- FIN: Funcionalidad de círculo y menú contextual ---
 
   const projectImages = [
     { src: 'assets/images/adjuntar-imagen-4.jpg', label: 'Patrullaje - Plaza' },
@@ -189,226 +395,224 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const closeEventModal = () => {
     if (!eventModal) return;
-    eventModal.classList.add('hidden');
-    eventModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    resetEventForm();
-    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-      lastFocusedElement.focus();
-    }
-  };
+      eventModal.classList.add('hidden');
+      eventModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      resetEventForm();
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
+    };
 
-  const renderImagePicker = () => {
-    if (!imagePickerGrid) return;
-    imagePickerGrid.innerHTML = '';
-    projectImages.forEach((item) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'asset-picker-card';
-      btn.innerHTML = `
-        <img src="${item.src}" alt="${item.label}">
-        <span>${item.label}</span>
-      `;
-      btn.addEventListener('click', () => {
-        if (typeof imagePickerAction === 'function') {
-          imagePickerAction(item);
-        }
-        closeImagePicker();
+    const renderImagePicker = () => {
+      if (!imagePickerGrid) return;
+      imagePickerGrid.innerHTML = '';
+      projectImages.forEach((item) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'asset-picker-card';
+        btn.innerHTML = `
+          <img src="${item.src}" alt="${item.label}">
+          <span>${item.label}</span>
+        `;
+        btn.addEventListener('click', () => {
+          if (typeof imagePickerAction === 'function') {
+            imagePickerAction(item);
+          }
+          closeImagePicker();
+        });
+        imagePickerGrid.appendChild(btn);
       });
-      imagePickerGrid.appendChild(btn);
+    };
+
+    const openImagePicker = (action) => {
+      if (!imagePickerModal) return;
+      imagePickerAction = action;
+      renderImagePicker();
+      imagePickerModal.classList.remove('hidden');
+      imagePickerModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeImagePicker = () => {
+      if (!imagePickerModal) return;
+      imagePickerModal.classList.add('hidden');
+      imagePickerModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    const showEventSuccess = () => {
+      if (!eventSuccessOverlay) return;
+      eventSuccessOverlay.classList.remove('hidden');
+      eventSuccessOverlay.setAttribute('aria-hidden', 'false');
+      clearTimeout(successTimer);
+      successTimer = setTimeout(() => hideEventSuccess(), 2200);
+    };
+
+    const hideEventSuccess = () => {
+      if (!eventSuccessOverlay) return;
+      eventSuccessOverlay.classList.add('hidden');
+      eventSuccessOverlay.setAttribute('aria-hidden', 'true');
+    };
+
+    eventSuccessOverlay && eventSuccessOverlay.addEventListener('click', hideEventSuccess);
+
+    // Toggle attach menu on button click
+    attachBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      menuOpen = !menuOpen;
+      if (menuOpen) {
+        attachMenuDropdown.classList.remove('hidden');
+      } else {
+        attachMenuDropdown.classList.add('hidden');
+      }
     });
-  };
 
-  const openImagePicker = (action) => {
-    if (!imagePickerModal) return;
-    imagePickerAction = action;
-    renderImagePicker();
-    imagePickerModal.classList.remove('hidden');
-    imagePickerModal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  };
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (menuOpen && !form.contains(e.target)) {
+        menuOpen = false;
+        attachMenuDropdown.classList.add('hidden');
+      }
+    });
 
-  const closeImagePicker = () => {
-    if (!imagePickerModal) return;
-    imagePickerModal.classList.add('hidden');
-    imagePickerModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  };
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
 
-  const showEventSuccess = () => {
-    if (!eventSuccessOverlay) return;
-    eventSuccessOverlay.classList.remove('hidden');
-    eventSuccessOverlay.setAttribute('aria-hidden', 'false');
-    clearTimeout(successTimer);
-    successTimer = setTimeout(() => hideEventSuccess(), 2200);
-  };
+      const newMessage = {
+        id: `msg_${Date.now()}`,
+        text: text,
+        userId: currentUserId,
+        timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
+      };
+      addMessageToDOM(newMessage);
 
-  const hideEventSuccess = () => {
-    if (!eventSuccessOverlay) return;
-    eventSuccessOverlay.classList.add('hidden');
-    eventSuccessOverlay.setAttribute('aria-hidden', 'true');
-  };
+      const chatId = window.chatAPI && window.chatAPI.getCurrentChatId ? window.chatAPI.getCurrentChatId() : null;
+      if (chatId) {
+        window.chatAPI.sendMessageToChat(chatId, text);
+      }
+      
+      input.value = '';
+      input.focus();
+    });
 
-  eventSuccessOverlay && eventSuccessOverlay.addEventListener('click', hideEventSuccess);
-
-  // Toggle attach menu on button click
-  attachBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    menuOpen = !menuOpen;
-    if (menuOpen) {
-      attachMenuDropdown.classList.remove('hidden');
-    } else {
-      attachMenuDropdown.classList.add('hidden');
-    }
-  });
-
-  // Close menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (menuOpen && !form.contains(e.target)) {
+    // Adjuntar imagen cargando un archivo local
+    attachImageBtn.addEventListener('click', () => {
       menuOpen = false;
       attachMenuDropdown.classList.add('hidden');
-    }
-  });
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const text = input.value.trim();
-    if (!text) return;
-
-    // --- NUEVO: Crear y renderizar el mensaje localmente ---
-    const newMessage = {
-      id: `msg_${Date.now()}`,
-      text: text,
-      userId: currentUserId,
-      timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
-    };
-    addMessageToDOM(newMessage);
-    // --- FIN NUEVO ---
-
-    const chatId = window.chatAPI && window.chatAPI.getCurrentChatId ? window.chatAPI.getCurrentChatId() : null;
-    if (chatId) {
-      // use central API to send message (simulado)
-      window.chatAPI.sendMessageToChat(chatId, text);
-    }
-    
-    input.value = '';
-    input.focus();
-  });
-  // Adjuntar imagen cargando un archivo local
-  attachImageBtn.addEventListener('click', () => {
-    menuOpen = false;
-    attachMenuDropdown.classList.add('hidden');
-    const chatId = window.chatAPI?.getCurrentChatId?.();
-    if (!chatId) {
-      alert('Selecciona una conversacion antes de adjuntar imagenes.');
-      return;
-    }
-    if (!chatImageInput) {
-      alert('No se encontro el selector de archivos.');
-      return;
-    }
-    pendingImageChatId = chatId;
-    chatImageInput.value = '';
-    chatImageInput.click();
-  });
-
-  chatImageInput && chatImageInput.addEventListener('change', (event) => {
-    const inputEl = event.target;
-    const file = inputEl.files && inputEl.files[0];
-    if (!file) {
-      pendingImageChatId = null;
-      return;
-    }
-    if (!file.type || !file.type.startsWith('image/')) {
-      alert('Selecciona un archivo de imagen valido.');
-      inputEl.value = '';
-      pendingImageChatId = null;
-      return;
-    }
-    if (!pendingImageChatId) {
-      alert('Selecciona una conversacion antes de adjuntar imagenes.');
-      inputEl.value = '';
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = typeof reader.result === 'string' ? reader.result : '';
-      if (dataUrl) {
-        if (window.chatAPI?.sendImageInChat) {
-          window.chatAPI.sendImageInChat(pendingImageChatId, dataUrl);
-        } else {
-          console.info('Imagen lista para enviar al chat');
-        }
-      } else {
-        alert('No se pudo leer la imagen seleccionada.');
+      const chatId = window.chatAPI?.getCurrentChatId?.();
+      if (!chatId) {
+        alert('Selecciona una conversacion antes de adjuntar imagenes.');
+        return;
       }
-      pendingImageChatId = null;
-      inputEl.value = '';
-    };
-    reader.onerror = () => {
-      alert('Ocurrio un problema al leer la imagen. Intentalo nuevamente.');
-      pendingImageChatId = null;
-      inputEl.value = '';
-    };
-    reader.readAsDataURL(file);
-  });
+      if (!chatImageInput) {
+        alert('No se encontro el selector de archivos.');
+        return;
+      }
+      pendingImageChatId = chatId;
+      chatImageInput.value = '';
+      chatImageInput.click();
+    });
 
-  imagePickerClose && imagePickerClose.addEventListener('click', closeImagePicker);
-  imagePickerModal && imagePickerModal.addEventListener('click', (evt) => {
-    if (evt.target === imagePickerModal) closeImagePicker();
-  });
+    chatImageInput && chatImageInput.addEventListener('change', (event) => {
+      const inputEl = event.target;
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) {
+        pendingImageChatId = null;
+        return;
+      }
+      if (!file.type || !file.type.startsWith('image/')) {
+        alert('Selecciona un archivo de imagen valido.');
+        inputEl.value = '';
+        pendingImageChatId = null;
+        return;
+      }
+      if (!pendingImageChatId) {
+        alert('Selecciona una conversacion antes de adjuntar imagenes.');
+        inputEl.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = typeof reader.result === 'string' ? reader.result : '';
+        if (dataUrl) {
+          if (window.chatAPI?.sendImageInChat) {
+            window.chatAPI.sendImageInChat(pendingImageChatId, dataUrl);
+          } else {
+            console.info('Imagen lista para enviar al chat');
+          }
+        } else {
+          alert('No se pudo leer la imagen seleccionada.');
+        }
+        pendingImageChatId = null;
+        inputEl.value = '';
+      };
+      reader.onerror = () => {
+        alert('Ocurrio un problema al leer la imagen. Intentalo nuevamente.');
+        pendingImageChatId = null;
+        inputEl.value = '';
+      };
+      reader.readAsDataURL(file);
+    });
 
-  // auto-scroll al cargar para ver últimos mensajes
-  chatArea.scrollTop = chatArea.scrollHeight;
+    imagePickerClose && imagePickerClose.addEventListener('click', closeImagePicker);
+    imagePickerModal && imagePickerModal.addEventListener('click', (evt) => {
+      if (evt.target === imagePickerModal) closeImagePicker();
+    });
 
-  // --- NUEVO: Handler para abrir modal de dictado por voz ---
-  const voiceModal = document.getElementById('voiceModal');
-  const attachVoiceBtn = document.getElementById('attachVoiceBtn');
-  const closeVoiceModal = document.getElementById('closeVoiceModal');
-  const startVoiceBtn = document.getElementById('startVoiceBtn');
-  const stopVoiceBtn = document.getElementById('stopVoiceBtn');
-  const sendVoiceBtn = document.getElementById('sendVoiceBtn');
-  const cancelVoiceBtn = document.getElementById('cancelVoiceBtn');
-  const voiceTranscript = document.getElementById('voiceTranscript');
-  const voiceStatus = document.getElementById('voiceStatus');
+    // auto-scroll al cargar para ver últimos mensajes
+    chatArea.scrollTop = chatArea.scrollHeight;
 
-  function openVoiceModal() {
-    lastFocusedElement = document.activeElement;
-    if (voiceModal) {
-      voiceModal.classList.remove('hidden');
-      voiceModal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      if (voiceTranscript) { voiceTranscript.value = ''; }
-      if (voiceStatus) { voiceStatus.textContent = 'Listo para dictar'; }
-      isRecordingVoice = false;
-      sendVoiceBtn && (sendVoiceBtn.disabled = true);
+    // --- Handler para abrir modal de dictado por voz ---
+    const voiceModal = document.getElementById('voiceModal');
+    const attachVoiceBtn = document.getElementById('attachVoiceBtn');
+    const closeVoiceModal = document.getElementById('closeVoiceModal');
+    const startVoiceBtn = document.getElementById('startVoiceBtn');
+    const stopVoiceBtn = document.getElementById('stopVoiceBtn');
+    const sendVoiceBtn = document.getElementById('sendVoiceBtn');
+    const cancelVoiceBtn = document.getElementById('cancelVoiceBtn');
+    const voiceTranscript = document.getElementById('voiceTranscript');
+    const voiceStatus = document.getElementById('voiceStatus');
+
+    function openVoiceModal() {
+      lastFocusedElement = document.activeElement;
+      if (voiceModal) {
+        voiceModal.classList.remove('hidden');
+        voiceModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (voiceTranscript) { voiceTranscript.value = ''; }
+        if (voiceStatus) { voiceStatus.textContent = 'Listo para dictar'; }
+        isRecordingVoice = false;
+        sendVoiceBtn && (sendVoiceBtn.disabled = true);
+      }
     }
-  }
 
-  function closeVoiceModalFn() {
-    if (!voiceModal) return;
-    stopRecognition();
-    voiceModal.classList.add('hidden');
-    voiceModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
-  }
-
-  function ensureSpeechRecognition() {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-    if (!SpeechRecognition) {
-      return null;
+    function closeVoiceModalFn() {
+      if (!voiceModal) return;
+      stopRecognition();
+      voiceModal.classList.add('hidden');
+      voiceModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
     }
-    const recog = new SpeechRecognition();
-    recog.continuous = true;
-    recog.interimResults = true;
-    recog.lang = 'es-PE';
-    return recog;
-  }
 
-  function startRecognition() {
-    if (isRecordingVoice) return;
-    speechRecognition = ensureSpeechRecognition();
+    function ensureSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+      if (!SpeechRecognition) {
+        return null;
+      }
+      const recog = new SpeechRecognition();
+      recog.continuous = true;
+      recog.interimResults = true;
+      recog.lang = 'es-PE';
+      return recog;
+    }
+
+    function startRecognition() {
+      if (isRecordingVoice) return;
+      speechRecognition = ensureSpeechRecognition();
       lastAudioBlob = null;
       if (speechRecognition) {
         // Browser supports Web Speech API
@@ -440,207 +644,192 @@ document.addEventListener('DOMContentLoaded', () => {
           stopVoiceBtn && (stopVoiceBtn.classList.remove('hidden'));
         }).catch((err) => { console.error('getUserMedia error', err); alert('No se pudo iniciar la grabación. Revisa permisos.'); });
       }
-    let interimText = '';
-    let finalText = '';
-    speechRecognition.onresult = (event) => {
-      interimText = '';
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const result = event.results[i];
-        if (result.isFinal) {
-          finalText += result[0].transcript + ' ';
+      let interimText = '';
+      let finalText = '';
+      speechRecognition.onresult = (event) => {
+        interimText = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i];
+          if (result.isFinal) {
+            finalText += result[0].transcript + ' ';
+          } else {
+            interimText += result[0].transcript;
+          }
+        }
+        if (voiceTranscript) {
+          voiceTranscript.value = (finalText + interimText).trim();
+          sendVoiceBtn && (sendVoiceBtn.disabled = voiceTranscript.value.trim().length === 0);
+        }
+      };
+      speechRecognition.onerror = (e) => {
+        console.error('SpeechRecognition error', e);
+        voiceStatus.textContent = 'Error de reconocimiento';
+        isRecordingVoice = false;
+        stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
+        startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
+      };
+      speechRecognition.onend = () => {
+        isRecordingVoice = false;
+        voiceStatus.textContent = 'Detenido';
+        stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
+        startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
+      };
+      speechRecognition.start();
+      startVoiceBtn && (startVoiceBtn.classList.add('hidden'));
+      stopVoiceBtn && (stopVoiceBtn.classList.remove('hidden'));
+    }
+
+    function stopRecognition() {
+      if (speechRecognition && typeof speechRecognition.stop === 'function') {
+        try { speechRecognition.stop(); } catch (e) { /* ignore */ }
+      }
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        try { mediaRecorder.stop(); } catch (e) { /* ignore */ }
+      }
+      if (mediaStream) {
+        try { mediaStream.getTracks().forEach(t => t.stop()); } catch (e) { }
+        mediaStream = null;
+      }
+      isRecordingVoice = false;
+      stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
+      startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
+      voiceStatus && (voiceStatus.textContent = 'Listo para dictar');
+    }
+
+    if (attachVoiceBtn) {
+      attachVoiceBtn.addEventListener('click', () => {
+        menuOpen = false;
+        attachMenuDropdown.classList.add('hidden');
+        openVoiceModal();
+      });
+    }
+
+    if (closeVoiceModal) closeVoiceModal.addEventListener('click', closeVoiceModalFn);
+    if (cancelVoiceBtn) cancelVoiceBtn.addEventListener('click', () => { stopRecognition(); closeVoiceModalFn(); });
+    if (startVoiceBtn) startVoiceBtn.addEventListener('click', startRecognition);
+    if (stopVoiceBtn) stopVoiceBtn.addEventListener('click', stopRecognition);
+
+    // Send the transcribed voice as message
+    if (sendVoiceBtn) sendVoiceBtn.addEventListener('click', () => {
+      const text = voiceTranscript && voiceTranscript.value.trim();
+      const hasAudio = !!lastAudioBlob;
+      if (!text && !hasAudio) return;
+      const newMessage = {
+        id: `msg_${Date.now()}`,
+        text: text,
+        audioUrl: hasAudio ? URL.createObjectURL(lastAudioBlob) : null,
+        userId: currentUserId,
+        viaVoice: true,
+        timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
+      };
+      addMessageToDOM(newMessage);
+      const chatId = window.chatAPI && window.chatAPI.getCurrentChatId ? window.chatAPI.getCurrentChatId() : null;
+      if (chatId) {
+        if (hasAudio && window.chatAPI?.sendAudioInChat) {
+          window.chatAPI.sendAudioInChat(chatId, lastAudioBlob);
         } else {
-          interimText += result[0].transcript;
+          window.chatAPI.sendMessageToChat(chatId, text);
         }
       }
-      if (voiceTranscript) {
-        voiceTranscript.value = (finalText + interimText).trim();
-        sendVoiceBtn && (sendVoiceBtn.disabled = voiceTranscript.value.trim().length === 0);
-      }
-    };
-    speechRecognition.onerror = (e) => {
-      console.error('SpeechRecognition error', e);
-      voiceStatus.textContent = 'Error de reconocimiento';
-      isRecordingVoice = false;
-      stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
-      startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
-    };
-    speechRecognition.onend = () => {
-      isRecordingVoice = false;
-      voiceStatus.textContent = 'Detenido';
-      stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
-      startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
-    };
-    speechRecognition.start();
-    startVoiceBtn && (startVoiceBtn.classList.add('hidden'));
-    stopVoiceBtn && (stopVoiceBtn.classList.remove('hidden'));
-  }
-
-  function stopRecognition() {
-    if (speechRecognition && typeof speechRecognition.stop === 'function') {
-      try { speechRecognition.stop(); } catch (e) { /* ignore */ }
-    }
-    if (mediaRecorder && mediaRecorder.state === 'recording') {
-      try { mediaRecorder.stop(); } catch (e) { /* ignore */ }
-    }
-    if (mediaStream) {
-      try { mediaStream.getTracks().forEach(t => t.stop()); } catch (e) { }
-      mediaStream = null;
-    }
-    isRecordingVoice = false;
-    stopVoiceBtn && (stopVoiceBtn.classList.add('hidden'));
-    startVoiceBtn && (startVoiceBtn.classList.remove('hidden'));
-    voiceStatus && (voiceStatus.textContent = 'Listo para dictar');
-  }
-
-  if (attachVoiceBtn) {
-    attachVoiceBtn.addEventListener('click', () => {
-      menuOpen = false;
-      attachMenuDropdown.classList.add('hidden');
-      openVoiceModal();
+      // free the audio blob (it is represented as URL locally in the message)
+      lastAudioBlob = null;
+      audioChunks = [];
+      stopRecognition();
+      closeVoiceModalFn();
     });
-  }
 
-  if (closeVoiceModal) closeVoiceModal.addEventListener('click', closeVoiceModalFn);
-  if (cancelVoiceBtn) cancelVoiceBtn.addEventListener('click', () => { stopRecognition(); closeVoiceModalFn(); });
-  if (startVoiceBtn) startVoiceBtn.addEventListener('click', startRecognition);
-  if (stopVoiceBtn) stopVoiceBtn.addEventListener('click', stopRecognition);
+    // Update send button disabled state when transcript changes
+    if (voiceTranscript) {
+      voiceTranscript.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        sendVoiceBtn && (sendVoiceBtn.disabled = val.length === 0);
+      });
+    }
 
-  // Send the transcribed voice as message
-  if (sendVoiceBtn) sendVoiceBtn.addEventListener('click', () => {
-    const text = voiceTranscript && voiceTranscript.value.trim();
-    const hasAudio = !!lastAudioBlob;
-    if (!text && !hasAudio) return;
-    const newMessage = {
-      id: `msg_${Date.now()}`,
-      text: text,
-      audioUrl: hasAudio ? URL.createObjectURL(lastAudioBlob) : null,
-      userId: currentUserId,
-      viaVoice: true,
-      timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
-    };
-    addMessageToDOM(newMessage);
-    const chatId = window.chatAPI && window.chatAPI.getCurrentChatId ? window.chatAPI.getCurrentChatId() : null;
-    if (chatId) {
-      if (hasAudio && window.chatAPI?.sendAudioInChat) {
-        window.chatAPI.sendAudioInChat(chatId, lastAudioBlob);
-      } else {
-        window.chatAPI.sendMessageToChat(chatId, text);
+    // --- TTS (Escuchar mensajes) ---
+    const attachVolumeBtn = document.getElementById('attachVolumeBtn');
+    const volumeIconContainer = document.getElementById('volumeIconContainer');
+
+    function readMessageEl(messageEl) {
+      if (!messageEl || !window.speechSynthesis) return Promise.resolve();
+      const id = messageEl.dataset.messageId;
+      if (!id || playedMessages.has(id)) return Promise.resolve();
+      const textEl = messageEl.querySelector('.msg-text');
+      if (!textEl) return Promise.resolve();
+      const text = textEl.textContent.trim();
+      if (!text) return Promise.resolve();
+
+      return new Promise((resolve, reject) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.onend = () => {
+          playedMessages.add(id);
+          resolve();
+        };
+        utterance.onerror = (e) => { console.error('TTS error', e); resolve(); };
+        window.speechSynthesis.speak(utterance);
+      });
+    }
+
+    async function processSpeechQueue() {
+      while (isListeningMessages && speechQueue.length > 0) {
+        const el = speechQueue.shift();
+        await readMessageEl(el);
+        if (!isListeningMessages) break;
       }
     }
-    // free the audio blob (it is represented as URL locally in the message)
-    lastAudioBlob = null;
-    audioChunks = [];
-    stopRecognition();
-    closeVoiceModalFn();
-  });
 
-  // Update send button disabled state when transcript changes
-  if (voiceTranscript) {
-    voiceTranscript.addEventListener('input', (e) => {
-      const val = e.target.value.trim();
-      sendVoiceBtn && (sendVoiceBtn.disabled = val.length === 0);
-    });
-  }
-
-  // --- NUEVO: TTS (Escuchar mensajes) ---
-  const startListenBtn = document.getElementById('startListenBtn');
-  const stopListenBtn = document.getElementById('stopListenBtn');
-  const attachVolumeBtn = document.getElementById('attachVolumeBtn');
-  const volumeIconContainer = document.getElementById('volumeIconContainer');
-
-  function readMessageEl(messageEl) {
-    if (!messageEl || !window.speechSynthesis) return Promise.resolve();
-    const id = messageEl.dataset.messageId;
-    if (!id || playedMessages.has(id)) return Promise.resolve();
-    const textEl = messageEl.querySelector('.msg-text');
-    if (!textEl) return Promise.resolve();
-    const text = textEl.textContent.trim();
-    if (!text) return Promise.resolve();
-
-    return new Promise((resolve, reject) => {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-ES';
-      utterance.rate = 1;
-      utterance.pitch = 1;
-      utterance.onend = () => {
-        playedMessages.add(id);
-        resolve();
-      };
-      utterance.onerror = (e) => { console.error('TTS error', e); resolve(); };
-      window.speechSynthesis.speak(utterance);
-    });
-  }
-
-  async function processSpeechQueue() {
-    while (isListeningMessages && speechQueue.length > 0) {
-      const el = speechQueue.shift();
-      await readMessageEl(el);
-      if (!isListeningMessages) break;
+    function queueAllUnplayedMessages() {
+      const all = Array.from(chatArea.querySelectorAll('.msg'));
+      const unplayed = all.filter(m => m.dataset.messageId && !playedMessages.has(m.dataset.messageId));
+      speechQueue.push(...unplayed);
+      processSpeechQueue();
     }
-  }
 
-  function queueAllUnplayedMessages() {
-    const all = Array.from(chatArea.querySelectorAll('.msg'));
-    const unplayed = all.filter(m => m.dataset.messageId && !playedMessages.has(m.dataset.messageId));
-    // ensure chronological order - DOM order is oldest-first as appended
-    speechQueue.push(...unplayed);
-    processSpeechQueue();
-  }
-
-  function startListening() {
-    if (!window.speechSynthesis) { alert('Tu navegador no soporta síntesis de voz'); return; }
-    isListeningMessages = true;
-    startListenBtn && startListenBtn.classList.add('hidden');
-    stopListenBtn && stopListenBtn.classList.remove('hidden');
-    queueAllUnplayedMessages();
-    // show header icon indicator
-    if (volumeIconContainer) volumeIconContainer.classList.remove('hidden');
-    if (attachVolumeBtn) { attachVolumeBtn.classList.add('active'); attachVolumeBtn.setAttribute('aria-pressed','true'); }
-  }
-
-  function stopListening() {
-    isListeningMessages = false;
-    speechQueue = [];
-    window.speechSynthesis.cancel();
-    startListenBtn && startListenBtn.classList.remove('hidden');
-    stopListenBtn && stopListenBtn.classList.add('hidden');
-    // hide header icon indicator
-    if (volumeIconContainer) volumeIconContainer.classList.add('hidden');
-    if (attachVolumeBtn) { attachVolumeBtn.classList.remove('active'); attachVolumeBtn.setAttribute('aria-pressed','false'); }
-  }
-
-  if (startListenBtn) startListenBtn.addEventListener('click', startListening);
-  if (stopListenBtn) stopListenBtn.addEventListener('click', stopListening);
-
-  // Attach dropdown volume button toggles listening as well
-  if (attachVolumeBtn) {
-    attachVolumeBtn.addEventListener('click', () => {
-      // hide the attach menu
-      menuOpen = false;
-      attachMenuDropdown.classList.add('hidden');
-      // toggle
-      if (isListeningMessages) {
-        stopListening();
-      } else {
-        startListening();
-      }
-    });
-  }
-
-  // Ensure newly added messages are queued for reading when listening is active
-  const originalAddMessageToDOM = addMessageToDOM;
-  addMessageToDOM = (message) => {
-    originalAddMessageToDOM(message);
-    // queue for TTS if active and not already played
-    const el = chatArea.querySelector(`[data-message-id="${message.id}"]`);
-    if (isListeningMessages && el) {
-      if (!playedMessages.has(message.id)) {
-        speechQueue.push(el);
-        processSpeechQueue();
-      }
+    function startListening() {
+      if (!window.speechSynthesis) { alert('Tu navegador no soporta síntesis de voz'); return; }
+      isListeningMessages = true;
+      queueAllUnplayedMessages();
+      if (volumeIconContainer) volumeIconContainer.classList.remove('hidden');
+      if (attachVolumeBtn) { attachVolumeBtn.classList.add('active'); attachVolumeBtn.setAttribute('aria-pressed','true'); }
     }
-  };
-  
+
+    function stopListening() {
+      isListeningMessages = false;
+      speechQueue = [];
+      window.speechSynthesis.cancel();
+      if (volumeIconContainer) volumeIconContainer.classList.add('hidden');
+      if (attachVolumeBtn) { attachVolumeBtn.classList.remove('active'); attachVolumeBtn.setAttribute('aria-pressed','false'); }
+    }
+
+    // Attach dropdown volume button toggles listening as well
+    if (attachVolumeBtn) {
+      attachVolumeBtn.addEventListener('click', () => {
+        menuOpen = false;
+        attachMenuDropdown.classList.add('hidden');
+        if (isListeningMessages) {
+          stopListening();
+        } else {
+          startListening();
+        }
+      });
+    }
+
+    // Ensure newly added messages are queued for reading when listening is active
+    const originalAddMessageToDOM = addMessageToDOM;
+    addMessageToDOM = (message) => {
+      originalAddMessageToDOM(message);
+      const el = chatArea.querySelector(`[data-message-id="${message.id}"]`);
+      if (isListeningMessages && el) {
+        if (!playedMessages.has(message.id)) {
+          speechQueue.push(el);
+          processSpeechQueue();
+        }
+      }
+    };
+    
     // --- Poll creation UI handlers ---
     const pollModal = document.getElementById('pollModal');
     const pollQuestion = document.getElementById('pollQuestion');
@@ -653,7 +842,6 @@ document.addEventListener('DOMContentLoaded', () => {
       pollModal.classList.remove('hidden');
       pollModal.setAttribute('aria-hidden','false');
       pollQuestion.value = '';
-      // reset to two inputs
       pollOptionsContainer.innerHTML = `
         <label>Opción 1 <input type="text" class="poll-option" placeholder="Texto opción 1" /></label>
         <label>Opción 2 <input type="text" class="poll-option" placeholder="Texto opción 2" /></label>

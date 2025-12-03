@@ -105,16 +105,9 @@
     <!-- REEMPLAZAMOS LA ZONA DEL MAPA POR EL CHAT, PERO CONSERVAMOS LA CLASE .mapa -->
     <section class="mapa">
       <div class="mapa-container chat-layout">
-        <!-- Backdrop used for centered sidebar on mobile/tablet -->
-        <div id="chatSidebarBackdrop" class="chat-sidebar-backdrop hidden" aria-hidden="true"></div>
 
  <!-- Columna izquierda: Buscar chats -->
 <div class="chat-sidebar">
-
-  <!-- Back button for mobile overlay: top-right in centered overlay -->
-  <button id="sidebarBackBtn" class="sidebar-back-btn hidden" aria-label="Cerrar menú" title="Atrás">
-    <img src="assets/images/return_minimized.png" alt="Atrás" />
-  </button>
 
   <!-- Botón para minimizar sidebar -->
   <button class="sidebar-toggle" aria-label="Minimizar sidebar">
@@ -185,11 +178,7 @@
   <!-- Columna derecha: Chat actual -->
   <div class="chat-wrap" role="main" aria-label="Chat Vecinal">
    <header class="chat-top">
-  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; position:relative;">
-    <!-- Header toggle (for mobile): a copy of the sidebar toggle placed to the left of the chat title -->
-    <button id="sidebarToggleHeader" class="sidebar-toggle header-toggle" aria-label="Minimizar sidebar">
-      <img src="assets/images/return_minimized.png" alt="Minimizar" />
-    </button>
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
     <div>
       <h1 id="chatTitle">
         <img src="assets/images/img_group.png" alt="Grupo" class="group-icon-chat" />
