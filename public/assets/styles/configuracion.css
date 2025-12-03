@@ -464,6 +464,40 @@ body {
   display: block;
 }
 
+/* FOOTER (alineado al estilo global azul) */
+.footer {
+  background: #1A284D;
+  color: #FFFFFF;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 18px 0;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.footer-inner > div:first-child {
+  text-align: left;
+}
+
+.footer-inner .muted {
+  text-align: center;
+  color: #CBD5E0;
+}
+
+.footer-inner .social {
+  justify-self: end;
+}
+
+.social a {
+  color: #FFFFFF;
+  margin-left: 10px;
+  display: inline-block;
+}
+
 
 .hamburger-btn {
   display: none;
@@ -593,10 +627,17 @@ body {
     position: relative; /* IMPORTANTE */
   }
 
+  .page-heading .container {
+    position: relative;
+    padding-right: 72px; /* evita que el botón se superponga al texto */
+  }
+
   .back-button {
     position: absolute;
-    top: 160px;
-    left: 95%;
+    top: 50%;
+    right: 10px;
+    left: auto;
+    transform: translateY(-50%);
   }
 
 

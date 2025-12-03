@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Urban Safe - Configuración</title>
-		<link rel="icon" href="favicon.ico" type="image/x-icon" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-			rel="stylesheet"
-		/>
-		<link rel="stylesheet" href="assets/styles/nav.css">
-		<link rel="stylesheet" href="assets/styles/configuracion.css" />
-	</head>
-	<body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Recordatorios</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles/nav.css">
+  <link rel="stylesheet" href="assets/styles/admin.css" />
+  <link rel="stylesheet" href="assets/styles/encuestas.css" />
+</head>
+<body>
         <nav class="navbar">
             <div class="container nav-inner">
                                 <div class="brand-wrap">
@@ -97,88 +94,50 @@
             </div>
         </nav>
 
-		<header class="page-heading">
-			<div class="container">
-				<button class="back-button" type="button" aria-label="Regresar">
-					<span>←</span>
-				</button>
-				<div>
-					<p class="eyebrow">Ajustes de aplicación</p>
-					<h1>Configuración</h1>
-					<p class="muted">Controla lo que otros vecinos pueden ver de tu perfil.</p>
-				</div>
-			</div>
-		</header>
+  <div class="back-wrap">
+    <a href="javascript:history.back()" class="back-link" aria-label="Volver">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" fill="#0C132D" />
+      </svg>
+    </a>
+    <div class="accent-box" aria-hidden="true"></div>
+  </div>
 
-		<main class="container main-content">
-			<section class="card">
-				<div class="card-header">
-					<h2>Visibilidad del perfil</h2>
-					<p class="muted">
-						Activa o desactiva la información que compartes con la comunidad.
-					</p>
-				</div>
-				<ul class="preference-list">
-					<li>
-						<div>
-							<h3>Mostrar nombre</h3>
-							<p class="muted">Tu nombre completo será visible para todos.</p>
-						</div>
-						<label class="switch">
-							<input type="checkbox" checked />
-							<span></span>
-						</label>
-					</li>
-					<li>
-						<div>
-							<h3>Mostrar ubicación aproximada</h3>
-							<p class="muted">Solo los vecinos cercanos verán tu zona.</p>
-						</div>
-						<label class="switch">
-							<input type="checkbox" />
-							<span></span>
-						</label>
-					</li>
-					<li>
-						<div>
-							<h3>Mostrar número de teléfono</h3>
-							<p class="muted">Mantén tu número oculto para mayor seguridad.</p>
-						</div>
-						<label class="switch">
-							<input type="checkbox" />
-							<span></span>
-						</label>
-					</li>
-				</ul>
-			</section>
+<main>
+  <div class="app">
 
-			<section class="card quick-links">
-				<a class="quick-link" href="notificaciones.html">
-					<span>Notificaciones</span>
-					<span>›</span>
-				</a>
-				<a class="quick-link" href="botonPani.html">
-					<span>Botón de pánico</span>
-					<span>›</span>
-				</a>
-			</section>
+    <section class="panel" aria-label="Lista de encuestas">
+      <div class="panel-header">
+        <div class="icon">👥</div>
+        <h2>Encuestas - <span id="totalCount">98</span> Respuestas</h2>
+      </div>
 
-			<section class="card summary">
-				<div>
-					<h2>Resumen de privacidad</h2>
-					<p class="muted">
-						Tu nombre es visible para todos los usuarios. La ubicación aproximada
-						solo se comparte con tus vecinos y tu número permanece oculto.
-					</p>
-				</div>
-				<button class="primary-btn">Guardar cambios</button>
-			</section>
-		</main>
-    <!-- FOOTER (identico a map.html) -->
+      <div class="list-wrap">
+        <ul class="list" id="answersList" role="list">
+          <!-- items rendered por JS -->
+        </ul>
+
+        <!-- espacio para scrollbar separada visualmente -->
+        <div style="width:16px"></div>
+      </div>
+
+    </section>
+
+    <aside class="right-col">
+      <div>
+        <div class="create-cta">+ Crear encuestas</div>
+        <small>Pulsa para crear una nueva encuesta</small>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+  <!-- FOOTER (idéntico a map.html) -->
     <footer class="footer">
       <div class="container footer-inner">
         <div>Urban Safe - 2025 - Lima, Peru</div>
-        <div class="muted">&copy; 2025 Urban Trust. Todos los derechos reservados.</div>
+        <div class="muted">© 2025 Urban Trust. Todos los derechos reservados.</div>
         <div class="social">
           <a href="assets/documents/legal.pdf" target="_blank" aria-label="Legal">
             <img src="assets/images/legal.png" alt="Legal" width="24" height="24" />
@@ -195,7 +154,7 @@
           </a>
         </div>
       </div>
-      <nav class="mobile-footer-nav" aria-label="Navegacion principal movil">
+      <nav class="mobile-footer-nav" aria-label="Navegación principal móvil">
         <a href="map.html" class="mobile-footer-link">
           <span class="mobile-footer-icon" aria-hidden="true">
             <svg viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -222,8 +181,7 @@
         </a>
       </nav>
     </footer>
-
-    <script src="assets/scripts/mobile-nav.js"></script>
-    <script src="assets/scripts/confi.js"></script>
-  </body>
+  <script src="assets/scripts/encuestas.js"></script>
+  <script src="assets/scripts/mobile-nav.js"></script>
+</body>
 </html>

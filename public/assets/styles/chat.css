@@ -118,6 +118,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
 }
 
 .chat-top h1 {
@@ -126,6 +127,49 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+}
+
+.chat-top-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  flex: 1 1 auto;
+  position: relative;
+  text-align: center;
+}
+
+.chat-top-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.header-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0,0,0,0.15);
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.header-toggle-icon svg {
+  display: block;
+}
+
+.header-toggle:hover {
+  background: rgba(0,0,0,0.24);
 }
 
 .chat-top .group-icon-chat {
@@ -360,9 +404,8 @@ body {
 /* Input del chat */
 .chat-input {
   display: flex;
-  gap: 8px;
+  gap: 16px;
   padding: 12px 14px;
-  border-top: 1px solid rgba(0,0,0,0.06);
   background: rgb(46, 56, 89);
   position: relative;
 }
@@ -478,62 +521,97 @@ body {
 
 
 /* Responsivo: tablet y móvil */
-@media (max-width: 1024px) {
+@media (max-width: 1024px) and (min-width: 821px) {
   .chat-sidebar { width: 220px; }
   .chat-wrap { max-width: calc(100% - 220px); }
   .chat-item { width: 92%; }
   :root { --icon-size: clamp(20px, 4vw, 36px); }
 }
 
-/* Tablet / iPad: prefer desktop layout (sidebar left, chat right) rather than mobile overlay */
-@media (max-width: 1024px) and (min-width: 821px) {
-  .chat-sidebar { width: 240px; }
+@media (max-width: 820px) and (min-height: 1024px) {
+  .mapa {
+    height: calc(100vh - 125px) !important; 
+    min-height: 0 !important;
+    overflow: hidden;
+    padding-bottom: 0;
+    align-items: stretch;
+  }
+
+  .mapa-container.chat-layout {
+    height: 100% !important;
+    padding: 0;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .chat-sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 60px;
+    width: 85vw;
+    max-width: 320px;
+    height: auto;
+    z-index: 1500;
+    transform: translateX(-110%);
+    transition: transform 0.3s ease;
+    border-radius: 0 16px 16px 0;
+  }
+  
+  .chat-sidebar:not(.minimized) {
+    transform: translateX(0);
+  }
+
   .chat-wrap {
-    position: static; /* behave like desktop */
-    flex: 1; /* occupy remaining space */
-    min-width: 0;
-    left: auto; right: auto; top: auto; bottom: auto;
-    z-index: auto;
-    border-radius: 12px;
+    height: 100% !important;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
     display: flex;
     flex-direction: column;
-    height: 100%;
     overflow: hidden;
-    margin-left: 0;
   }
-  .chat-wrap .chat-input { position: static; }
-  .chat-wrap .chat-area { padding-bottom: 0; }
-  .header-toggle { display: none !important; }
-  .chat-sidebar .sidebar-toggle { display: flex; }
-  /* Keep the floating maximize control visible on tablet (user can restore the sidebar when minimized) */
-  .sidebar-maximize { display: flex !important; left: 12px; top: calc(var(--app-header-height) + 16px); }
-  .chat-top h1 { padding-left: 12px; }
-}
 
-@media (max-width: 820px) {
-  .mapa-container.chat-layout {
-    flex-direction: column;
-    gap: 10px;
-    align-items: stretch;
-    height: 100%;
+  .chat-top {
+    flex: 0 0 auto;
+    padding: 10px 12px;
   }
-  .chat-sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-    transform: translateX(0);
-    padding: 10px;
-    border-radius: 12px;
-    order: 0;
-    max-height: 36vh;
+  
+  .chat-top h1 { font-size: 16px; }
+  .chat-zone { font-size: 11px; display: block; }
+  .header-toggle { display: inline-flex !important; margin-right: 8px; }
+
+  .chat-area {
+    flex: 1;
     overflow-y: auto;
+    padding: 12px;
+    height: auto;
+    min-height: 0;
+    padding-bottom: 12px; 
   }
-  .chat-wrap { max-width: 100%; order: 1; height: calc(100vh - 64px - 36vh - 40px); }
-  .msg-body { max-width: 85%; }
-  .chat-item { width: 100%; margin: 8px 0; }
-  .emoji-modal-inner { width: calc(100% - 32px); }
-  .emoji-grid { grid-template-columns: repeat(6,1fr); }
-  :root { --icon-size: clamp(18px, 6vw, 28px); --avatar-size: clamp(28px, 9vw, 40px); }
+
+  .chat-input {
+    flex: 0 0 auto;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    border-radius: 0;
+    z-index: 20;
+    padding: 8px 10px;
+    background: #2E3859;
+  }
+
+  .chat-input input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  :root { 
+    --icon-size: 24px; 
+    --avatar-size: 36px; 
+  }
 }
 
 /* Make the chat wrap overlay above the footer on small screens (mobile/tablet), and keep the input pinned */
@@ -684,65 +762,22 @@ body {
 
 /* On small screens use transform to slide the sidebar off-canvas */
 @media (max-width: 820px) {
-  /* make sidebar behave as a center overlay when visible; hide above the viewport when minimized */
-  .chat-sidebar {
-    position: fixed;
-    top: calc(64px + 18px);
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: min(420px, 94%);
-    max-height: 64vh;
-    z-index: 1600;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.28);
-    border-radius: 12px;
-    transition: transform 300ms cubic-bezier(.2,.9,.2,1), opacity 200ms ease;
-    transform-origin: top center;
-  }
-  /* When the sidebar shows the minimize/maximize/back button, avoid overlap with search input by adding padding-left */
-  .chat-sidebar .sidebar-maximize:not(.hidden) ~ .chat-search,
-  .chat-sidebar .sidebar-back-btn:not(.hidden) ~ .chat-search,
-  .chat-sidebar .sidebar-toggle:not(.hidden) ~ .chat-search {
-    padding-left: 56px; /* enough to leave room for the button */
-  }
-  /* Mobile overlay: show back button inside header on top-right */
-  .sidebar-back-btn {
-    display: none; /* default hidden; JS toggles visibility also */
-    position: absolute;
-    top: 12px;
-    left: 12px; /* moved closer to the left edge of the chat overlay */
-    z-index: 1700;
-    background: var(--panel);
-    border: none;
-    width: 44px;
-    height: 44px;
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .sidebar-back-btn img { width: 28px; height: 28px; }
-  .sidebar-back-btn.hidden { display: none !important; }
-  .chat-sidebar:not(.minimized) .sidebar-back-btn { display: flex !important; }
   .chat-sidebar.minimized {
-    transform: translate(-50%, -120%); /* hide it above viewport */
-    opacity: 0;
-    pointer-events: none;
-  }
-  /* Position the maximize button closer to the left edge of the chat overlay
-     when on mobile: calculate overlay left based on centered container width. */
-  .sidebar-maximize {
-    left: calc(50% - (min(420px, 94%) / 2) + 8px);
+    width: 82vw;
+    max-width: 420px;
+    padding: 12px;
+    transform: translateX(-110%);
+    position: fixed;
     top: 70px;
-    transform: translateX(0);
+    bottom: 0;
+    left: 0;
+    z-index: 1500;
   }
-  /* When the sidebar is minimized on tablet, expand chat-wrap to cover entire area (including where sidebar was) */
-  .chat-sidebar.minimized + .chat-wrap {
+  .chat-wrap {
+    width: 100% !important;
     max-width: 100% !important;
-    margin-left: 0 !important;
-    flex: 1 1 100% !important;
   }
-  /* Make maximize button visible on tablet too so the user can restore the sidebar */
-  .sidebar-maximize { display: flex !important; left: 12px; top: calc(var(--app-header-height) + 16px); }
+  .sidebar-maximize { left: 12px; top: 76px; }
 }
 
 /* Botón para maximizar sidebar (cuando está minimizado) */
@@ -1598,6 +1633,142 @@ body {
   .event-modal-header h3 {
     font-size: 22px;
   }
+
+  
 }
 
 .hidden { display: none !important; }
+
+/* Estilos para el botón de opciones de mensaje */
+.msg-options-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #666;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 2;
+}
+
+.msg:hover .msg-options-btn {
+  opacity: 1;
+}
+
+.msg-options-btn:hover {
+  background: #f5f5f5;
+}
+
+/* Menú contextual */
+.msg-context-menu {
+  position: absolute;
+  right: 35px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  min-width: 180px;
+  padding: 8px 0;
+  display: none;
+}
+
+.msg-context-menu.show {
+  display: block;
+}
+
+.context-menu-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.context-menu-item:hover {
+  background: #f5f5f5;
+}
+
+.context-menu-item.delete {
+  color: #d32f2f;
+}
+
+.context-menu-item.block {
+  color: #f57c00;
+}
+
+.context-menu-item svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Estados de mensajes */
+.msg-deleted .msg-text {
+  color: #999;
+  font-style: italic;
+}
+
+.msg-blocked .msg-text {
+  color: #999;
+  font-style: italic;
+}
+
+.msg-deleted .delete-msg-btn,
+.msg-deleted .msg-options-btn,
+.msg-blocked .delete-msg-btn,
+.msg-blocked .msg-options-btn {
+  display: none !important;
+}
+
+
+.msg-other .msg-body {
+  max-width: 78%;
+}
+
+.msg-self .msg-body {
+  max-width: 78%; 
+}
+
+@media (max-width: 640px) {
+  .msg-other .msg-body,
+  .msg-self .msg-body {
+    max-width: 94%;
+  }
+}
+
+.msg-options-btn {
+  position: absolute;
+  top: 4px;     /* antes estaba más lejos */
+  right: -5px;  /* lo pegamos al globo */
+  font-size: 16px;
+  background: white;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+
+.msg-container {
+  margin-right: 20px; /* espacio solo para el botón */
+}

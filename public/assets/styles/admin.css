@@ -681,28 +681,30 @@ body {
     display: block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     body {
         padding-top: 60px;
         padding-bottom: 90px;
     }
-    .arrow-icon { display: none; }
-    .menu {
+
+    /* Navbar en modo móvil/tablet */
+    nav.navbar .arrow-icon,
+    nav.navbar .brand-toggle {
         display: none;
-        position: fixed;
-        top: 64px;
-        right: 12px;
-        flex-direction: column;
-        gap: 10px;
-        background: #EAE9E7;
-        padding: 12px;
-        border-radius: 12px;
-        box-shadow: 0 12px 20px rgba(0,0,0,0.18);
-        z-index: 1001;
     }
-    .menu.menu-open { display: flex; }
-    .menu-toggle:checked ~ .menu { display: flex; }
-    .login-link {
+
+    nav.navbar .menu,
+    nav.navbar .menu.menu-open,
+    nav.navbar .menu-toggle:checked ~ .menu {
+        display: none;
+    }
+
+    nav.navbar .user-menu,
+    nav.navbar .menu-toggle:checked ~ .user-menu {
+        display: none;
+    }
+
+    nav.navbar .login-link {
         padding: 8px 12px;
         background: #0C132D;
         color: #EAE9E7;
@@ -710,8 +712,10 @@ body {
         font-weight: 600;
         font-size: 13px;
     }
-    .hamburger-btn { display: inline-flex; }
-    .user-menu {
+
+    nav.navbar .hamburger-btn { display: inline-flex; }
+
+    nav.navbar .user-menu {
         left: auto;
         right: 0;
         width: 88vw;
@@ -720,15 +724,20 @@ body {
         padding: 16px 16px 96px;
         overflow-y: auto;
     }
-    .user-menu > .menu-item:last-child {
+
+    nav.navbar .user-menu > .menu-item:last-child {
         align-self: stretch;
         margin-bottom: 8px;
     }
+
+    /* Layout tendencia en una columna en tablets/móvil */
+    .trend-layout { grid-template-columns: 1fr; }
+
     .footer-inner { display: none; }
     .mobile-footer-nav { display: flex; }
 }
 
-@media (min-width: 901px) {
+@media (min-width: 1025px) {
     .trend-head { padding-top: 0; text-align: left; }
     .trend-head-row { display: flex; align-items: center; justify-content: space-between; }
     .trend-head-left { text-align: left; }
@@ -736,7 +745,7 @@ body {
     .btn-back-trend { position: absolute; margin-left: 8px; height: auto; right: 0; }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .trend-head { 
         position: relative; 
         text-align: center; 

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urban Safe - Notificaciones</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles/nav.css">
+    <link rel="stylesheet" href="assets/styles/configuracion.css" />
+    <link rel="stylesheet" href="assets/styles/notificaciones.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-inner">
+        <a href="index.html" class="brand" aria-label="Urban Safe">
+          <img
+            class="brand-logo"
+            src="assets/images/UrbanSafe-Logo-Horizontal-Sin Fondo.png"
+            alt="Urban Safe"
+          />
+        </a>
+
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="map.html">Mapa</a></li>
+          <li><a href="chat.html">Chats</a></li>
+          <li><a href="reports.html">Incidentes</a></li>
+        </ul>
+
+        <a href="login.html" class="login-link">
+          <span>Iniciar sesión</span>
+        </a>
+        <button
+          type="button"
+          class="hamburger-btn"
+          aria-label="Abrir menú de navegación móvil"
+        >
+          <span class="hamburger-lines" aria-hidden="true"></span>
+        </button>
+      </div>
+    </nav>
+
+    <main class="notif-shell">
+      <div class="container">
+        <div class="notif-header">
+          <button class="notif-back" type="button" aria-label="Regresar">
+            <span><</span>
+          </button>
+          <h1 class="notif-heading">Notificaciones</h1>
+        </div>
+
+        <section class="notif-card" aria-labelledby="notifTitle">
+          <h2 id="notifTitle">Notificaciones</h2>
+
+          <div class="notif-group">
+            <p class="group-label">Permisos</p>
+            <div class="notif-row">
+              <div class="notif-copy">
+                <p class="row-title">Permitir notificaciones</p>
+                <p class="row-sub">
+                  Recibe notificaciones sobre eventos importantes y actualizaciones.
+                </p>
+              </div>
+              <label class="switch slim">
+                <input
+                  type="checkbox"
+                  data-pref="allow"
+                  aria-label="Permitir notificaciones"
+                  checked
+                />
+                <span></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="notif-group">
+            <p class="group-label">Configuración</p>
+
+            <div class="notif-row">
+              <div class="notif-copy">
+                <p class="row-title">Zonas de interés</p>
+                <p class="row-sub">
+                  Selecciona las zonas de interés para recibir alertas.
+                </p>
+              </div>
+              <button class="row-action" type="button" aria-label="Configurar zonas de interés">></button>
+            </div>
+
+            <div class="notif-row">
+              <div class="notif-copy">
+                <p class="row-title">Frecuencia de alertas</p>
+                <p class="row-sub">
+                  Ajusta la frecuencia de las alertas según el tipo de incidente.
+                </p>
+              </div>
+              <button class="row-action" type="button" aria-label="Configurar frecuencia de alertas">></button>
+            </div>
+
+            <div class="notif-row">
+              <div class="notif-copy">
+                <p class="row-title">Silenciar notificaciones</p>
+                <p class="row-sub">
+                  Silencia las notificaciones temporalmente.
+                </p>
+              </div>
+              <label class="switch slim">
+                <input
+                  type="checkbox"
+                  data-pref="silence"
+                  aria-label="Silenciar notificaciones"
+                />
+                <span></span>
+              </label>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>Urban Safe - 2025 - Lima, Perú</div>
+        <div class="muted">&copy; 2025 Urban Trust. Todos los derechos reservados.</div>
+        <div class="social">
+          <a href="assets/documents/legal.pdf" target="_blank" aria-label="Legal">
+            <img src="assets/images/legal.png" alt="Legal" width="24" height="24" />
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
+            </svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465A4.902 4.902 0 0120.322 3.678c.735.735 1.006 1.328 1.153 1.772.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 8a3 3 0 110-6 3 3 0 010 6zm6.406-11.845a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <nav class="mobile-footer-nav" aria-label="Navegacion principal movil">
+        <a href="map.html" class="mobile-footer-link">
+          <span class="mobile-footer-icon" aria-hidden="true">
+            <svg viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32.8854 47.6094L20.625 43.3125L9.96875 47.4375C9.58681 47.5903 9.21403 47.6384 8.85042 47.5819C8.48681 47.5253 8.15299 47.4008 7.84896 47.2083C7.54493 47.0158 7.3066 46.7584 7.13396 46.436C6.96132 46.1137 6.875 45.7409 6.875 45.3177V13.1771C6.875 12.6806 7.01861 12.2413 7.30583 11.8594C7.59306 11.4774 7.98417 11.191 8.47917 11L19.1354 7.39062C19.3646 7.31423 19.6037 7.25694 19.8527 7.21875C20.1017 7.18055 20.3592 7.16145 20.625 7.16145C20.8908 7.16145 21.149 7.18055 21.3996 7.21875C21.6501 7.25694 21.8885 7.31423 22.1146 7.39062L34.375 11.6875L45.0312 7.56249C45.4132 7.40972 45.786 7.36236 46.1496 7.42041C46.5132 7.47847 46.847 7.60222 47.151 7.79166C47.4551 7.98111 47.6942 8.2393 47.8683 8.56624C48.0425 8.89319 48.1281 9.2652 48.125 9.68229V41.8229C48.125 42.3194 47.9822 42.7587 47.6965 43.1406C47.4108 43.5226 47.0189 43.809 46.5208 44L35.8646 47.6094C35.6354 47.6858 35.3971 47.743 35.1496 47.7812C34.9021 47.8194 34.6439 47.8385 34.375 47.8385C34.1061 47.8385 33.8487 47.8194 33.6027 47.7812C33.3567 47.743 33.1176 47.6858 32.8854 47.6094ZM32.0833 42.5104V15.6979L22.9167 12.4896V39.3021L32.0833 42.5104ZM36.6667 42.5104L43.5417 40.2187V13.0625L36.6667 15.6979V42.5104ZM11.4583 41.9375L18.3333 39.3021V12.4896L11.4583 14.7812V41.9375Z" fill="#EAE9E7"/>
+            </svg>
+          </span>
+          <span class="mobile-footer-label">Mapa</span>
+        </a>
+        <a href="chat.html" class="mobile-footer-link">
+          <span class="mobile-footer-icon" aria-hidden="true">
+            <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M41.5 4.16667H8.16667C5.875 4.16667 4.02083 6.04167 4.02083 8.33334L4 45.8333L12.3333 37.5H41.5C43.7917 37.5 45.6667 35.625 45.6667 33.3333V8.33334C45.6667 6.04167 43.7917 4.16667 41.5 4.16667ZM37.3333 29.1667H12.3333V25H37.3333V29.1667ZM37.3333 22.9167H12.3333V18.75H37.3333V22.9167ZM37.3333 16.6667H12.3333V12.5H37.3333V16.6667Z" fill="#EAE9E7"/>
+            </svg>
+          </span>
+          <span class="mobile-footer-label">Chats</span>
+        </a>
+        <a href="reports.html" class="mobile-footer-link">
+          <span class="mobile-footer-icon" aria-hidden="true">
+            <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M34.0455 8.84615H42V46H7V8.84615H14.9545V12.0769H34.0455V8.84615ZM13.3636 25H35.6364V21.7692H13.3636V25ZM13.3636 37.9231H35.6364V34.6923H13.3636V37.9231ZM18.1364 8.84615V4H30.8636V8.84615H18.1364Z" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="mobile-footer-label">Incidentes</span>
+        </a>
+      </nav>
+    </footer>
+
+    <script src="assets/scripts/mobile-nav.js"></script>
+    <script src="assets/scripts/notificaciones.js"></script>
+  </body>
+</html>
