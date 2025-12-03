@@ -1524,6 +1524,13 @@ body {
   font-style: italic;
 }
 
+.msg-deleted .delete-msg-btn,
+.msg-deleted .msg-options-btn,
+.msg-blocked .delete-msg-btn,
+.msg-blocked .msg-options-btn {
+  display: none !important;
+}
+
 
 .msg-other .msg-body {
   max-width: 22%;

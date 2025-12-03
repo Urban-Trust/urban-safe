@@ -627,10 +627,17 @@ body {
     position: relative; /* IMPORTANTE */
   }
 
+  .page-heading .container {
+    position: relative;
+    padding-right: 72px; /* evita que el botón se superponga al texto */
+  }
+
   .back-button {
     position: absolute;
-    top: 160px;
-    left: 95%;
+    top: 50%;
+    right: 10px;
+    left: auto;
+    transform: translateY(-50%);
   }
 
 
