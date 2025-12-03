@@ -4,6 +4,7 @@
 
 html, body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -34,15 +35,15 @@ body {
   background: #EAE9E7;
   border-radius: 18px;
   padding: 30px;
-  max-width: 600px;
-  margin: 49px auto;
+  width: min(680px, 92vw);
+  margin: 64px auto 48px;
   position: relative; /* IMPORTANTE */
 }
 
 .back-button {
-  position: absolute;
-  top: 120px;
-  left: 480px;
+  position: fixed;
+  top: 84px;
+  left: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -661,16 +662,15 @@ main {
     background: #EAE9E7;
     border-radius: 18px;
     padding: 30px;
-    max-width: 95%;
-    top: 40px;
-    margin: 10px auto 40px auto;
-    position: relative; /* IMPORTANTE */
+    max-width: 96%;
+    margin: 80px auto 48px auto;
+    position: relative;
   }
 
   .back-button {
-    position: absolute;
-    top: 160px;
-    left: 95%;
+    position: fixed;
+    top: 76px;
+    left: 12px;
   }
 
   .user-menu {
@@ -798,4 +798,6 @@ main.flex-grow {
   display: flex;
   justify-content: center;   /* centra horizontal */
   align-items: flex-start;    /* contenido desde arriba */
+  padding: 12px 16px 32px;
+  box-sizing: border-box;
 }
