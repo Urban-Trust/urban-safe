@@ -1429,6 +1429,8 @@ body {
   .event-modal-header h3 {
     font-size: 22px;
   }
+
+  
 }
 
 .hidden { display: none !important; }
@@ -1524,9 +1526,31 @@ body {
 
 
 .msg-other .msg-body {
-  max-width: 20%;
+  max-width: 22%;
 }
 
 .msg-self .msg-body {
   max-width: 70%; 
+}
+
+.msg-options-btn {
+  position: absolute;
+  top: 4px;     /* antes estaba más lejos */
+  right: -5px;  /* lo pegamos al globo */
+  font-size: 16px;
+  background: white;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+
+.msg-container {
+  margin-right: 20px; /* espacio solo para el botón */
 }

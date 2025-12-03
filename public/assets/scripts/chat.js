@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
       optionsBtn.className = 'msg-options-btn';
       optionsBtn.setAttribute('aria-label', 'Opciones del mensaje');
       optionsBtn.innerHTML = '⋯'; // Tres puntos verticales
-      optionsBtn.dataset.senderId = senderId;
+      optionsBtn.dataset.senderId = String(senderId).trim();
       optionsBtn.dataset.messageId = messageId;
       
       // Crear el menú contextual
@@ -184,53 +184,45 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Función para bloquear todos los mensajes de un usuario CON LA FUNCIONALIDAD ESPECIAL
-  function blockUserMessages(senderId) {
-    blockedUsers.add(senderId);
-    
-    const allMessages = document.querySelectorAll(`[data-sender-id="${senderId}"]`);
-    
-    allMessages.forEach(msg => {
-      const textDiv = msg.querySelector('.msg-text');
-      const messageId = msg.dataset.messageId;
-      
-      if (textDiv) {
-        // Verificar si es el texto específico
-        if (isSpecialThanksMessage(textDiv.textContent.trim())) {
+  // Función para bloquear todos los mensajes de un usuario CON LA FUNCIONALIDAD ESPECIAL
+    function blockUserMessages(senderId) {
+      if (!senderId && senderId !== 0) return;
+
+      const normalizedTarget = String(senderId).trim().toLowerCase();
+      blockedUsers.add(normalizedTarget);
+
+      const allMsgs = Array.from(document.querySelectorAll('.msg'));
+
+      allMsgs.forEach(msg => {
+        const ds = (msg.dataset.senderId || '').trim().toLowerCase();
+        if (ds !== normalizedTarget) return;
+
+        // Buscar .msg-text en cualquier lugar del mensaje
+        const textDiv = msg.querySelector('.msg-text');
+        if (!textDiv) return;
+
+        // Tomar texto original si existe
+        const originalText = textDiv.getAttribute('data-original-text') || textDiv.textContent || '';
+
+        // Caso especial (Tu lógica personalizada)
+        if (originalText === 'Gracias por el aviso — lo revisamos.') {
           textDiv.textContent = 'Usuario bloqueado';
-          textDiv.classList.add('blocked');
-          blockedThanksMessages.add(messageId);
-          
-          // Efecto visual especial
-          textDiv.style.transition = 'all 0.3s ease';
-          setTimeout(() => {
-            textDiv.style.backgroundColor = '#ffebee';
-            textDiv.style.padding = '8px 12px';
-            textDiv.style.borderRadius = '12px';
-            textDiv.style.display = 'inline-block';
-          }, 100);
         } else {
           textDiv.textContent = 'Mensaje bloqueado';
         }
+
         msg.classList.add('msg-blocked');
-      }
-      
-      // Ocultar el botón de opciones si existe
-      const optionsBtn = msg.querySelector('.msg-options-btn');
-      if (optionsBtn) {
-        optionsBtn.style.display = 'none';
-      }
-    });
-    
-    // Mostrar notificación especial si se bloqueó algún mensaje con el texto específico
-    const specialMessagesBlocked = Array.from(allMessages).some(msg => {
-      const textDiv = msg.querySelector('.msg-text');
-      return textDiv && isSpecialThanksMessage(textDiv.textContent.trim());
-    });
-    
-    if (specialMessagesBlocked) {
-      showSpecialBlockNotification();
+
+        // Ocultar opciones del menú contextual
+        const btn = msg.querySelector('.msg-options-btn');
+        if (btn) btn.style.display = 'none';
+      });
     }
-  }
+
+
+
+
+
 
   // Función para mostrar notificación especial
   function showSpecialBlockNotification() {
@@ -267,10 +259,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = users[message.userId];
     const isSelf = user.id === currentUserId;
 
+
+    
     const msgDiv = document.createElement('div');
     msgDiv.className = `msg ${isSelf ? 'msg-self' : 'msg-other'}`;
     msgDiv.dataset.messageId = message.id;
-    msgDiv.dataset.senderId = message.userId;
+    msgDiv.dataset.senderId = String(message.userId).trim();
 
     const avatarDiv = document.createElement('div');
     avatarDiv.className = 'msg-avatar';
@@ -280,7 +274,14 @@ document.addEventListener('DOMContentLoaded', () => {
     bodyDiv.className = 'msg-body';
 
     const textDiv = document.createElement('div');
-    textDiv.className = 'msg-text';
+    textDiv.classList.add('msg-text');
+
+    textDiv.setAttribute('data-original-text', message.text); // ← ***CLAVE***
+    textDiv.textContent = message.text;
+
+    // GUARDA EL TEXTO ORIGINAL EN UN ATRIBUTO
+    textDiv.setAttribute('data-original-text', message.text);
+    
     
     // Verificar si es el texto específico para darle estilo especial
     if (isSpecialThanksMessage(message.text) && !blockedThanksMessages.has(message.id)) {
@@ -309,14 +310,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Verificar si el usuario está bloqueado
     if (blockedUsers.has(message.userId) && !isSelf) {
-      if (isSpecialThanksMessage(message.text)) {
+      const originalText = message.text;
+
+      if (originalText === 'Gracias por el aviso — lo revisamos.') {
         textDiv.textContent = 'Usuario bloqueado';
-        textDiv.classList.add('blocked');
       } else {
         textDiv.textContent = 'Mensaje bloqueado';
       }
+
       msgDiv.classList.add('msg-blocked');
     }
+
 
     if (isSelf) {
       msgDiv.appendChild(bodyDiv);
