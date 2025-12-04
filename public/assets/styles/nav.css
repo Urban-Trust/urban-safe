@@ -319,15 +319,16 @@
     display: none;
   }
 
-  nav.navbar .user-menu,
-  nav.navbar .menu-toggle:checked ~ .user-menu {
+  nav.navbar .menu {
     display: none !important;
   }
 
-  nav.navbar .menu,
-  nav.navbar .menu.menu-open,
-  nav.navbar .menu-toggle:checked ~ .menu {
-    display: none !important;
+  nav.navbar .user-menu {
+    display: none;
+  }
+
+  nav.navbar .menu-toggle:checked ~ .user-menu {
+    display: flex !important;
   }
 
   nav.navbar .login-link {
@@ -343,7 +344,7 @@
 
   nav.navbar .user-menu {
     left: auto;
-    right: 8px;
+    right: 0;
     width: 88vw;
     max-width: 380px;
     height: calc(100vh - 86px);
