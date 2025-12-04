@@ -194,7 +194,7 @@ body {
 
 /* Área de mensajes */
 .chat-area {
-  flex: 1; /* ocupa todo el espacio entre header y footer */
+  flex: 1;
   padding: 12px 18px;
   background: #B9C2C5;
   overflow-y: auto;
@@ -202,18 +202,14 @@ body {
 
 /* Pinned area */
 .pinned-area { margin-bottom: 12px; }
-/* single thin banner across top for pinned message (sticky & visible) */
 .pinned-banner { width: 100%; background: #2F7372; color: white; padding: 8px 12px; border-radius: 8px; display:flex; align-items:center; gap:12px; cursor:pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.12); height:52px; box-sizing:border-box; position: sticky; top: 8px; z-index: 1200; }
 .pinned-banner .pinned-preview { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .pinned-banner .pinned-avatar { width:40px; height:40px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.08); }
 
-/* Make pinned banner fully rectangular (no rounded corners) */
 .pinned-banner { border-radius: 0 !important; }
 .pinned-banner .pinned-avatar { border-radius: 0 !important; }
 
-/* Presentation/welcome message styling (Lucía) */
 .msg.presentation .msg-text {
-  /* Match the lighter "mention" appearance: white bubble with dark text */
   background: #ffffff !important;
   color: var(--accent-dark) !important;
   border-radius: 8px;
@@ -221,30 +217,26 @@ body {
 }
 .msg.presentation .msg-meta { color: rgba(255,255,255,0.75); }
 
-/* Pin icon that sits at the right edge overlapping slightly outside the banner */
 .pinned-banner { position: relative; }
-/* banner-level pin icon removed — icon now displayed next to the pinned message itself */
 
 /* Message action dropdown */
 .msg-actions { position: relative; }
-.msg-dropdown { position: absolute; left: 0; top: 100%; margin-top:4px; background: #2E3859; color: #fff; padding:4px; border-radius:8px; display:flex; gap:6px; box-shadow:0 6px 14px rgba(0,0,0,0.14); z-index:1400; transform-origin: top left; }
+.msg-dropdown { position: absolute; left: 0; top: 100%; margin-top:8px; background: #2E3859; color: #fff; padding:4px; border-radius:8px; display:flex; gap:6px; box-shadow:0 6px 14px rgba(0,0,0,0.14); z-index:1400; transform-origin: top left; }
+.msg.msg-other .msg-dropdown { margin-top:30px; }
 .msg-dropdown button { background: none; border: none; padding:4px; cursor:pointer; display:flex; align-items:center; }
 /* Slightly smaller icons and reduced padding so dropdown is less tall */
 .msg-dropdown img { width:26px; height:26px; object-fit:contain; transform: scale(1.05); transition: transform 120ms ease; }
 .msg-dropdown button:hover img { transform: scale(1.12); }
 
-/* reactions area under message */
 .reactions { margin-top:6px; display:flex; gap:8px; align-items:center; }
 .reaction { display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; background:#f0f2f5; }
 .reaction .count { font-weight:600; }
 
-/* Emoji picker */
 #emojiPickerModal { position: fixed; left:0; top:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.35); z-index:1500; }
 .emoji-modal-inner { background: var(--panel); color: var(--accent-dark); padding:12px; border-radius:10px; width:360px; max-width:calc(100% - 32px); }
 .emoji-grid { display:grid; grid-template-columns: repeat(8,1fr); gap:8px; max-height:360px; overflow:auto; padding:8px; }
 .emoji-grid button { font-size:20px; padding:8px; border-radius:8px; background:transparent; border:none; cursor:pointer; }
 
-/* Mention highlight (background slightly grey behind message) */
 .msg.mention-highlight { background-color: rgba(0,0,0,0.06); }
 
 /* Mensajes */
