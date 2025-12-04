@@ -42,7 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Datos de ejemplo y renderizado de mensajes ---
   const currentUserId = 'user1'; // Asumimos que este es el usuario actual
   const blockedUsers = new Set(); // Para almacenar usuarios bloqueados
-  const blockedThanksMessages = new Set(); // Para rastrear mensajes específicos bloqueados
+  const blockedThanksMessages = new Set(); // Para rastrear mensajes espec?ficos bloqueados
+  const SELF_DEDUP_WINDOW_MS = 5000;
+  const recentSelfSignatures = new Map();
+  const recentSelfIds = new Map();
 
   const users = {
     'user1': { id: 'user1', name: 'Tú', avatarInitial: 'T' },
@@ -50,6 +53,88 @@ document.addEventListener('DOMContentLoaded', () => {
     'user3': { id: 'user3', name: 'Carlos', avatarInitial: 'C' },
     'user4': { id: 'user4', name: 'Ana', avatarInitial: 'A' },
     'user5': { id: 'user5', name: 'Pedro', avatarInitial: 'P' },
+  };
+
+
+  const normalizeTextForSignature = (text) => (text || '').replace(/\s+/g, ' ').trim().toLowerCase();
+  const selfSenderKeys = new Set([
+    normalizeId(currentUserId),
+    normalizeId(users[currentUserId]?.name || ''),
+    'self'
+  ]);
+
+  const isSelfSender = (senderId) => selfSenderKeys.has(normalizeId(senderId));
+
+  const getSelfSignature = (text, senderId = 'self') => {
+    const normalizedSender = normalizeId(senderId) || 'self';
+    const normalizedText = normalizeTextForSignature(text);
+    if (!normalizedText) return null;
+    return `${normalizedSender}|${normalizedText}`;
+  };
+
+  const isDuplicateSelfMessage = (message) => {
+    const senderKey = normalizeId(message.userId || message.senderId || message.from || (message.outgoing ? 'self' : ''));
+    const isSelf = message.self || message.outgoing || isSelfSender(senderKey);
+    if (!isSelf) return false;
+
+    const now = Date.now();
+    if (message.id) {
+      const ts = recentSelfIds.get(message.id);
+      if (ts && (now - ts) < SELF_DEDUP_WINDOW_MS) return true;
+    }
+
+    const signature = getSelfSignature(message.text || '', senderKey || 'self');
+    if (!signature) return false;
+    const sigTs = recentSelfSignatures.get(signature);
+    return !!(sigTs && (now - sigTs) < SELF_DEDUP_WINDOW_MS);
+  };
+
+  const rememberSelfMessage = (message) => {
+    const senderKey = normalizeId(message.userId || message.senderId || message.from || (message.outgoing ? 'self' : ''));
+    const isSelf = message.self || message.outgoing || isSelfSender(senderKey);
+    if (!isSelf) return;
+
+    const now = Date.now();
+    if (message.id) {
+      recentSelfIds.set(message.id, now);
+      setTimeout(() => {
+        const ts = recentSelfIds.get(message.id);
+        if (ts && ts <= now) recentSelfIds.delete(message.id);
+      }, SELF_DEDUP_WINDOW_MS + 200);
+    }
+
+    const signature = getSelfSignature(message.text || '', senderKey || 'self');
+    if (signature) {
+      recentSelfSignatures.set(signature, now);
+      setTimeout(() => {
+        const ts = recentSelfSignatures.get(signature);
+        if (ts && ts <= now) recentSelfSignatures.delete(signature);
+      }, SELF_DEDUP_WINDOW_MS + 200);
+    }
+  };
+
+  window.chatDedup = {
+    windowMs: SELF_DEDUP_WINDOW_MS,
+    makeSignature: (text, senderId = 'self') => getSelfSignature(text, senderId || 'self'),
+    isRecent: ({ id = null, text = '', senderId = 'self' } = {}) => {
+      const normalizedSender = normalizeId(senderId || 'self');
+      const isSelf = normalizedSender === 'self' || isSelfSender(normalizedSender);
+      if (!isSelf) return false;
+      const now = Date.now();
+      if (id) {
+        const ts = recentSelfIds.get(id);
+        if (ts && (now - ts) < SELF_DEDUP_WINDOW_MS) return true;
+      }
+      const signature = getSelfSignature(text, normalizedSender || 'self');
+      if (!signature) return false;
+      const ts = recentSelfSignatures.get(signature);
+      return !!(ts && (now - ts) < SELF_DEDUP_WINDOW_MS);
+    },
+    remember: ({ id = null, text = '', senderId = 'self' } = {}) => {
+      const normalizedSender = normalizeId(senderId || 'self');
+      if (normalizedSender !== 'self' && !isSelfSender(normalizedSender)) return;
+      rememberSelfMessage({ id, text, userId: normalizedSender, outgoing: true });
+    }
   };
 
   // Agregamos más mensajes de ejemplo con el texto específico
@@ -181,13 +266,13 @@ document.addEventListener('DOMContentLoaded', () => {
       contextMenu.className = 'msg-context-menu';
       contextMenu.innerHTML = `
         <div class="context-menu-item delete" data-action="delete">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <svg xmlns="http://www.w3.org/5000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"/>
           </svg>
           Eliminar mensaje
         </div>
         <div class="context-menu-item block" data-action="block">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <svg xmlns="http://www.w3.org/5000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>
           </svg>
           Bloquear usuario
@@ -240,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
       deleteBtn.className = 'delete-msg-btn';
       deleteBtn.setAttribute('aria-label', 'Eliminar mensaje');
       deleteBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <svg xmlns="http://www.w3.org/5000/svg" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path>
         </svg>
       `;
@@ -420,9 +505,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addMessageToDOM(message) {
+    const senderKey = normalizeId(message.userId || message.senderId || message.from);
+    const isSelf = message.self || message.outgoing || isSelfSender(senderKey);
+    if (isSelf && isDuplicateSelfMessage(message)) {
+      return;
+    }
+
     const msgEl = createMessageElement(message);
     chatArea.appendChild(msgEl);
     chatArea.scrollTop = chatArea.scrollHeight;
+    if (isSelf) {
+      rememberSelfMessage(message);
+    }
   }
 
   // Procesar mensajes iniciales
@@ -579,6 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
         id: `msg_${Date.now()}`,
         text: text,
         userId: currentUserId,
+        outgoing: true,
         timestamp: new Date().toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })
       };
       addMessageToDOM(newMessage);
