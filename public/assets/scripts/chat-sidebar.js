@@ -419,6 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const pinnedArea = document.getElementById('pinnedArea'); if (pinnedArea) pinnedArea.innerHTML = '';
     }
     chatArea.scrollTop = chatArea.scrollHeight;
+    document.dispatchEvent(new CustomEvent('chatMessagesRendered', { detail: { chatId: id } }));
     // persist after render
     saveState();
   }
@@ -429,6 +430,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const msg = document.createElement('div');
     msg.className = 'msg ' + (m.from === 'Tú' || m.self ? 'msg-self' : 'msg-other');
     msg.dataset.msgId = m._id;
+    msg.dataset.messageId = m._id;
+    const senderId = m.userId || m.from || '';
+    msg.dataset.senderId = senderId;
+    msg.dataset.senderNormalized = (senderId || '').trim().toLowerCase();
     const avatar = document.createElement('div');
     avatar.className = 'msg-avatar';
     avatar.textContent = m.avatar || (m.self ? '🧍‍♂️' : '👤');
@@ -594,6 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const escMention = escapeHtml(mentionPlain).replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
       const withBold = escaped.replace(new RegExp(escMention, 'g'), `<strong>${escapeHtml(mentionPlain)}</strong>`);
       text.innerHTML = withBold;
+      text.setAttribute('data-original-text', raw);
       body.appendChild(text);
     }
     const meta = document.createElement('div');
