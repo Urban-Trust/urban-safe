@@ -252,9 +252,6 @@ body {
   position: relative; /* Para posicionar el botón de borrar */
 }
 
-/* allow positioning a pin icon outside the message bubble without cutting text */
-.msg.pinned-msg { /* keep outer container spacing minimal, reserve inner spacing on bubble instead */ }
-
 .pinned-pin-icon-msg {
   width: 34px;
   height: 34px;
@@ -606,6 +603,17 @@ body {
   }
 }
 
+/* Mostrar botón para abrir la lista de chats en mobile/tablet */
+@media (max-width: 900px) {
+  .header-toggle {
+    display: inline-flex !important;
+    margin-right: 8px;
+  }
+  .chat-top {
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: 480px) {
   .chat-top h1 { font-size: 16px; }
   .chat-top h1 { padding-left: 56px; }
@@ -630,6 +638,23 @@ body {
 
 /* Hide header toggle by default - only show in mobile/tablet via media queries */
 .header-toggle { display: none; }
+
+/* Recuperar toggle de chats en mobile/tablet dentro del header */
+@media (max-width: 900px) {
+  .header-toggle {
+    display: inline-flex !important;
+    margin-right: 8px;
+    order: -1;           /* fuerza a quedar al inicio */
+    flex-shrink: 0;      /* evita que se colapse */
+    z-index: 2;          /* por encima de adornos del header */
+  }
+  .chat-top {
+    justify-content: flex-start;
+  }
+  .chat-top-main {
+    justify-content: flex-start;
+  }
+}
 
 /* Backdrop for centered mobile/tablet sidebar */
 .chat-sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000; }
@@ -1506,25 +1531,41 @@ body {
   .chat-event-card {
     grid-template-columns: 1fr;
   }
-  /* Centered overlay sidebar for iPad/tablet devices */
+  /* Sidebar como slide desde la izquierda (no centrado) */
   .chat-sidebar {
     position: fixed;
-    top: calc(64px + 8px);
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: min(420px, 94%);
-    max-height: 68vh;
+    top: 70px;
+    left: 0;
+    bottom: 0;
+    width: 86vw;
+    max-width: 360px;
+    padding: 12px;
+    height: auto;
     z-index: 1600;
-    border-radius: 12px;
+    border-radius: 0 16px 16px 0;
     box-shadow: 0 12px 40px rgba(0,0,0,0.28);
     transition: transform 300ms ease, opacity 200ms ease;
-  }
-  .chat-sidebar.minimized {
-    transform: translate(-50%, -120%);
+    transform: translateX(-110%);
     opacity: 0;
     pointer-events: none;
   }
-  .sidebar-maximize { left: 50%; transform: translateX(-50%); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); top:auto; }
+  .chat-sidebar:not(.minimized) {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  /* Override estado minimized para mantener ancho durante el slide */
+  .chat-sidebar.minimized {
+    width: 86vw;
+    max-width: 360px;
+    padding: 12px;
+  }
+  .sidebar-maximize {
+    left: 12px;
+    transform: none;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    top: auto;
+  }
 }
 
 @media (max-width: 640px) {

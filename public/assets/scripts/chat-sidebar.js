@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.querySelector('.chat-sidebar');
   const toggleBtns = document.querySelectorAll('.sidebar-toggle');
   const backdrop = document.getElementById('chatSidebarBackdrop');
-  const sidebarBackBtn = document.getElementById('sidebarBackBtn');
+  const sidebarBackBtn = null;
 
   // Helper: scroll an element into view inside the chatArea, accounting for the chat container
   function scrollElementIntoViewInChat(el, center) {
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function showBackdrop() { if (backdrop) backdrop.classList.remove('hidden'); }
   function hideBackdrop() { if (backdrop) backdrop.classList.add('hidden'); }
   function showBackBtn() { if (sidebarBackBtn) sidebarBackBtn.classList.remove('hidden'); }
-  function hideBackBtn() { if (sidebarBackBtn) sidebarBackBtn.classList.add('hidden'); }
+  function hideBackBtn() { /* back button removido */ }
 
   // Minimizar / restaurar sidebar (support multiple toggle buttons: sidebar and header)
   toggleBtns.forEach(toggleBtn => {
@@ -289,16 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (maximizeBtn) maximizeBtn.classList.remove('hidden');
       hideBackdrop();
       hideBackBtn();
-    });
-  }
-
-  // Back button closes overlay (used in mobile overlay centered view)
-  if (sidebarBackBtn) {
-    sidebarBackBtn.addEventListener('click', () => {
-      sidebar.classList.add('minimized');
-      if (maximizeBtn) maximizeBtn.classList.remove('hidden');
-      if (backdrop) backdrop.classList.add('hidden');
-      sidebarBackBtn.classList.add('hidden');
     });
   }
 
